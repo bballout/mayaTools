@@ -307,3 +307,20 @@ def addInbetweenShape():
         
         print ibIndex
     pm.blendShape(str(blShape), e = 1, ib = 1,tc = False, t = (base, ibIndex, ibName, ibWeight))
+    
+def poseReader(name,parent,pose):
+    #create pose reader
+    loc = cmds.spaceLocator(name = '%s_Loc'%name)[0]
+    poseReader = cmds.createNode('poseReader', name = '%s_PRShape'%name)
+    prParent = cmds.listRelatives(poseReader,parent = True)[0]
+    cmds.connectAttr('%s.worldMatrix[0]'%loc,'%s.worldMatrixPoseIn'%poseReader)
+    cmds.connectAttr('%s.worldMatrix[0]'%prParent,'%s.worldMatrixLiveIn'%poseReader)
+    prParent = cmds.listRelatives(poseReader,parent = True)[0]
+    cmds.parent(prParent,loc)
+    constraint = cmds.parentConstraint(pose,loc)
+    cmds.delete(constraint)
+    cmds.parentConstraint(pose,prParent)
+    cmds.parentConstraint(parent,loc, mo = True)
+    
+    cmds.setAttr( '%s.drawCone'%poseReader,1)
+    cmds.setAttr('%s.drawText'%poseReader,1)

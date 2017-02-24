@@ -172,6 +172,9 @@ def makeRivets(**kwargs):
         i += 1
     return rivets
 
+def moPathJnts(curve):
+    pass
+
 def deleteRivets():
 
     rivets = cmds.ls(type = 'kSurfaceRivetNode')
@@ -247,6 +250,64 @@ def makeFloatingJoints(locators = [],name = ''):
         i += 1
         
     return joints
+
+def createMoPathLoc(curve,name,upObject):
+    curvePath = GenAPI.getDagPath(curve)
+    curveItr = om.MItCurveCV(curvePath)
+    curveFn = om.MFnNurbsCurve()
+    
+    
+    shape = cmds.listRelatives(curve,type = 'shape')[0]
+    curvePath = GenAPI.getDagPath(curve)
+    curveItr = om.MItCurveCV(curvePath)
+    curveFn = om.MFnNurbsCurve(curvePath)
+    util = om.MScriptUtil()
+    
+    cmds.addAttr(curve,ln = 'upperTwist',at = 'double',keyable = True)
+    cmds.addAttr(curve,ln = 'lowerTwist',at = 'double',keyable = True)
+    
+    locators = []
+    
+    while not curveItr.isDone():
+        #getting param value
+        pos = curveItr.position()
+        ptr = util.asDoublePtr()
+        curveFn.getParamAtPoint(pos,ptr,om.MSpace.kWorld)
+        uValue = util.getDouble(ptr)
+        
+        #motion path node setup
+        loc = cmds.spaceLocator(name = '%s_Twist_%s_Loc'%(name,str(curveItr.index()+1).zfill(2)))
+        offset = cmds.group(name = '%s_Twist_%s_Loc_Offset'%(name,str(curveItr.index()+1).zfill(2)))
+        group = cmds.group(name = '%s_Twist_%s_Loc_Grp'%(name,str(curveItr.index()+1).zfill(2)))
+        moPathNode = cmds.createNode('motionPath',name = '%s_Twist_%s_MoPath'%(name,str(curveItr.index()+1).zfill(2)))
+        cmds.connectAttr('%s.worldSpace[0]'%shape,'%s.geometryPath'%moPathNode)
+        cmds.setAttr('%s.uValue'%moPathNode,uValue)
+        cmds.setAttr('%s.follow'%moPathNode,True)
+        cmds.setAttr('%s.worldUpType'%moPathNode,2)
+        cmds.setAttr('%s.frontAxis'%moPathNode,0)
+        cmds.connectAttr('%s.worldMatrix[0]'%upObject,'%s.worldUpMatrix'%moPathNode)
+        cmds.connectAttr('%s.allCoordinates'%moPathNode,'%s.translate'%group)
+        cmds.connectAttr('%s.rotate'%moPathNode,'%s.rotate'%group)
+        
+        #setting up twist
+        mdNode = cmds.createNode('multiplyDivide',name = '%s_UpperTwist_%s_MD'%(name,str(curveItr.index()+1).zfill(2)))
+        mdNode2 = cmds.createNode('multiplyDivide',name = '%s_LowerTwist_%s_MD'%(name,str(curveItr.index()+1).zfill(2)))
+        reverse = cmds.createNode('reverse',name = '%s_Twist_%s_Reverse'%(name,str(curveItr.index()+1).zfill(2)))
+        pmaNode = cmds.createNode('plusMinusAverage',name = '%s_Twist_%s_PMA'%(name,str(curveItr.index()+1).zfill(2)))
+        cmds.connectAttr('%s.outputX'%reverse,'%s.input1X'%mdNode2)
+        
+        cmds.connectAttr('%s.input1X'%mdNode,'%s.inputX'%reverse)
+        cmds.setAttr('%s.input1X'%mdNode,uValue)
+        cmds.connectAttr('%s.upperTwist'%curve,'%s.input2X'%mdNode)
+        cmds.connectAttr('%s.lowerTwist'%curve,'%s.input2X'%mdNode2)
+        cmds.connectAttr('%s.outputX'%mdNode,'%s.input1D[0]'%pmaNode)
+        cmds.connectAttr('%s.outputX'%mdNode2,'%s.input1D[1]'%pmaNode)
+        cmds.connectAttr('%s.output1D'%pmaNode,'%s.rotateX'%offset)
+        
+        locators.append(loc[0])
+        curveItr.next()
+        
+    return locators
 
 def orientJoint(joint = '',aimAxis = (1,0,0),upAxis = (0,1,0)):
     
@@ -441,27 +502,23 @@ def zeroOut():
         cmds.rotate(0,0,0,obj,os = True)
         cmds.scale(1,1,1,obj,os = True) 
 
-def switchInfluece(): 
+def switchInfluence(): 
 
     obj = cmds.ls(sl = True)[0]
     
-    history = cmds.listHistory(obj,pdo = 1, il = 2)
+    history = cmds.listHistory(obj,pdo = 1 ,il = 2)
     skinCluster = ''
     
     for node in history:
         if cmds.nodeType(node) == 'skinCluster':
             skinCluster = node
-    
-
+               
     joints = cmds.skinCluster(skinCluster,q = True,inf = True)
     
     unlockedJoints = []
     
-    print joints
-    
     for joint in joints:
         lock = cmds.getAttr('%s.liw'%joint)
-
         if not lock:
             unlockedJoints.append(joint)
     
@@ -474,7 +531,6 @@ def switchInfluece():
     if i == len(unlockedJoints):
         i = 0
     
-    print 'unlocked:',unlockedJoints
     
     cmds.artAttrSkinPaintCtx('artAttrSkinPaintCtx1',e = True,inf = unlockedJoints[i])
     
@@ -482,7 +538,7 @@ def switchInfluece():
     mel.eval('artSkinInflListChanging %s 1'%unlockedJoints[i])
     mel.eval('artSkinInflListChanged artAttrSkinPaintCtx')
     
-    om.MGlobal.displayInfo('Paint Weights on %s'%unlockedJoints[i])
+    om.MGlobal.displayInfo('Paint Weights on %s'%unlockedJoints[i]) 
 
 def setShapeDisplay():
     sel = cmds.ls(sl = True)
@@ -570,6 +626,72 @@ def getOffset(worldNode = ''):
                     offset = ctrlGrp
                     return offset
                 
+def duplicateSDKs(searchFor = 'L_',replaceWith = 'R_'):
+    sel = cmds.ls(sl = True)
+    connections = cmds.listConnections(skipConversionNodes = True)
+    sdks = []
+    blendWeights = []
+    
+    for connection in connections:
+        if cmds.nodeType(connection) == 'animCurveUA':
+            sdks.append(connection)
+    
+        if cmds.nodeType(connection) == 'blendWeighted':
+            blendWeights.append(connection)
+            
+    for sdk in sdks:
+        name = '%s%s'%(replaceWith,sdk.split(searchFor)[1])
+        dupsdk = cmds.duplicate(sdk,name = name)[0]
+        inputConnection = cmds.connectionInfo('%s.input'%sdk,sfd = True)
+        oppInput = '%s%s'%(replaceWith,inputConnection.split(searchFor)[1])
+        cmds.connectAttr(oppInput,'%s.input'%dupsdk)
+        outConnection = cmds.connectionInfo('%s.output'%sdk,dfs = True)[0]
+        oppOutput = '%s%s'%(replaceWith,outConnection.split(searchFor)[1])
+        cmds.connectAttr('%s.output'%dupsdk,oppOutput)
+        cmds.select(dupsdk)
+     
+    for blendWeight in blendWeights:
+        i = 0
+        connections = cmds.listConnections(blendWeight,skipConversionNodes = True,d = False)
+        dupBlend = cmds.duplicate(blendWeight)[0]
+        print dupBlend
+        
+        for sdk in connections:
+            try:
+                name = '%s%s'%(replaceWith,sdk.split(searchFor)[1])
+                dupsdk = cmds.duplicate(sdk,name = name)[0]
+                inputConnection = cmds.connectionInfo('%s.input'%sdk,sfd = True)
+                oppInput = '%s%s'%(replaceWith,inputConnection.split(searchFor)[1])
+                cmds.connectAttr(oppInput,'%s.input'%dupsdk)
+                outConnection = cmds.connectionInfo('%s.output'%sdk,dfs = True)[0]
+                oppOutput = '%s%s'%(replaceWith,outConnection.split(searchFor)[1])
+                cmds.connectAttr('%s.output'%dupsdk,oppOutput)
+                cmds.select(dupsdk)
+                i+=1
+            except:
+                #name = '%s%s'%(replaceWith,sdk.split(searchFor)[1])
+                dupsdk = cmds.duplicate(sdk)[0]
+                inputConnection = cmds.connectionInfo('%s.input'%sdk,sfd = True)
+                oppInput = '%s%s'%(replaceWith,inputConnection.split(searchFor)[1])
+                cmds.connectAttr(oppInput,'%s.input'%dupsdk)
+                outConnection = cmds.connectionInfo('%s.output'%sdk,dfs = True)[0]
+                print dupBlend
+                cmds.connectAttr('%s.output'%dupsdk,'%s.input[%i]'%(dupBlend,i))
+                cmds.select(dupsdk)
+                i+=1
+        
+               
+        outConnections = cmds.connectionInfo('%s.output'%blendWeight,dfs = True)[0]
+        print outConnections
+        if cmds.nodeType(outConnections.split('.')[0]) == 'unitConversion':
+            input = cmds.connectionInfo('%s.output'%outConnections.split('.')[0],dfs = True)[0]
+        else:    
+            input = '%s%s'%(replaceWith,outConnections.split(searchFor)[1])
+            
+        oppInput = '%s%s'%(replaceWith,input.split(searchFor)[1])
+        #print oppInput
+        cmds.connectAttr('%s.output'%dupBlend,oppInput)
+       
         
 def setConstraint(control = '',worldNodes = []):
     
@@ -589,93 +711,3 @@ def setConstraint(control = '',worldNodes = []):
         
         cmds.parentConstraint(control,offset, mo = True)
         cmds.scaleConstraint(control,offset, mo = True)
-        
-def createTargetRig(name):
-    
-    sphere = cmds.sphere(n = '%s_Target_Surface'%name)[0]
-    sphereShape = cmds.listRelatives(sphere,type = 'shape')[0]
-    loc = cmds.spaceLocator(name = '%s_Target_Loc'%name)[0]
-    cmds.move(1,0,0,loc)
-    cpsNode = cmds.createNode('closestPointOnSurface',n = '%s_Target_CPS'%name)
-    cmds.connectAttr('%s.worldSpace[0]'%sphereShape,'%s.inputSurface'%cpsNode)
-    dmNode = cmds.createNode('decomposeMatrix',name = '%s_Target_DM'%name)
-    cmds.connectAttr('%s.worldMatrix[0]'%loc,'%s.inputMatrix'%dmNode)
-    cmds.connectAttr('%s.outputTranslate'%dmNode,'%s.inPosition'%cpsNode)
-    
-    cmds.addAttr(loc,ln = 'paramU',at = 'double')
-    cmds.setAttr('%s.paramU'%loc,e = True, keyable = True)
-    cmds.connectAttr('%s.result.parameterU'%cpsNode,'%s.paramU'%loc)
-    
-    cmds.addAttr(loc,ln = 'paramV',at = 'double')
-    cmds.setAttr('%s.paramV'%loc,e = True, keyable = True)
-    cmds.connectAttr('%s.result.parameterV'%cpsNode,'%s.paramV'%loc)
-    
-    grp = cmds.group(name = '%s_Target_Grp'%name,empty = True)
-    cmds.parent(sphere,grp)
-    cmds.parent(loc,grp)
-    
-def getRootJoint(joint):
-    
-    '''method for returning root joint in hierarchy'''
-    jointObject = GenAPI.getMObject(joint)
-    nodeFn = om.MFnDagNode(jointObject)
-    
-    while not nodeFn.parent(0).apiType() == om.MFn.kWorld:
-        if nodeFn.parent(0).apiType() == om.MFn.kJoint:
-            nodeFn.setObject(nodeFn.parent(0))
-        else:
-            break
-        
-    dagPath = om.MDagPath()
-    nodeFn.getPath(dagPath)
-    return dagPath.partialPathName()
-    
-def getJointHeirarchy(joint):
-    
-    jointObject = GenAPI.getMObject(joint)
-    nodeFn = om.MFnDagNode(jointObject)
-    
-    joints = []
-    
-    while not nodeFn.child(0).apiType() == om.MFn.kJoint:
-        nodeFn.setObject(nodeFn.parent(0))
-        dagPath = om.MDagPath()
-        nodeFn.getPath(dagPath)
-        joints.append(dagPath.partialPathName())
-        
-    return joints
-    
-    
-def createPocLoc(crv = '',name = '',count = 0):
-    
-    inc = 1.0/count
-    
-    newCrv = cmds.duplicate(crv)[0]
-    newCrvName = '%s_Master_Crv'%name
-    cmds.rename(newCrv,newCrvName)
-    
-    locGrp = cmds.group(empty = True, name = '%s_Loc_Grp'%name)
-    pocLoc = []
-    mpNodes = []
-    
-    uValue = 0.0
-    
-    for i in range(count+1):
-       
-        mp = cmds.createNode('motionPath', name = '%s_DynIK_%s_MP'%(name,str(i+1).zfill(2)))
-        cmds.setAttr('%s.fractionMode'%mp,1)
-        try:
-            cmds.setAttr('%s.uValue'%mp,uValue)
-        except:
-            cmds.setAttr('%s.uValue'%mp,1.0)
-        cmds.connectAttr('%s.worldSpace[0]'%newCrvName,'%s.geometryPath'%mp)
-        loc = cmds.spaceLocator(name = '%s_%s_Loc'%(name,str(i+1).zfill(2)))[0]
-        cmds.connectAttr('%s.allCoordinates'%mp,'%s.translate'%loc)
-        cmds.parent(loc,locGrp)
-        
-        pocLoc.append(loc)
-        mpNodes.append(mp)
-        
-        uValue+=inc
-        
-    return pocLoc,mpNodes
