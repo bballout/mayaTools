@@ -17,13 +17,20 @@ class DeformerNode(ompx.MPxDeformerNode):
     deformSpace = om.MObject()
     amplitude = om.MObject()
     frequency = om.MObject()
+    inMesh = om.MObject()
     
     def __init__(self):
         ompx.MPxDeformerNode.__init__(self)
     
     def deform(self, data, geoIter, matrix, multiIndex ):
+      
+        inMesh = data.inputValue(DeformerNode.inMesh).asMesh()
+        meshFn = om.MFnMesh(inMesh)
+        colors = om.MColorArray()
+        colorSet = 'polyColorPerVertex1'
+        meshFn.getColors(colors)
         
-        envelope = ompx.cvar.MPxDeformerNode_envelope
+        envelope = ompx.cvar.MPxGeometryFilter_envelope
         envelopeHandle = data.inputValue( envelope )
         envelopeValue = envelopeHandle.asFloat()
 
@@ -40,6 +47,8 @@ class DeformerNode(ompx.MPxDeformerNode):
         while not geoIter.isDone():
             
             if envelopeValue > 0:
+                i = geoIter.index()
+                color = colors[i]
                 point = geoIter.position()
                 point *= invMatrixVal
                 
@@ -47,9 +56,16 @@ class DeformerNode(ompx.MPxDeformerNode):
                 sinVal = math.sin(length)
                 point.y = sinVal / length
                 point.y *=  envelopeValue
-                
+                 
                 point *= matrixVal
-                  
+                   
+                
+                #===============================================================
+                # point.x = color.r + pos.x
+                # point.y = color.g + pos.y
+                # point.z = color.b + pos.z
+                #===============================================================
+
                 geoIter.setPosition(point)
             
             geoIter.next()
@@ -72,6 +88,7 @@ def nodeInitializer():
     
     mAttr = om.MFnMatrixAttribute()
     nAttr = om.MFnNumericAttribute()
+    tAttr = om.MFnTypedAttribute()
 
     DeformerNode.deformSpace = mAttr.create('deformSpace','dm')
     mAttr.setStorable(False)
@@ -89,8 +106,11 @@ def nodeInitializer():
     nAttr.setStorable(True); 
     nAttr.setKeyable(True)
 
-    outputGeom = ompx.cvar.MPxDeformerNode_outputGeom
+    outputGeom = ompx.cvar.MPxGeometryFilter_outputGeom
     
+    DeformerNode.inMesh = tAttr.create('inMesh', 'im', om.MFnData.kMesh)
+    
+    DeformerNode.addAttribute(DeformerNode.inMesh)
     DeformerNode.addAttribute(DeformerNode.deformSpace)
     DeformerNode.addAttribute(DeformerNode.amplitude)
     DeformerNode.addAttribute(DeformerNode.frequency)
@@ -98,6 +118,7 @@ def nodeInitializer():
     DeformerNode.attributeAffects( DeformerNode.deformSpace, outputGeom)
     DeformerNode.attributeAffects( DeformerNode.amplitude, outputGeom)
     DeformerNode.attributeAffects( DeformerNode.frequency, outputGeom)
+    DeformerNode.attributeAffects(DeformerNode.inMesh, outputGeom)
     
 def initializePlugin(mobject):
      

@@ -28,7 +28,7 @@ class ShapeTool():
         
         self.origShape = ''
         shapes = cmds.listRelatives(self.transform,shapes = True)
-
+        '''
         for obj in shapes:
 
             if cmds.getAttr('%s.intermediateObject'%obj) and cmds.listConnections('%s.worldMesh'%obj,source=False):
@@ -36,6 +36,7 @@ class ShapeTool():
                 break
         else:
             raise RuntimeError('No deformers found for %s.' % self.shape)
+        '''
     
     @staticmethod    
     def getPointArray(shape):
