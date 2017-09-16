@@ -174,6 +174,34 @@ def makeRivets(**kwargs):
 
 def moPathJnts(curve):
     pass
+  
+def createFollicesAtLocs(locators=[],surface=''):
+  locators = cmds.ls(sl=True)
+  surfaceFn = om.MFnNurbsSurface(GenAPI.getDagPath(surface))
+  surfaceShape = cmds.listRelatives(surface,type='shape')[0]
+  util = om.MScriptUtil()
+  for obj in locators:
+      pos = cmds.xform(obj,q=True,ws=True,translation=True)
+      point = om.MPoint(pos[0],pos[1],pos[2])
+      vutil = om.MScriptUtil()
+      uutil = om.MScriptUtil()
+      uutil.createFromDouble(0.0)
+      Uptr = uutil.asDoublePtr()
+      vutil.createFromDouble(0.0)
+      Vptr = vutil.asDoublePtr()
+      closestPoint = surfaceFn.closestPoint(point,Uptr,Vptr,om.MSpace.kWorld)
+      surfaceFn.getParamAtPoint(closestPoint,Uptr,Vptr,om.MSpace.kWorld)
+      uVal = uutil.asFloat() 
+      vVal = vutil.asFloat()
+      print util.getDouble(Uptr),util.getDouble(Vptr)
+      follicle = cmds.createNode('follicle')
+      cmds.connectAttr('%s.worldSpace[0]'%surfaceShape,'%s.inputSurface'%follicle)
+      cmds.setAttr('%s.parameterU'%follicle,util.getDouble(Uptr))
+      cmds.setAttr('%s.parameterV'%follicle,util.getDouble(Vptr)/18.0)
+      follicleTransform = cmds.listRelatives(follicle,parent = True)[0]
+      cmds.connectAttr('%s.outTranslate'%follicle,'%s.translate'%follicleTransform)
+      cmds.connectAttr('%s.outRotate'%follicle,'%s.rotate'%follicleTransform)
+
 
 def deleteRivets():
 
