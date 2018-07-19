@@ -1,0 +1,899 @@
+global proc shelf_igAnimation () {
+    global string $gBuffStr;
+    global string $gBuffStr0;
+    global string $gBuffStr1;
+
+
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Save file Increment - Version Up" 
+        -enableBackground 0
+        -align "center" 
+        -label "Version Up" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/igVersionUp.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/igVersionUp.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igVersionUp.igVersionUp()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Checkout This File in P4" 
+        -enableBackground 0
+        -align "center" 
+        -label "P4 Checkout File" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/p4checkout.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/p4checkout.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igPerforceCheckout()" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 37
+        -height 37
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Give Maya 2016+ a \"kick\" to re-initialize GPU override if you think things are kinda slow." 
+        -enableBackground 0
+        -align "center" 
+        -label "User Script" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "X:/tech_art/maya/shared/icons/igShelf/kickGPU.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/kickGPU.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "if (float(`about -version`) >= 2016)\n{\n\tevaluator -name dynamics -c \"action=evaluate\";\n\tprint \"Ouch, OK OK. I'll start working!\";\n} else\n{\n\tprint \"Stop kicking me. I don't know what GPU override is! This is as fast as I go.\";\n}" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Gives the scene a little refresh if things are misbehaving." 
+        -enableBackground 0
+        -align "center" 
+        -label "SceneBump" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "X:/tech_art/maya/shared/icons/igShelf/sceneBump.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/sceneBump.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "dgdirty -allPlugs; \nprint \"Scene was forced to refresh.\";\n" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 40
+        -height 36
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Creates groups for references in a scene so animators can have nice clean scenes." 
+        -enableBackground 0
+        -align "center" 
+        -label "Organize" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "X:/tech_art/maya/shared/icons/organize.png" 
+        -image1 "X:/tech_art/maya/shared/icons/organize.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import pymel.core as pm\n\nnames = ['CAMS', 'CHARS', 'PROPS', 'ENV', 'MISC']\nfor name in names:\n\tif pm.objExists(name):\n\t\tcontinue\n\tpm.group(em=True, n=name)\n\npm.select(cl=True)\nfor name in names:\n\tpm.select(pm.ls(name), add=True)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Seperator" 
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0 0 0 
+        -overlayLabelBackColor 0 0 0 0 
+        -image "X:/tech_art/maya/shared/icons/igShelf/blankIcon.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/blankIcon.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Character UI" 
+        -enableBackground 0
+        -align "center" 
+        -label "Character UI (Picker)" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/igCharacterUI.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/igCharacterUI.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igNewCharacterUI.igNewCharacterUI()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Assemble Scene - Reference Manager" 
+        -enableBackground 0
+        -align "center" 
+        -label "Assemble Scene" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/igAssembleScene.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/igAssembleScene.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igAssembleScene.igAssembleScene()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Import Mocap" 
+        -enableBackground 0
+        -align "center" 
+        -label "Import Mocap" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "X:/tech_art/maya/shared/icons/igShelf/import_mocap.bmp" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/import_mocap.bmp" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igImportMocap.launchWindow()" 
+        -sourceType "python" 
+        -doubleClickCommand "igBatchImportMocap.launchWindow()" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Pose Library" 
+        -enableBackground 0
+        -align "center" 
+        -label "Pose Library" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/poseLibrary.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/poseLibrary.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igNewPoseTool.igNewPoseTool()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Seperator" 
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0 0 0 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/blankIcon.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/blankIcon.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Anim Snap Tool" 
+        -enableBackground 0
+        -align "center" 
+        -label "AnimSnap" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/animSnap.bmp" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/animSnap.bmp" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igAnimSnapTool.igAnimSnapTool()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Bake Character to Mocap/Control Rig" 
+        -enableBackground 0
+        -align "center" 
+        -label "Bake Character " 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/igBakeCharacter.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/igBakeCharacter.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igBakeCharacter.igBakeCharacter()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Tween Machine" 
+        -enableBackground 0
+        -align "center" 
+        -label "Tween Machine" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/tweenMachine.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/tweenMachine.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "mel.eval( \"tweenMachine();\")" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "AutoTangent" 
+        -enableBackground 0
+        -align "center" 
+        -label "Auto Tangent" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/autoTangent.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/autoTangent.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "autoTangent;" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Smooth Keys" 
+        -enableBackground 0
+        -align "center" 
+        -label "Smooth Keys" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/smoothKeys2.bmp" 
+        -image1 "X:/tech_art/maya/shared/icons/smoothKeys2.bmp" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "oaSmoothKeys;" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Graph Editor" 
+        -enableBackground 0
+        -align "center" 
+        -label "Graph Editor" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/graphEditor.bmp" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/graphEditor.bmp" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "GraphEditor" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Phantom Tool - Onion Skin / Ghost Geo!" 
+        -enableBackground 0
+        -align "center" 
+        -label "Phantom Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/igPhantomTool.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/igPhantomTool.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "phantomWindow();" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Transfer Motion Script" 
+        -enableBackground 0
+        -align "center" 
+        -label "Transfer Motion" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/transferMotion.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/transferMotion.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igTransferMotion.igTransferMotion()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Follow Camera" 
+        -enableBackground 0
+        -align "center" 
+        -label "JC Follow Camera" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/followCamera.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/followCamera.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "jc_followCam();" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Mirror Animation Tool" 
+        -enableBackground 0
+        -align "center" 
+        -label "Mirror Animation" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/igMirrorAnimationTool.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/igMirrorAnimationTool.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igMirrorAnimation.igMirrorAnimationTool()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Opens IK/FK Switch tool." 
+        -enableBackground 0
+        -align "center" 
+        -label "IK/FK Switch" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/igIkFkSwitch.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/igIkFkSwitch.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igBakeIKFK.igLaunchBakeIKFK();" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Geo Cache" 
+        -enableBackground 0
+        -align "center" 
+        -label "Geo Cache" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/geo_cache.png" 
+        -image1 "X:/tech_art/maya/shared/icons/geo_cache.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igGeoCache.open_win();" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "select viewport to lock to sequencer" 
+        -enableBackground 0
+        -align "center" 
+        -label "Lock Viewport" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "X:/tech_art/maya/shared/icons/igShelf/CAM_LOCK_ICON.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/CAM_LOCK_ICON.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "if ( catch ( eval (\"sequenceManager -mp \" + `getPanel -withFocus`))) warning \"Please select a valid view port\\n\";" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0 0 0 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/blankIcon.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/blankIcon.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "AnimClip Manager. Export animations for Animsets." 
+        -enableBackground 0
+        -align "center" 
+        -label "AnimClip Manager" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/exportAnimClip.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/exportAnimClip.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igAnimClipManager.igAnimClipManager()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Cinematic Manager" 
+        -enableBackground 0
+        -align "center" 
+        -label "Cinematic Manager" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/exportCinematicManager.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/exportCinematicManager.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igCinematicManager.igCinematicManager()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0 0 0 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/blankIcon.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/blankIcon.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "+1 Range" 
+        -enableBackground 0
+        -align "center" 
+        -label "+1 Range" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/plusOneRange.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/plusOneRange.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igEditTimeline.grow_timeline_range(1)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "-1 Range" 
+        -enableBackground 0
+        -align "center" 
+        -label "-1 Range" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "X:/tech_art/maya/shared/icons/igShelf/minusOneRange.png" 
+        -image1 "X:/tech_art/maya/shared/icons/igShelf/minusOneRange.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igEditTimeline.shrink_timeline_range(1)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+
+} 

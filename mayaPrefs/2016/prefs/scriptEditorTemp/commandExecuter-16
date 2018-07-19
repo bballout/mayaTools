@@ -1,0 +1,17 @@
+#havok prim flags
+
+sel = cmds.ls(sl = True)
+hp = []
+
+for obj in sel:
+    primShape = '%s_hkShape'%obj
+    hp.append(primShape)
+
+for obj in hp:
+    cmds.setAttr('%s.kTargeting'%obj,1)
+    cmds.setAttr('%s.kHeroMove'%obj,1)
+    cmds.setAttr('%s.kMove'%obj,1)
+    cmds.setAttr('%s.kHeroAltMove'%obj,1)
+    cmds.setAttr('%s.kCamera'%obj,1)
+    cmds.setAttr('%s.kProjectile'%obj,1)
+    cmds.setAttr('%s.kGround'%obj,1)

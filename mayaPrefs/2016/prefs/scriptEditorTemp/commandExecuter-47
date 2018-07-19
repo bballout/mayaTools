@@ -1,0 +1,8 @@
+allRefs = cmds.file(q=1, r=1)
+
+if allRefs:
+  for cur in allRefs:
+    refNode = cmds.referenceQuery(cur, referenceNode=1)
+    if cmds.referenceQuery(refNode, isLoaded=1) == True:
+      ns = cmds.referenceQuery(refNode, ns=1).strip(":")
+      print cur,'.....',ns

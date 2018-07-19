@@ -1,0 +1,13 @@
+startTime = 3
+endTime = 33
+duration = endTime - startTime
+
+duplicateThese = ['jacketOpen','pants','jacketOpen_Pocket','jacketOpen_Buttons']
+
+for mesh in duplicateThese:
+    grp = cmds.group(empty = True)
+    for i in range(duration+1):
+        cmds.currentTime(i+startTime)
+        dup = cmds.duplicate(mesh, name = '%s_frame%i'%(mesh,i))
+        cmds.parent(dup,grp)
+        

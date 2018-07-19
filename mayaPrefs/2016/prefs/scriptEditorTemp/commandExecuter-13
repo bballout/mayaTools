@@ -1,0 +1,34 @@
+import maya.cmds as cmds
+
+#parent proxies to joints
+sel = cmds.ls(sl = True)
+for obj in sel:
+
+    split1 = obj.split('geo_proxy_')[1]
+    jointName = split1.split('_meshVis')[0]
+    cmds.parent(obj,jointName)
+
+#connect proxy vis      
+sel = cmds.ls(sl = True)
+for obj in sel:
+    try:
+        cmds.connectAttr('root_CTRL.displayMode','%s.visibility'%obj,f = True)
+    except:
+        pass
+
+#connect skinned geo vis    
+sel = cmds.ls(sl = True)
+reverse = cmds.createNode('reverse')
+cmds.connectAttr('root_CTRL.displayMode','%s.inputX'%reverse)
+
+
+for obj in sel:
+    cmds.connectAttr('%s.outputX'%(reverse),'%s.visibility'%obj,f =True)
+    
+    
+refPaths = cmds.file(q = True, r = True)
+
+
+
+reload(igGeoCache)
+igGeoCache.getFileRefs()

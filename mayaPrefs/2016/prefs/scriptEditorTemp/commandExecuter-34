@@ -1,0 +1,37 @@
+import testExport
+reload(testExport)
+
+shot1 = testExport.Shot('shot1')
+shot2 = testExport.Shot('shot2')
+
+shots = [shot1,shot2]
+
+for shot in shots:
+    testExport.exportShot(shot)
+
+testExport.exportShotList(shots)
+
+#######################################
+import testExport
+reload(testExport)
+
+testExport.fastExport()
+#####################################
+import testExport
+reload(testExport)
+
+shot1 = testExport.Shot('shot1')
+testExport.exportShot(shot1)
+
+animClip = r'X:\i20\devel\assets\source\test\bballout\testCinematics\kingpin\kingpin_idle\kingpin_idle_shot1_Camera_igCam_Export.animClip'
+testExport.checkOutFile(animClip)
+
+os.path.isfile(animClip)
+
+p4 = igPerforceTools.igP4()
+p4.checkOutFile(animClip)
+p4.disconnect()
+
+cmds.playbackOptions(min = 1)
+cmds.playbackOptions(max = 14)
+

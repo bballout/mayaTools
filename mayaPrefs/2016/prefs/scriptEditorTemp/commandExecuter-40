@@ -1,0 +1,10 @@
+import igKeyPusher
+reload(igKeyPusher)
+
+keypusher = igKeyPusher.KeyPusher()
+keypusher.allAnimation = True
+keypusher.skipUnloadedRefs = True
+keys = keypusher.gatherKeys()
+
+if 'mask_CTRL_scaleY3' in keys:
+    'shit!'

@@ -1,0 +1,6 @@
+from mayaScripts import BlendShapeLib
+
+shapeTool = BlendShapeLib.ShapeTool('RT_Elbow_50_cbs1')
+translateVectors = shapeTool.getTranslationVectors('RT_Elbow_100_cbs1')
+
+BlendShapeLib.ShapeTool.setTranslation('rt_shape',translateVectors) 

@@ -1,0 +1,45 @@
+#create joints
+import maya.cmds as cmds
+
+sel = cmds.ls(sl = True)
+cmds.select(cl = True)
+joints = []
+for obj in sel:
+    cmds.select(cl = True)
+    name = obj.split('_CTRL_Null')[0]
+    jnt = cmds.joint(name = name)
+    constraint = cmds.parentConstraint(obj,jnt)
+    cmds.delete(constraint)
+    joints.append(jnt)
+#parent joints
+for joint in joints:
+    cmds.parent(joint,'head')
+    
+cmds.parent('CTR_lolip','jaw')
+
+#select joints
+cmds.select(joints)
+    
+#add constraint
+cmds.setAttr("RT_corner_grp.tx",e = True,l = False)
+cmds.setAttr("RT_corner_grp.ty",e = True,l = False)
+cmds.setAttr("RT_corner_grp.tz",e = True,l = False)
+cmds.setAttr("LF_corner_grp.tx",e = True,l = False)
+cmds.setAttr("LF_corner_grp.ty",e = True,l = False)
+cmds.setAttr("LF_corner_grp.tz",e = True,l = False)
+
+lcon = cmds.parentConstraint('jaw_CTRL','head_CTRL','LF_corner_grp',mo = True,skipRotate = ['x','y','z'])
+rcon = cmds.parentConstraint('jaw_CTRL','head_CTRL','RT_corner_grp',mo = True,skipRotate = ['x','y','z'])
+
+cmds.setAttr("LF_corner_grp_parentConstraint1.head_CTRLW1", 0.5) 
+cmds.setAttr("RT_corner_grp_parentConstraint1.head_CTRLW1", 0.5) 
+
+#add sdk eye lids
+cmds.addAttr('head_CTRL',ln = 'leftBlink', at = 'double',min = 0, max = 1,k = True)
+cmds.addAttr('head_CTRL',ln = 'rightBlink', at = 'double',min = 0, max = 1,k = True)
+
+
+
+
+
+

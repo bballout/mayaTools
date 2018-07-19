@@ -1,0 +1,20 @@
+import urllib,simplejson,subprocess
+
+shotList2Path = r'X:\i20\devel\assets\source\test\bballout\forReddy\shotlist2_cine\shotList2_cine.shotlist2'
+source = r'X:\i20\devel\assets\source'
+built = r'x:\i20\devel\assets\built'
+published_symbols =  r'X:\i20\devel\code\PublishedSymbols'
+
+f = urllib.urlopen("http://luna:2255/GetSystemPaths")
+jsonData = f.read()
+data = simplejson.loads( jsonData )
+f.close
+exePath = data[ "ExecutableFolder" ]
+animImportHelperExe = '%s\\AnimImportHelper_v2.exe'%exePath
+animImportHelperCmd = '%s -shotlist2Validate %s'%(animImportHelperExe,)
+subprocess.call(animImportHelperCmd)
+
+import igCinematicManager2
+reload(igCinematicManager2)
+
+igCinematicManager2.igCinematicManager2()

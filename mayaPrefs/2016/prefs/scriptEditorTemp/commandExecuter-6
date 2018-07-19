@@ -1,0 +1,22 @@
+#base pose
+name = 'LF_armOut_cbs'
+sel = cmds.ls(sl = True)[0]
+
+parent = cmds.listRelatives(sel,parent = True)[0]
+
+loc  = cmds.spaceLocator(name = '%s_loc'%name)[0]
+cmds.parentConstraint(sel,loc)
+pr = cmds.createNode('poseReader',name = 'pr_%sShape'%name)
+prTransform = cmds.listRelatives(pr, parent = True)[0]
+cmds.rename(prTransform,'pr_%s'%name)
+cmds.parent('pr_%s'%name,loc)
+cmds.parent(loc,parent)
+
+cmds.setAttr('%s.drawCone'%pr,1)
+cmds.setAttr('%s.drawText'%pr,1)
+
+cmds.connectAttr('%s.worldMatrix[0]'%loc,'%s.poseData.worldMatrixPoseIn'%pr)
+cmds.connectAttr('%s.worldMatrix[0]'%sel,'%s.poseData.worldMatrixLiveIn'%pr)
+
+cmds.move(0,0,0,'pr_%s'%name,os = True)
+cmds.rotate(0,0,0,'pr_%s'%name,os = True) 

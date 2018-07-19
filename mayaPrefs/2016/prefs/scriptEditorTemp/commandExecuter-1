@@ -1,0 +1,56 @@
+# Script snippet used to safely optimize i20 character rigs.
+# NOTE: Requires File -> Optimize Scene to be opened or run during the current Maya session to work
+import pymel.core as pm
+import igLibrary as ig
+
+bindPoses = cmds.ls(type = "dagPose")
+
+for bindPose in bindPoses:
+    if not'igCharPose' in bindPose:
+        cmds.delete(bindPose) 
+
+
+#pm.Mel.eval('performCleanUpScene()')  ##  Errors out if File -> Optimize Scene window hasn't been opened in session
+infs = ['LF_uparm', 'LF_loarm', 'LF_upleg', 'LF_loleg', 'RT_uparm', 'RT_loarm', 'RT_upleg', 'RT_loleg','LF_uparm_bind_1','RT_uparm_bind_1','LF_upleg_bind_1','RT_upleg_bind_1','LF_loarm_bind_1','RT_loarm_bind_1','LF_loleg_bind_1','RT_loleg_bind_1']
+for i in infs:
+  if not pm.objExists(i):
+    infs.remove(i)
+
+if infs:
+  try:
+      rjc = igRigboxJr.igRigboxJrUIClass()
+      rjc.detachRig()
+      pm.refresh()
+  except:
+      pass
+
+  for i in pm.listRelatives('Geometry', ad=True):
+    skn = ig.getMeshSkinCluster(i)
+    for jnt in infs:
+      try:
+          pm.skinCluster(skn, e=True, ug=True, dr=4, ps=0, ns=10, lw=True, wt=0, ai=jnt)
+      except:
+          print i
+
+  try:
+    rjc.attachRig()
+  except:
+      pass
+pm.refresh()
+for i in pm.ls(typ='blinn'):
+    tex = i.transparency.inputs(plugs=True)
+    if tex:
+        tex[0].disconnect(i.transparency)
+
+# for sel in pm.ls('CLASH_*'):
+#     sel.rename(sel.shortName().replace('CLASH__', ''))
+#     print 'Removed CLASH prefix from:' + sel.shortName()
+
+# ## Remove RIG nodes from A-Body
+# print 'Removing RIG nodes from A-Body'
+# controlNames = pm.Attribute('a_body_CTRL.controlNames')
+# flipControls = pm.Attribute('a_body_CTRL.flipControls')
+# for at in [controlNames, flipControls]:
+#     at.setLocked(False)
+#     at.set(' '.join([i for i in at.get().split() if not i.endswith('_RIG') and pm.objExists(i)]))
+#     at.setLocked(True)

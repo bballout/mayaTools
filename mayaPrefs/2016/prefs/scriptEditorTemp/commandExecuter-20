@@ -1,0 +1,7 @@
+reload(igCinematicManager)
+igCinematicManager.exportAll()
+
+cmds.about(version = True)
+
+
+import igMayaFileOpenCallback

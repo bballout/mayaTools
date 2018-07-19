@@ -1,0 +1,16 @@
+//Maya Preference 2016 (Release 1)
+//
+//
+
+nameCommand
+	-annotation "BSB_MM_PressNameCommand"
+	-sourceType "mel"
+	-command ("BSB_MM_Press")
+	BSB_MM_PressNameCommand;
+
+nameCommand
+	-annotation "BSB_MM_ReleaseNameCommand"
+	-sourceType "mel"
+	-command ("BSB_MM_Release")
+	BSB_MM_ReleaseNameCommand;
+

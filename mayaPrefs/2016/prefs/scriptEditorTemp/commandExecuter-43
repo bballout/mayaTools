@@ -1,0 +1,17 @@
+animCurves = cmds.ls(sl=True)
+outList = []
+for curve in animCurves:
+    entry = [curve]
+    connection = cmds.connectionInfo('%s.input'%curve,sfd=True)
+    if cmds.nodeType(connection.split('.')[0]) == 'unitConversion':
+        actualconnection = cmds.connectionInfo('%s.input'%connection.split('.')[0],sfd=True)
+        print actualconnection
+        entry.append(actualconnection)
+    else:
+        entry.append(connection)
+    outList.append(entry)
+    
+print outList
+
+for l in outList:
+    print l

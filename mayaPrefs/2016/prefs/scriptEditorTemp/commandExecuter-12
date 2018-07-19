@@ -1,0 +1,18 @@
+#create override switch for corrective blends
+
+import maya.cmds as cmds
+
+driver = 'corrective_driver'
+switch = 'root_CTRL.correctiveBlends'
+attrs = cmds.listAttr(driver,ud = True)
+
+for attr in attrs:
+
+    mdNode = cmds.createNode('multiplyDivide')
+    cmds.connectAttr(switch,'%s.input1X'%mdNode)
+    connection = cmds.connectionInfo('%s.%s'%(driver,attr),sfd = True)
+    cmds.connectAttr(connection,'%s.input2X'%mdNode)
+    cmds.connectAttr('%s.outputX'%mdNode,'%s.%s'%(driver,attr),f = True)
+    print connection
+    
+###############

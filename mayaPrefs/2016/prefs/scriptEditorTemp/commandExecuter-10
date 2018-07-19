@@ -1,0 +1,37 @@
+import maya.cmds as cmds
+import maya.mel as mel
+
+#cluster at each vert
+sel = cmds.ls(sl = True,fl = True)
+cmds.select(cl = True)
+for vert in sel:
+    cmds.select(vert)
+    cmds.cluster()
+
+
+sel = cmds.ls(sl=True)
+name = 'scaffolding_bend'
+
+cmds.select(cl = True)
+i=1
+for obj in sel:
+    jnt = cmds.joint(name = '%s_%s'%(name,(str(i)).zfill(2)))
+    constraint = cmds.parentConstraint(obj,jnt,mo = False)
+    cmds.delete(constraint)
+    cmds.select(cl = True)
+    i+=1
+    
+import maya.cmds as cmds
+
+sel = cmds.ls(sl=True)
+cmds.select(cl = True)
+i=1
+for obj in sel:
+    name = obj.split('_Clu')[0]
+    grp = cmds.group(empty = True, name = '%s_loc_GRP'%name)
+    loc = cmds.spaceLocator(name = '%s_loc'%name )
+    cmds.parent(loc,grp)
+    constraint = cmds.parentConstraint(obj,grp,mo = False)
+    cmds.delete(constraint)
+    cmds.select(cl = True)
+    i+=1

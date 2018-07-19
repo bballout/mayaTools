@@ -172,9 +172,26 @@ def makeRivets(**kwargs):
         i += 1
     return rivets
 
-def moPathJnts(curve):
-    pass
+def moPathJnts(curve,joints):
+  sel = cmds.ls(sl=True)
   
+  for obj in joints:
+    curveObj = GenAPI.getDagPath(curve)
+    objPos = cmds.xform(obj,q=True,ws=True,translation=True)
+    curveFn = om.MFnNurbsCurve(curveObj)
+    objPosPoint = om.MPoint(objPos[0],objPos[1],objPos[2])
+    util = om.MScriptUtil()
+    doublePtr = util.asDoublePtr()
+    curveFn.getParamAtPoint(objPosPoint,doublePtr,om.MSpace.kWorld)
+    uValue = util.getDouble(doublePtr)
+    
+    loc = cmds.spaceLocator(name='%s_loc'%obj)[0]
+    poc = cmds.createNode('pointOnCurveInfo',name='%s_poc'%obj)
+    cmds.connectAttr('%s.worldSpace[0]'%curve,'%s.inputCurve'%poc)
+    cmds.setAttr('%s.parameter'%poc,uValue)
+    cmds.connectAttr('%s.position'%poc,'%s.translate'%loc)
+    cmds.parentConstraint(loc,obj,mo=True)
+    
 def createFollicesAtLocs(locators=[],surface=''):
   locators = cmds.ls(sl=True)
   surfaceFn = om.MFnNurbsSurface(GenAPI.getDagPath(surface))

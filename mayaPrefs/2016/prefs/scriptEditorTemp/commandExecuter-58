@@ -1,0 +1,59 @@
+###simplygon shit
+
+import maya.cmds as cmds
+
+sel = cmds.ls(sl=True)
+
+for obj in sel:
+    children = cmds.listRelatives(obj,allDescendents=True,type='transform')
+    lodGrps = []
+    for i in range(5):
+        grp = cmds.group(empty=True,name='LOD%i'%(i+1),parent=obj)
+        lodGrps.append(grp)
+    for child in children:
+        for i in range(5):
+            if 'LOD%i'%(i+1) in child:
+                cmds.parent(child,lodGrps[i])
+                print 'found %s for %s'%(child,lodGrps[i])
+                                
+                                
+#################################################
+geoSel = cmds.ls(sl=True)
+
+for geoName in geoSel:
+    history = cmds.listHistory(geoName,il = 2,pdo = 1)
+    print history
+    for input in history:
+        if cmds.nodeType(input) == 'blendShape':
+            blendname = input
+    blendAttrs = cmds.aliasAttr(blendname, q = True)
+    attrs = []
+    
+    for attr in blendAttrs:
+        if not 'weight'in attr:
+            attrs.append(attr)
+            
+    i = 0
+    for attr in attrs:
+        cmds.setAttr('%s.%s'%(blendname,attr),0)
+        
+    grp = cmds.group(empty = True,name = '%s_correctives'%geoName)
+    
+    for attr in attrs:
+        print attr
+        for zAttr in attrs:
+            cmds.setAttr('%s.%s'%(blendname,zAttr),0)
+            
+        cmds.setAttr('%s.%s'%(blendname,attr),1)
+        dup = cmds.duplicate(geoName)
+        cmds.parent(dup,grp)
+        cmds.rename(dup,attr)
+#####################################################
+geoSel = cmds.ls(sl=True)
+
+for geoName in geoSel:
+    history = cmds.listHistory(geoName,il = 2,pdo = 1)
+    print history
+    for input in history:
+        if cmds.nodeType(input) == 'blendShape':
+            cmds.delete(input)

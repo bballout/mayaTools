@@ -1,0 +1,27 @@
+start = 100
+end = 400
+
+
+for i in range(end):
+    cmds.currentTime(i+1+start)
+    cmds.duplicate('geo_seperated',name='frame%i_dup'%(i+1))
+    cmds.polyUnite('frame%i_dup'%(i+1),ch=1,mergeUVSets=1,name='frame%i'%(i+1))
+    cmds.delete('frame%i'%(i+1),ch=True)
+    
+'''
+for i in range(end):
+	for t in range(end):
+		cmds.currentTime(t+start)
+		cmds.setAttr('morph_driver.currentFrame',t)
+		if (i+1) == (t+1):
+			cmds.setAttr('morph_driver.frame%i'%(i+1),1)
+		else:
+			cmds.setAttr('morph_driver.frame%i'%(i+1),0)
+		cmds.setDrivenKeyframe('morph_driver.frame%i'%(i+1),currentDriver = 'morph_driver.currentFrame')
+'''	
+for i in range(200):
+    cmds.connectAttr('morph_driver.frame%i'%(i+1),'hair_blendShapes.frame%i'%(i+1))
+cmds.connectAttr('noise.noise','hair_blendShapes.adjustment'
+    
+igMorph_hair_blendShapes_target200
+igMorph_hair_blendShapes_target201

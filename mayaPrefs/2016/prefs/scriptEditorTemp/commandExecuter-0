@@ -1,0 +1,73 @@
+sel = cmds.ls(sl = True)
+
+for col in sel:
+    try:
+        jnt = col.split('Collidable_')[1]
+        cmds.parentConstraint(jnt,col,mo = True)
+    except:
+        pass
+
+#select joint hierarchy
+cmds.SelectHierarchy()
+sel = cmds.ls(sl = True)
+
+joints = []
+
+for obj in sel:
+    if cmds.nodeType(obj) == 'joint':
+        joints.append(obj)
+        
+cmds.select(joints)
+
+#build hierarchy
+import maya.cmds as cmds
+
+joints = cmds.ls(sl = True)
+
+for i in range(len(joints)):
+    try:
+        if not i == 0:
+            cmds.parent(joints[i],joints[i-1])
+        
+    except:
+        pass
+
+#turn off bone drawing
+sel = cmds.ls(sl = True)
+
+for obj in sel:
+    try:
+        cmds.setAttr('%s.drawStyle'%obj,2)     
+    except:
+        pass
+        
+#add ig locators
+sel = cmds.ls(sl = True)
+
+for obj in sel:
+    name = 'igLoc_%s'%obj
+    pos = cmds.xform(obj,q = True,ws = True,translation = True)
+    loc = cmds.spaceLocator(name = name)
+    cmds.move(pos[0],pos[1],pos[2],loc,ws = True)
+    cmds.parent(loc,obj)
+        
+#turn off segment scale
+sel = cmds.ls(sl = True)
+
+for obj in sel:
+    try:
+        cmds.setAttr('%s.segmentScaleCompensate'%obj, l = False)
+        cmds.setAttr('%s.segmentScaleCompensate'%obj,0)
+    except:
+        pass
+        
+#ig loc each joint
+sel = cmds.ls(sl = True)
+
+for obj in sel:
+    loc = cmds.spaceLocator(name = 'igLoc_%s'%obj)[0]
+    cmds.parent(loc,obj)
+    cmds.move(0,0,0,loc,os = True)
+    cmds.rotate(0,0,0,loc,os = True)
+        
+        

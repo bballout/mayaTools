@@ -1,0 +1,6 @@
+import igCinematicManager2
+reload(igCinematicManager2)
+
+manager = igCinematicManager2.igCinematicManagerMainClass()
+shotlist = manager.exportShotList2()
+shotlist['Shots']

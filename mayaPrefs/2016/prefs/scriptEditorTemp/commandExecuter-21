@@ -1,0 +1,56 @@
+newSel = cmds.ls(sl = True)
+
+for new in newSel:
+    old = '%s_old'%new
+    if cmds.objExists(old):
+        #select joint hierarchy
+        cmds.select('root')
+        cmds.SelectHierarchy()
+        sel = cmds.ls(sl = True)
+        
+        joints = []
+        
+        for obj in sel:
+            if cmds.nodeType(obj) == 'joint':
+                joints.append(obj)
+                
+        cmds.select(joints)
+        cmds.select(new,add = True)
+        desSkin = cmds.skinCluster()
+        
+        
+        cmds.move(-1,0,0,'LF_uparm_bind_5',os = True, r = True)
+        cmds.move(1,0,0,'LF_loarm_bind_1',os = True, r = True)
+        
+        cmds.move(1,0,0,'RT_uparm_bind_5',os = True, r = True)
+        cmds.move(-1,0,0,'RT_loarm_bind_1',os = True, r = True)
+        
+        cmds.move(-1,0,0,'LF_upleg_bind_5',os = True, r = True)
+        cmds.move(1,0,0,'LF_loleg_bind_1',os = True, r = True)
+        
+        cmds.move(1,0,0,'RT_upleg_bind_5',os = True, r = True)
+        cmds.move(-1,0,0,'RT_loleg_bind_1',os = True, r = True)
+        
+        cmds.move(1,0,0,'LF_wrist',os = True, r = True)
+        cmds.move(-1,0,0,'RT_wrist',os = True, r = True)
+        
+        
+        cmds.select(old)
+        cmds.select(new,add = True)
+        cmds.CopySkinWeights()
+        cmds.move(1,0,0,'LF_uparm_bind_5',os = True, r = True)
+        cmds.move(-1,0,0,'LF_loarm_bind_1',os = True, r = True)
+        
+        cmds.move(-1,0,0,'RT_uparm_bind_5',os = True, r = True)
+        cmds.move(1,0,0,'RT_loarm_bind_1',os = True, r = True)
+        
+        cmds.move(1,0,0,'LF_upleg_bind_5',os = True, r = True)
+        cmds.move(-1,0,0,'LF_loleg_bind_1',os = True, r = True)
+        
+        cmds.move(-1,0,0,'RT_upleg_bind_5',os = True, r = True)
+        cmds.move(1,0,0,'RT_loleg_bind_1',os = True, r = True)
+        
+        cmds.move(-1,0,0,'LF_wrist',os = True, r = True)
+        cmds.move(1,0,0,'RT_wrist',os = True, r = True)
+    else:
+        cmds.error('cannot find destination')

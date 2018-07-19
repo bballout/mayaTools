@@ -1,0 +1,1450 @@
+global proc shelf_Skinning () {
+    global string $gBuffStr;
+    global string $gBuffStr0;
+    global string $gBuffStr1;
+
+
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\ncurrentFile = cmds.file(q = True,sn = True)\ncmds.file(currentFile, open = True, f = True )" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\n\ncurrentFile = cmds.file(q = True,sn = ..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "reload" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\ncurrentFile = cmds.file(q = True,sn = True)\ncmds.file(currentFile, open = True, f = True )" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Joint Tool: Click to place joint, click on existing joint to add to skeleton, click/drag to position joint" 
+        -enableBackground 0
+        -align "center" 
+        -label "Joint Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinJoint.xpm" 
+        -image1 "kinJoint.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "JointTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "JointToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Remove Joint: Select a joint to remove" 
+        -enableBackground 0
+        -align "center" 
+        -label "Remove Joint" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinRemove.xpm" 
+        -image1 "kinRemove.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "RemoveJoint" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Disconnect Joint: Select a joint to disconnect" 
+        -enableBackground 0
+        -align "center" 
+        -label "Disconnect Joint" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinDisconnect.xpm" 
+        -image1 "kinDisconnect.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "DisconnectJoint" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    manipMoveContext
+        -image1 "moveSkinnedJoint.png" 
+        -image2 "vacantCell.png" 
+        -image3 "vacantCell.png" 
+        -mode 0
+        -activeHandle 3
+        -currentActiveHandle 3
+        -orientAxes 0 0 0 
+        -interactiveUpdate 1
+        -activeHandleNormal 2
+        -preserveChildPosition 1
+        -preserveUV 0
+        -pinPivot 0
+        -snapPivotPos 1
+        -snapPivotOri 0
+        -xformConstraint "none" 
+        -orientJointEnabled 1
+        -orientJoint "xyz" 
+        -secondaryAxisOrient "yup" 
+        -snap 0
+        -snapRelative 0
+        -snapValue 1
+        -snapComponentsRelative 1
+        -snapLiveFaceCenter 0
+        -snapLivePoint 0
+        -editPivotMode 0
+        -tweakMode 0
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "moveSkinnedJoint.png" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "IK Handle Tool: Create IK handle on joint chain" 
+        -enableBackground 0
+        -align "center" 
+        -label "IK Handle Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinHandle.xpm" 
+        -image1 "kinHandle.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "IKHandleTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "IKHandleToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "IK Spline Handle Tool: Create IK spline handle on joint chain" 
+        -enableBackground 0
+        -align "center" 
+        -label "IK Spline Handle Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinSplineHandle.xpm" 
+        -image1 "kinSplineHandle.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "IKSplineHandleTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "IKSplineHandleToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Smooth Bind" 
+        -enableBackground 0
+        -align "center" 
+        -label "Smooth Bind" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "smoothSkin.xpm" 
+        -image1 "smoothSkin.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "SmoothBindSkin" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Mirror Skin Weights" 
+        -enableBackground 0
+        -align "center" 
+        -label "Mirror Skin Weights" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "mirrorSkinWeight.xpm" 
+        -image1 "mirrorSkinWeight.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "MirrorSkinWeights" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Copy Skin Weights" 
+        -enableBackground 0
+        -align "center" 
+        -label "Copy Skin Weights" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "copySkinWeight.xpm" 
+        -image1 "copySkinWeight.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "CopySkinWeights" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "OrientJointOptions;" 
+        -enableBackground 0
+        -align "center" 
+        -label "OrientJointOptions;" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "JtOr" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "OrientJointOptions;" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "source \"cometSkinWeight.mel\"; cometSkinWeight();" 
+        -enableBackground 0
+        -align "center" 
+        -label "source \"cometSkinWeight.mel\"; cometSkinWeight();" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "C:/Users/Bill/Documents/maya/2009/prefs/icons/cometSkinWeight.bmp" 
+        -image1 "C:/Users/Bill/Documents/maya/2009/prefs/icons/cometSkinWeight.bmp" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "source \"cometSkinWeight.mel\"; cometSkinWeight();" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "cometSaveWeights" 
+        -enableBackground 0
+        -align "center" 
+        -label "cometSaveWeights" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "C:/Users/Bill/Documents/maya/2009/prefs/icons/cometSaveWeights.bmp" 
+        -image1 "C:/Users/Bill/Documents/maya/2009/prefs/icons/cometSaveWeights.bmp" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "// --------------------------------------------------------------------------\n// cometSaveWeights.mel - MEL Script\n// --------------------------------------------------------------------------\n//\n// DESCRIPTION:\n//\tA tool to easily save and load skin weights.  Handles search and replace,\n//\tmirroring and normalization/pruning.\n//\n//\tNOTE: To do mirroring, you MUST:\n//\t\t\t- Load by Point Position\n//\t\t\t- Select BOTH a Search/Replace AND a Mirror Axis.\n//\n//\n// REQUIRES:\n//\tlibSkin.mel\t- For skin procs\n//\tlibString.mel \t- For string procs\n//\n// USAGE:\n//\tsource \"cometSaveWeights.mel\";  cometSaveWeights() ;\n//\n//\n// AUTHORS:\n//\tMichael B. Comet - comet@comet-cartoons.com\n//\tCopyright ?2004 Michael B. Comet - All Rights Reserved.\n//\n// VERSIONS:\n//\t1.00 - Sep 18, 2004 - Initial Release.\n//\t1.01 - 11/02/04 - mcomet - Fixing.\n//\t1.02 - 11/02/04 - mcomet - Now does pruning on save and works better.\n//\t1.03 - 11/03/04 - mcomet - Fixed big bug in pruning I added yesterday and\n//\t\talso better printing now for matches.\n//\n// --------------------------------------------------------------------------\n\n// DJ MOD\n//\tfix 2011 cSaveW_save() problem\n//\n\n/*\n * Includes\n */\n//eval(\"source \\\"libSkin.mel\\\"; \") ;\n//eval(\"source \\\"libString.mel\\\"; \") ;\n\n/*\n * globals\n */\nglobal string $cSaveW_version = \"1.03_djx01\" ;\nglobal string $cSaveW_date = \"24 August, 2010\" ;\n\n// --------------------------------------------------------------------------\n\n// --------------------------------------------------------------------------\n//\tUI Procs\n// --------------------------------------------------------------------------\n\n// --------------------------------------------------------------------------\n\n/*\n * cometSaveWeights() - Main Entry\n */\nglobal proc cometSaveWeights()\n{\n    global string $cSaveW_version ;\n    global string $cSaveW_date ;\n\n    if (`window -q -ex cometSaveWeightsWin`)\n    \t{\n    \tshowWindow cometSaveWeightsWin ;\n    \treturn ;\n    \t}\n\n\n    window -w 350 -h 280 -t (\"Comet Save Weights - v\"+$cSaveW_version) cometSaveWeightsWin ;\n    formLayout mainSaveForm ;\n    \n    text -l \"skinCluster:\" txSkinCl ;\n    textField -tx \"\" tfSkinCl ;\n    button -l \"<<<\" -w 30 -c (\"cSaveW_loadSkin();\") -ann (\"Load skinCluster from selected geometry.\") btnSkinCl ;\n\n    popupMenu -p tfSkinCl -pmc (\"cSaveW_buildSkinMenu();\") pmSkinCl ;\n    \n\n    text -l \"Filename:\" txFile ;\n    textField -tx \"\" tfFileWts ;\n    button -l \"...\" -w 30 -c (\"cSaveW_chooseFile();\") -ann (\"Choose file for load/save.\") btnFile ;\n    \n    separator -style \"in\" -h 3 sepMain ;\n    \n    button -l \"Save Weights\" -c (\"cSaveW_saveUI();\") -ann (\"Save weights for chosen skinCluster\") btnSave ;\n    \n    separator -style \"in\" -h 3 sepSave ;\n    \n    radioButtonGrp -l \"Load By:\" -cc (\"cSaveW_updateUI();\")  -nrb 3 -la3 \"Pt. Order\" \"World Pos.\" \"Local pos.\" -sl 1 -cw4 52 70 80 80  -ann (\"Load by either Point Order, where point count cannot have changed, or by Closest Point Position matching.\") rbgLoadBy ;\n\n    text -l \"Point Position Match Tolerance:\" txTol ;\n    floatField -w 150 -v -1.0 -min -1.0 -pre 6 -en false tfTol ;\n    popupMenu -p tfTol ;\n    \tmenuItem -l \"0.0001\" -c (\"floatField -e -v 0.0001 tfTol ;\") ;\n    \tmenuItem -l \"0.001\" -c (\"floatField -e -v 0.001 tfTol ;\") ;\n    \tmenuItem -l \"0.01\" -c (\"floatField -e -v 0.01 tfTol ;\") ;\n    \tmenuItem -l \"0.1\" -c (\"floatField -e -v 0.1 tfTol ;\") ;\n    \tmenuItem -divider true ;\n    \tmenuItem -l \"Disabled (-1)\" -c (\"floatField -e -v -1.0 tfTol ;\") ;\n\n\n    checkBox -l \"Prune weights to\" -v 1 -cc (\"cSaveW_updateUI();\") cbPrune ;\n    intField -v 3 -min 1 -max 12 -w 40 ifPrune ;\n    text -l \"decimal places.\" txPrune ;\n    popupMenu -p ifPrune ;\n    \tmenuItem -l \"1\" -c (\"intField -e -v 1 ifPrune ;\") ;\n    \tmenuItem -l \"2\" -c (\"intField -e -v 2 ifPrune ;\") ;\n    \tmenuItem -l \"3\" -c (\"intField -e -v 3 ifPrune ;\") ;\n    \tmenuItem -l \"4\" -c (\"intField -e -v 4 ifPrune ;\") ;\n    \tmenuItem -l \"5\" -c (\"intField -e -v 5 ifPrune ;\") ;\n\n\n    radioButtonGrp -l \"Mirror Pos.:\" -nrb 4 -la4 \"None\" \"X\" \"Y\" \"Z\" -sl 1 -en false -cw5 63 50 40 40 40  rbgMirror ;\n\n\n    text -l \"Search:\" txSearch ;\n    textField -tx \"\" tfSearch ;\n    text -l \"Replace:\" txReplace ;\n    textField -tx \"\" tfReplace ;\n   \n    popupMenu -p tfSearch ;\n        menuItem -l \"*NONE*\" -c (\"textField -e -tx \\\"\\\" tfSearch; textField -e -tx \\\"\\\" tfReplace; radioButtonGrp -e -sl 1 rbgMirror ; \") ;\n        menuItem -l \"Lf\" -c (\"textField -e -tx \\\"Lf\\\" tfSearch; textField -e -tx \\\"Rt\\\" tfReplace; radioButtonGrp -e -sl 2 rbgMirror ; \") ;\n        menuItem -l \"Rt\" -c (\"textField -e -tx \\\"Rt\\\" tfSearch; textField -e -tx \\\"Lf\\\" tfReplace; radioButtonGrp -e -sl 2 rbgMirror ; \") ;\n\n    popupMenu -p tfReplace ;\n        menuItem -l \"*NONE*\" -c (\"textField -e -tx \\\"\\\" tfSearch; textField -e -tx \\\"\\\" tfReplace; radioButtonGrp -e -sl 1 rbgMirror ; \") ;\n        menuItem -l \"Rt\" -c (\"textField -e -tx \\\"Lf\\\" tfSearch; textField -e -tx \\\"Rt\\\" tfReplace; radioButtonGrp -e -sl 2 rbgMirror ; \") ;\n        menuItem -l \"Lf\" -c (\"textField -e -tx \\\"Rt\\\" tfSearch; textField -e -tx \\\"Lf\\\" tfReplace; radioButtonGrp -e -sl 2 rbgMirror ; \") ;\n   \n    button -l \"Select Joints from File\" -c (\"cSaveW_selJntsUI();\") -ann (\"Attempts to re-select original skin joints based on what was stored in the save weights file.\") btnSelJnts ;\n   \n    button -l \"Load Weights\" -c (\"cSaveW_loadUI();\") -ann (\"Loads weights for chosen skinCluster.\") btnLoad ;\n   \n    separator -style \"in\" -h 3 sepEmail ;\n    iconTextButton -style \"textOnly\" -l (\"comet@comet-cartoons.com\") -ann (\"cometSaveWeights - \"+$cSaveW_version+\" - \"+$cSaveW_date+\"  Copyright ?2004 Michael B. Comet All Rights Reserved\") -c (\"showHelp -a \\\"http://www.comet-cartoons.com/toons/\\\"\") -h 24 email ;\n   \n\n    \n    formLayout -e\n    \n    \t-af txSkinCl \"top\" 8 \n    \t-an txSkinCl \"bottom\" \n    \t-af txSkinCl \"left\" 5 \n    \t-an txSkinCl \"right\" \n\n    \t-af tfSkinCl \"top\" 5 \n    \t-an tfSkinCl \"bottom\" \n    \t-ac tfSkinCl \"left\" 5 txSkinCl \n    \t-ac tfSkinCl \"right\" 5 btnSkinCl\n    \t\n    \t-af btnSkinCl \"top\" 5 \n    \t-an btnSkinCl \"bottom\" \n    \t-an btnSkinCl \"left\"  \n    \t-af btnSkinCl \"right\" 5\n\n\n    \t-ac txFile \"top\" 8 tfSkinCl\n    \t-an txFile \"bottom\" \n    \t-af txFile \"left\" 5 \n    \t-an txFile \"right\" \n\n    \t-ac tfFileWts \"top\" 5 tfSkinCl\n    \t-an tfFileWts \"bottom\" \n    \t-ac tfFileWts \"left\" 5 txFile \n    \t-ac tfFileWts \"right\" 5 btnFile\n    \t\n    \t-ac btnFile \"top\" 5 tfSkinCl\n    \t-an btnFile \"bottom\" \n    \t-an btnFile \"left\"  \n    \t-af btnFile \"right\" 5\n    \t\n    \t-ac sepMain \"top\" 5 tfFileWts\n    \t-an sepMain \"bottom\" \n    \t-af sepMain \"left\" 0\n    \t-af sepMain \"right\" 0\n    \n    \t-ac btnSave \"top\" 5 sepMain\n    \t-an btnSave \"bottom\" \n    \t-af btnSave \"left\" 5\n    \t-af btnSave \"right\" 5\n\n    \t-ac sepSave \"top\" 5 btnSave\n    \t-an sepSave \"bottom\" \n    \t-af sepSave \"left\" 0\n    \t-af sepSave \"right\" 0\n\n    \t-ac rbgLoadBy \"top\" 5 sepSave\n    \t-an rbgLoadBy \"bottom\" \n    \t-af rbgLoadBy \"left\" 5\n    \t-an rbgLoadBy \"right\" \n\n    \t-ac txTol \"top\" 8 rbgLoadBy\n    \t-an txTol \"bottom\" \n    \t-af txTol \"left\" 5\n    \t-an txTol \"right\" \n\n    \t-ac tfTol \"top\" 5 rbgLoadBy\n    \t-an tfTol \"bottom\" \n    \t-ac tfTol \"left\" 5 txTol\n    \t-af tfTol \"right\" 5\n    \n\n    \t-ac cbPrune \"top\" 8 tfTol\n    \t-an cbPrune \"bottom\" \n    \t-af cbPrune \"left\" 5 \n    \t-an cbPrune \"right\" \n\n    \t-ac ifPrune \"top\" 5 tfTol\n    \t-an ifPrune \"bottom\" \n    \t-ac ifPrune \"left\" 0 cbPrune\n    \t-an ifPrune \"right\" \n\n    \t-ac txPrune \"top\" 8 tfTol\n    \t-an txPrune \"bottom\" \n    \t-ac txPrune \"left\" 5 ifPrune\n    \t-an txPrune \"right\" \n\n\n    \t-ac rbgMirror \"top\" 5 ifPrune\n    \t-an rbgMirror \"bottom\" \n    \t-af rbgMirror \"left\" 5 \n    \t-af rbgMirror \"right\" 5\n\n\n    \t    \t\n    \t-ac txSearch \"top\" 8 rbgMirror\n    \t-an txSearch \"bottom\" \n    \t-af txSearch \"left\" 5 \n    \t-an txSearch \"right\" \n\n    \t-ac tfSearch \"top\" 5 rbgMirror\n    \t-an tfSearch \"bottom\" \n    \t-ac tfSearch \"left\" 5 txSearch\n    \t-ap tfSearch \"right\" 0 49\n\n    \t-ac txReplace \"top\" 8 rbgMirror\n    \t-an txReplace \"bottom\" \n    \t-ap txReplace \"left\" 0 51\n    \t-an txReplace \"right\" \n\n    \t-ac tfReplace \"top\" 5 rbgMirror\n    \t-an tfReplace \"bottom\" \n    \t-ac tfReplace \"left\" 5 txReplace \n    \t-af tfReplace \"right\" 5\n    \n    \t-ac btnSelJnts \"top\" 5 tfSearch\n    \t-an btnSelJnts \"bottom\" \n    \t-af btnSelJnts \"left\" 5 \n    \t-ap btnSelJnts \"right\" 0 50\n\n    \t-ac btnLoad \"top\" 5 tfSearch\n    \t-an btnLoad \"bottom\" \n    \t-ap btnLoad \"left\" 0 50\n    \t-af btnLoad \"right\" 5\n\n    \t-ac sepEmail \"top\" 5 btnLoad\n    \t-an sepEmail \"bottom\" \n    \t-af sepEmail \"left\" 0 \n    \t-af sepEmail \"right\" 0\n\n    \t-ac email \"top\" 0 sepEmail\n    \t-an email \"bottom\" \n    \t-af email \"left\" 5\n    \t-af email \"right\" 5\n    \t\n    \tmainSaveForm ;\n\n\t\n\n    showWindow cometSaveWeightsWin ;\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_loadSkin() - Loads the skinCluster up into field\n */\nglobal proc cSaveW_loadSkin()\n{\n    string $objs[] = `ls -sl` ;\n\n    string $skins[] = libSkin_getSkinFromGeo($objs[0]) ;\n    textField -e -tx $skins[0] tfSkinCl ;\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_buildSkinMenu() - Makes popup menu for the geo list\n */\nglobal proc cSaveW_buildSkinMenu()\n{\n    menu -e -dai pmSkinCl ;\n    setParent -menu pmSkinCl ;\n    \n    string $geos[] = libSkin_getSkinGeosInScene() ;\n    string $g;\n    \n    $geos = `sort $geos` ;\n    \n    for ($g in $geos)\n        {\n        menuItem -l $g -c (\"select -r \\\"\"+$g+\"\\\"; cSaveW_loadSkin(); \") ;        \n        }\n    \n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_chooseFile() - Use the nicer Maya file browser....\n */\nglobal proc cSaveW_chooseFile()\n{\n\t// See the top of fileBrowser.mel in Maya for info.\n\t// Basically you call :\n\t//\t\tfileBrowser( string $procCB, string $action, string $type, int $mode) ;\n\t//\n\t//  $procCB = callback proc to be invoked when the action button is pressed\n\t//  $action = label of the button in the browser that will do something, like \"Load\" or \"Save\"\n\t//  $type   = File type to be used... like *.mel\n\t//  $mode   = 0=read 1=write 2=write (no paths)  4=Read dir's only\n    \t//\n\t//\n\t//  The Callback proc must take two strings, and return an int\n\t// ie:\n\t//\tglobal proc int fileProcCB(string $file, string $type) \n\t//\n\t//   $file  = file or dir that was chosen\n\t//   $type  = type of file\n\t//     Returns 1 if dialog should close and success, 0 if keep open and fail.\n\t//\n\t//  Finally another useful items is: \n\t//\t\tglobal string $gDefaultFileBrowserDir;\n\t//\n\t//\tThis will put the filebrowser to point to the path.  Useful to make\n\t//\tit go somewhere right before the initial fileBrowser call.\n\t//\n    global string $gDefaultFileBrowserDir;\n\n    string $curFile = `textField -q -tx tfFileWts` ;\n\tstring $dir = dirname($curFile) ;\n\n\t// DJ MOD - 2011 style fileBrowser\n//\tif ($dir != \"\")\n//\t\tpv_goDirectory($dir) ;\t\t\t// And start in that place...\n//    \n//   fileBrowser( \"cSaveW_chooseFileCB\", \"Choose\", \"*.*\", 1) ;\n    \n\tstring $singleFilter = \"All Files (*.*)\";\n    string $newFile[] = `fileDialog2 -ds 1 -fm 0 -ff $singleFilter -dir $dir`;\n    \n    if(size($newFile)) {\n    \t\t$curFile = $newFile[0];\n\t\tprint (\"cometSaveWeights: filename = \" + $newFile[0] + \"\\n\");\n\t\ttextField -e -tx $curFile tfFileWts ;\n\t}\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_chooseFileCB() - Callback proc for fileBrowser call.\n */\nglobal proc int cSaveW_chooseFileCB(string $file, string $type)\n{\n    textField -e -tx $file tfFileWts ;\n    return 1 ;\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_saveUI() - Wrapper for save from ui call\n */\nglobal proc cSaveW_saveUI()\n{\n    string $skinCl = `textField -q -tx tfSkinCl`; \n    string $file = `textField -q -tx tfFileWts` ;\n    int $bDoPrune = `checkBox -q -v cbPrune` ;\n    int $prunePlaces = `intField -q -v ifPrune` ;\n\t\n    string $comps[] = libSkin_getSelComps($skinCl) ;\n    \n    cSaveW_save($skinCl, $file, $comps, $bDoPrune, $prunePlaces ) ;\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_save() - Real Save proc\n */\nglobal proc cSaveW_save(string $skinCl, string $file, string $comps[],\n\tint $bDoPrune, int $prunePlaces)\n{\n    if (size($comps) <= 0)\n    \t{\n    \terror -sl 0 (\"cometSaveWeights: You must select one or more points/vertices to save.\") ;\n    \t}\n\n    if ($file == \"\")\n    \t{\n    \terror -sl 0 (\"cometSaveWeights: You must choose a file to save to.\");\n    \t}\n\n    if (`filetest -r $file`)\t// Does file already exist? \n    \t{\n    \tif (`filetest -w $file` != true)\t// If so is it not writable?\n    \t    {\n    \t    error -sl 0 (\"cometSaveWeights: The file you have chosen is NOT writeable.\");\t\n    \t    }\n\tstring $ret = `confirmDialog\n\t\t\t-title \"Overwrite File?\"\n\t\t\t-message (\"The file: \"+$file+\" \\n\\n    Already exists.  Do you wish to overwrite it?\\n\")\n\t\t\t-button \"Save\"\n\t\t\t-button \"Cancel\"\n\t\t\t-defaultButton \"Cancel\"\n\t\t\t-cancelButton \"Cancel\"\n\t\t\t-dismissString \"Cancel\"\n\t\t\t`;\n\t\t\t\n\tif ($ret != \"Save\")\n\t    {\n\t    print (\"// cometSaveWeights aborted at user request. //\\n\") ;\n\t    return ;\n\t    }\n    \t\n    \t}\n\n\n\t// At this point we are ready to save weights.\n\t//\n\n\t// Open file\n    int $fileId = `fopen $file \"w\"`;\n    if ($fileId == 0) {\n\terror -sl 1 (\"cometSaveWeights: Error Opening File: \"+$file);\n\treturn;\n\t}    \n\n    fprint $fileId (\"// \"+$file+\" - cometSaveWeights.mel OUTPUT.\\n\");\n    fprint $fileId (\"// \\n\\n\");\n    fprint $fileId (\"[WEIGHTS]\\n\");\n\n    waitCursor -state on; \n\n    string $comp=\"\" ;\n    \n    string $usedJnts[] ;\n    clear $usedJnts ;\n    string $cmd=\"\" ;\n    \n        \n    setAttr ($skinCl+\".envelope\") 0.0 ;\t// Disable so we get a valid point pos read...\n        \t\n    for ($comp in $comps) \n        {\n\t\tfloat $wts[] ;\n\t\tstring $jnts[] ;\n\t\tclear $jnts;\t\t// erase array\n\t\tclear $wts ;\n\t\n\t\t// What joints are being used?\n\t\t// DJ MOD - 2011 fix\n\t\t//$cmd = (\"skinPercent -q -t \"+$skinCl+\" \"+$comp); \n\t\t//$jnts = eval($cmd);\n\t\tstring $jnts[] = `skinCluster -q -inf $skinCl`;\n\t\n\t\t// And what are their skinPercent weights?\n\t\t$cmd = (\"skinPercent -q -v \"+$skinCl+\" \"+$comp); \n\t\t$wts = eval($cmd);\n\t\t\n\t\tif ($bDoPrune)\n\t\t\tcSaveW_pruneAndNormalize($wts, $prunePlaces) ;\n\t\t\n\t\tfloat $posW[3] = `pointPosition -w $comp`;\n\t\tfloat $posL[3] = `pointPosition -l $comp`;\n\t\n\t\tfprint $fileId \"[COMPONENT]\\n\";\n\t\tfprint $fileId ($comp+\"\\n\");\t\t\t// print sel name\n\t\tfprint $fileId ($posW[0]+\" \"+$posW[1]+\" \"+$posW[2]+\"\\n\");   // print pos World\n\t\tfprint $fileId ($posL[0]+\" \"+$posL[1]+\" \"+$posL[2]+\"\\n\");   // print pos Local\n\t\n\t\tstring $output = \"\" ;\n\t\tfloat $total = 0.0 ;\t\n\t\tfor ($n=0; $n < size($jnts); ++$n) \n\t\t\t{\n\t\t\tif ($wts[$n] != 0.0)\n\t\t\t\t{\n\t\t\t\t$total += $wts[$n] ;\n\t\t\t\t$output += ($jnts[$n]+\" \"+$wts[$n]+\" \");\n\t\n\t\t\t\t// Now keep list of joints we've seen...\n\t\t\t\tcSaveW_addToArray($jnts[$n], $usedJnts ) ;\n\t\t\t\t}\n\t\t\t}\n\t\tif ($total <= 0.0 || $output == \"\")\n\t\t\t$output = \"// No weights\" ;\n\t\n\t\tfprint $fileId ($output+\"\\n\");\t\t// write to file\n\t\t} // end of each comp\n\n    fprint $fileId (\"[END-WEIGHTS]\\n\");\n\n    fprint $fileId (\"\\n\");\n\n    fprint $fileId (\"[JOINTS]\\n\");\n    for ($n=0; $n < size($usedJnts); ++$n) \n    \t{\n    \tfprint $fileId ($usedJnts[$n]+\"\\n\");\n    \t}\n    fprint $fileId (\"[END-JOINTS]\\n\");\n    \n    fprint $fileId (\"\\n\\n\");\n    fprint $fileId (\"// end of output.\\n\");\n\n    fclose $fileId;\n\n    setAttr ($skinCl+\".envelope\") 1.0 ;\t\t// RE-Enable\n\n\n    waitCursor -state off; \n\n    print (\"// cometSaveWeights ended successfully. //\\n\");    \n\n}\n\n\n// --------------------------------------------------------------------------\n\n\n/*\n * cSaveW_addToArray() - Helper function that checks to see if the passed in\n *     string/bonename is in our list, and if not, adds it to the end.\n */\nglobal proc cSaveW_addToArray(string $b, string $array[])\n{\n    int $n;\n    int $found=0;\n    int $total = size($array);\n    \n    for ($n=0; $n < $total; ++$n) {\n    \tif ($array[$n] == $b) {\n\t    $found = 1;\n\t    break;\n\t    }\n    \t}\n\n    if ($found == 0)\t\t// haven't seen it yet, add to end of list\n        $array[$total] = $b;   // add it\n\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_updateUI\n */\nglobal proc cSaveW_updateUI()\n{\n    int $mode = `radioButtonGrp -q -sl rbgLoadBy` ;\n    if ($mode == 1)\t// Order\n    \t{\n    \t// DJ MOD - 2011 bug fix\n    \tfloatField -e -en false tfTol ;\n    \tradioButtonGrp -e -en false rbgMirror ;\n    \t}\n    else\n    \t{\n    \t// DJ MOD - 2011 bug fix\n    \tfloatField -e -en true tfTol ;\n    \tradioButtonGrp -e -en true rbgMirror ;\n    \t}\n\n\n    int $prune = `checkBox  -q -v cbPrune` ;\n    intField -e -en $prune ifPrune ;\n\n}\n\n// --------------------------------------------------------------------------\n\n\n/*\n * cSaveW_loadUI() - Wrapper for load from ui call\n */\nglobal proc cSaveW_loadUI()\n{\n    string $skinCl = `textField -q -tx tfSkinCl`; \n    string $file = `textField -q -tx tfFileWts` ;\n    int $mode = `radioButtonGrp -q -sl rbgLoadBy` ;\n    float $tol = `floatField -q -v tfTol` ;\n    int $mirrorMode = `radioButtonGrp -q -sl rbgMirror` ;\n    string $search = `textField -q -tx tfSearch` ;\n    string $replace = `textField -q -tx tfReplace` ;\n    int $bDoPrune = `checkBox -q -v cbPrune` ;\n    int $prunePlaces = `intField -q -v ifPrune` ;\n\n    string $comps[] = libSkin_getSelComps($skinCl) ;\n    \n    cSaveW_load($skinCl, $file, $comps, $mode, $tol, $mirrorMode, $search, $replace, $bDoPrune, $prunePlaces) ;\n\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_load() - Real load proc\n */\nglobal proc cSaveW_load(string $skinCl, string $file, string $comps[], \n\tint $mode, float $tol, int $mirrorMode, string $search, string $replace,\n\tint $bDoPrune, int $prunePlaces)\n{\n\t// Store some vars for pointPosition loads...\n    int $ppCnt = 0 ;\t// How many read in?\n\tstring $ppComps[] ;\t// Original component name for the saved pp comp\n    string $ppJnts[] ;\t// string of joints for each point\n    string $ppWts[] ;\t// Weight string of float weights for each point\n    float $ppXPos[] ;\t// X Pos for each loaded pt\n    float $ppYPos[] ;\t// X Pos for each loaded pt\n    float $ppZPos[] ;\t// X Pos for each loaded pt\n\n\n    if (size($comps) <= 0)\n    \t{\n    \terror -sl 0 (\"cometSaveWeights: You must select one or more points/vertices to load points for.\") ;\n    \t}\n\n    if ($file == \"\")\n    \t{\n    \terror -sl 0 (\"cometSaveWeights: You must choose a file to load from.\");\n    \t}\n\n    if (`filetest -r $file` != true)\t// Does file already exist? \n\terror -sl 0 (\"cometSaveWeights: The file \\\"\"+$file+\"\\\" does not exist.\") ;\n\n\n    $fileId = `fopen $file \"r\"`;\n    if ($fileId == 0) {\n\terror -sl 1 (\"saveWeights.mel: Error Opening File or File does not exist: \"+$file);\n\treturn;\n\t}        \n\n    waitCursor -state on; \n\n    setAttr ($skinCl+\".envelope\") 0.0 ;\t// Disable so we get a valid point pos read...\n\n\t// Start the reading...\n    $line = `fgetline $fileId`;\t\t// get the first comment line/header\n    $line = cSaveW_stripCR($line);\n\n    string $parts[] ;\n\n    string $curObj = \"\" ;\n    tokenize($comps[0], \".\", $parts) ;\t// Break on obj.attr to get at least what current obj is.\n    $curObj = $parts[0] ;\n\n    do\n        {\n        \n        \n\tif ($line == \"\" || substring($line,1,1) == \" \" || substring($line,1,2) == \"//\")\n\t    $line = \"[COMMENT]\" ;\n\t\n\tswitch ($line)\n\t    {\n\t    case \"[WEIGHTS]\":\n\t    \tprint (\"// cometSaveWeights: Reading weights... //\\n\") ;\n\t    \tbreak ;\n\t    \n\t    case \"[COMPONENT]\":\n\t    \t// Now read next items...\n\t    \tstring $comp = `fgetline $fileId` ;\t// obj.vtx[]\n\t    \t$comp = cSaveW_stripCR($comp) ;\n\t    \t\n\t    \tstring $posWStr = `fgetline $fileId` ;\t// posW\n\t    \t$posWStr = cSaveW_stripCR($posWStr) ;\n\t    \ttokenize($posWStr, $parts) ;\n\t    \tfloat $posW[3]; \n\t    \t$posW[0] = (float)$parts[0] ;\n\t    \t$posW[1] = (float)$parts[1] ;\n\t    \t$posW[2] = (float)$parts[2] ;\n\t    \tif ($mirrorMode == 2)\n\t    \t    $posW[0] *= -1.0 ;\n\t    \telse if ($mirrorMode == 3)\n\t    \t    $posW[1] *= -1.0 ;\n\t    \telse if ($mirrorMode == 4)\n\t    \t    $posW[2] *= -1.0 ;\n\t    \t\n\t    \tstring $posLStr = `fgetline $fileId` ;\t// posL\n\t    \t$posLStr = cSaveW_stripCR($posLStr) ;\n\t    \ttokenize($posLStr, $parts) ;\n\t    \tfloat $posL[3]; \n\t    \t$posL[0] = (float)$parts[0] ;\n\t    \t$posL[1] = (float)$parts[1] ;\n\t    \t$posL[2] = (float)$parts[2] ;\n\t    \tif ($mirrorMode == 2)\n\t    \t    $posL[0] *= -1.0 ;\n\t    \telse if ($mirrorMode == 3)\n\t    \t    $posL[1] *= -1.0 ;\n\t    \telse if ($mirrorMode == 4)\n\t    \t    $posL[2] *= -1.0 ;\n\t    \t\t    \t\n\t    \tstring $tvStr = `fgetline $fileId` ;\t// jnt wt jnt wt jnt wt ...\n\t    \t$tvStr = cSaveW_stripCR($tvStr) ;\n\t    \ttokenize($tvStr, $parts) ;\n\t    \tstring $jnts[] ;\n\t    \tfloat $wts[] ;\n\t    \tclear $jnts ;\n\t    \tclear $wts ;\n\t    \tint $j;\n\t    \t\n\t    \t// DJ MOD - handle \"// No Weights\" comment\n\t    \t//\tAlthough this is a possibility, it shouldn't happen in a normalized skin cluster where every vertshould be weighted to something\n\t    \t//\n\t    \tint $noWeights = 1;\n\t    \tif($parts[0] != \"//\") {\n\t    \t\t$noWeights = 0;\n\t\t\tfor ($j=0; $j < size($parts); $j += 2)\n\t\t\t\t{\n\t\t\t\tif ($search != \"\")\n\t\t\t\t\t$parts[$j] = strSearchReplace($parts[$j], $search, $replace) ;\n\n\t\t\t\t$jnts[size($jnts)] = $parts[$j] ;\n\t\t\t\t$wts[size($wts)] = $parts[$j+1] ;\n\t\t\t\t}\n\t\t}\n\n\t\t// Now actually do something with all the data we read.\n\t\t// We know the points World and Local space with mirroring done, \n\t\t// as well as the joints, weights and comp with search/replace done.\n\t\t//\n\t\tif ($mode == 1 && !$noWeights)\t\t// Order\n\t\t    {\n\t\t    tokenize($comp, \".\", $parts) ;\t// Break into obj.attr\n\t\t    string $c;\n\t\t    \n\t\t\t\n\t\t    // Now to allow for loading of one obj to another, we only really keep\n\t\t    // the .vtx part, and retack that onto the real object the skinCluster is for.\n\t\t    //\n\t\t    $comp = ($curObj+\".\"+$parts[1]) ;\n\t\t    \n\t\t    int $isSel = false ;\n\t\t    for ($c in $comps)\n\t\t        {\n\t\t        if ($c == $comp)\n\t\t            {\n\t\t            $isSel = true ;\n\t\t            break ;\n\t\t            }\n\t\t        }\n\t\t    \n\t\t    // Now only actually do the load if the comp we just read was in the selected comp list...\n\t\t    if ($isSel)\n\t\t        {\n\t\t\t\tprint (\"// \"+$comp+\" Loading... //\\n\");\n\t\n\t\t\t\tstring $cmd = \"\" ;\n\t\t\t\n\t\t\t\tif ($bDoPrune)\n\t\t\t\t\t{\n\t\t\t\t\t// Prune and normalize\n\t\t\t\t\tint $floodIdx = cSaveW_pruneAndNormalize($wts, $prunePlaces) ;\n\t\n\t\t\t\t\t// Flood to largest value first, to ensure proper set.\n\t\t\t\t\t$cmd += \"skinPercent \" ;\n\t\t\t\t\t$cmd += (\"-tv \"+$jnts[$floodIdx]+\" 1.0 \");\n\t\t\t\t\t$cmd += ($skinCl+\" \"+$comp+\" ;  \") ;\n\t\t\t\t\teval($cmd) ;\n\t\t\t\t\t}\n\t\t\t\n\t\t\t\n\t\t\t\t$cmd = \"skinPercent \" ;\n\t\n\t\t\t\tfor ($j=0; $j < size($jnts); ++$j)\n\t\t\t\t\t$cmd += (\"-tv \"+$jnts[$j]+\" \"+$wts[$j]+\" \");\n\t\n\t\t\t\t$cmd += ($skinCl+\" \"+$comp+\" ;\") ;\n\t\n\t\t\t\teval($cmd) ;\t\t// Load the weight!\n\t\t\t\t}\n\t\t    }\n\t\telse \t// Point position, just store data\n\t\t    {\n\t\t\t$ppComps[$ppCnt] = $comp ;\n\t\t    $ppJnts[$ppCnt] = \"\" ;\n\t\t    $ppWts[$ppCnt] = \"\" ;\n\t\t    for ($j=0; $j < size($jnts); ++$j)\t// Re-assemble as strings for now...\n\t\t    \t{\n\t\t    \t$ppJnts[$ppCnt] = $ppJnts[$ppCnt] + ($jnts[$j] + \" \");\t\n\t\t    \t$ppWts[$ppCnt]  = $ppWts[$ppCnt]  + ($wts[$j] + \" \") ;\t\n\t\t    \t}\n\t\t    \n\t\t    if ($mode == 2)\t\t// World\n\t\t        {\n\t\t        $ppXPos[$ppCnt] = $posW[0] ;\n\t\t        $ppYPos[$ppCnt] = $posW[1] ;\n\t\t        $ppZPos[$ppCnt] = $posW[2] ;\n\t\t        }\n\t\t    else if ($mode == 3)\t// Local\n\t\t        {\n\t\t        $ppXPos[$ppCnt] = $posL[0] ;\n\t\t        $ppYPos[$ppCnt] = $posL[1] ;\n\t\t        $ppZPos[$ppCnt] = $posL[2] ;\n\t\t        }\n\t\t    \n\t\t    ++$ppCnt ;\t// Keep track of how many pts read.\n\t\t    }\n\n\n\t    \tbreak ;\n\n\t    case \"[END-WEIGHTS]\":\n\t        print (\"// cometSaveWeights: Finished reading weight data. //\\n\") ;\n\t        break ;\n\n\n\t    case \"[JOINTS]\":    \n\t    \t// Orig jnt list, read until we hit the END marker for it...\n\t    \tstring $temp ;\n\t    \tdo \n\t    \t    {\n\t    \t    $temp = `fgetline $fileId` ;\t// orig jnt \n\t\t    $temp = cSaveW_stripCR($temp) ;\n\t    \t    \n\t    \t    } while ($temp != \"[END-JOINTS]\" && !feof($fileId)) ;\n\t\tbreak ;\n\n\n\t    case \"[COMMENT]\":    \n\t    default:\n\t    \t; // Ignore it!\n\t    \tbreak ;\n\t    \t}\n\n\n\t\t// Attempt to read next line        \n\t\t$line = `fgetline $fileId`;\t\t// get the first comment line/header\n\t\t$line = cSaveW_stripCR($line);\n\t\t\t\n        } while ( !feof($fileId) ) ;\n\n\n\n    if ($mode == 2 || $mode == 3)\t\t// Point position load...must finish...\n    \t{\n    \tprint (\"// cometSaveWeights: Loading by point position... //\\n\") ;\n    \t\n    \t// At this stage we have stored jnt, wts, pos for each original comp pt.\n    \t// Now for each real selected vert, we can loop thru and load.\n    \t//\n    \t\n    \t// Go thru each selected comp...and find best match for it..\n    \tint $i;\n    \tfor ($i=0; $i < size($comps); ++$i)\n    \t    {\n\t\t\t\t// Get position of the component\n\t\t\tfloat $posC[3] ;\n\t\t\tif ($mode == 2)\n\t\t\t\t$posC = `pointPosition -w $comps[$i]`;\n\t\t\telse if ($mode == 3) \n\t\t\t\t$posC = `pointPosition -l $comps[$i]`;\n\t\t\t\t\n\t\t\t\n\t\t\t\tint $idxClosest = -1 ;\n\t\t\t\tfloat $closestDist = -1 ;\n\t\t\t\t\n\t\t\t\tint $j ;\n\t\t\t\tfor ($j=0; $j < $ppCnt; ++$j)\n\t\t\t\t\t{\n\t\t\t\t\t\n\t\t\t\t\tvector $vDist = << ($posC[0] - $ppXPos[$j]), ($posC[1] - $ppYPos[$j]), ($posC[2] - $ppZPos[$j]) >> ;\n\t\t\t\t\tfloat $dist = mag($vDist) ;\n\t\n\t\t\t\t\t\n\t\t\t\t\t// Now if we are closer, or if first round, store...\n\t\t\t\t\tif ($dist < $closestDist || $idxClosest == -1)\n\t\t\t\t\t\t{\n\t\t\t\t\t\t$idxClosest = $j ;\n\t\t\t\t\t\t$closestDist = $dist ;\n\t\t\t\t\t\t}\n\t\t\t\t\t\n\t\t\t\t\t}\n\t\t\t  \n\t\t\t\t// Now we have a closest point..but make sure it is within threshold\n\t\t\tif ($closestDist > $tol && $tol >= 0.0)\t// The closest match was not close enough....neg tol means ignore tolerance\n\t\t\t\t\t{\n\t\t\t\t\tprint (\"// \"+$comps[$i]+\" distance \"+$closestDist+\" is out of tolerance \"+$tol+\" for closest point INDEX \"+$idxClosest+\". //\\n\") ;\n\t\t\t\t\tcontinue ;\n\t\t\t\t\t}\n\t\t\t  \n\t\t\tprint (\"// \"+$comps[$i]+\" matches \"+$ppComps[$idxClosest]+\" (Internal Index \"+$idxClosest+\") //\\n\") ;\n\t\t\t  \n\t\t\t// At this point we can weight..we just have to munge the strings we stored\n\t\t\t// back into something usable\n\t\t\t//\n\t\t\tstring $jnts[] ;\n\t\t\tfloat $wts[] ;\n\t\t\tclear $jnts ;\n\t\t\tclear $wts ;\n\t\t\t\n\t\t\ttokenize($ppJnts[$idxClosest], $parts) ;\n\t\t\tfor ($j=0; $j < size($parts); ++$j)\n\t\t\t$jnts[size($jnts)] = $parts[$j] ;\n\t\n\t\t\ttokenize($ppWts[$idxClosest], $parts) ;\n\t\t\tfor ($j=0; $j < size($parts); ++$j)\n\t\t\t$wts[size($wts)] = (float)$parts[$j] ;\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t// Now we can actually load it.\n\t\t\t//\n\t\t\tstring $cmd = \"\" ;\n\t\n\t\t\tif ($bDoPrune)\n\t\t\t\t{\n\t\t\t\t// Prune and normalize\n\t\t\t\tint $floodIdx = cSaveW_pruneAndNormalize($wts, $prunePlaces) ;\n\t\t\n\t\t\t\t// Flood to largest value first, to ensure proper set.\n\t\t\t\t$cmd += \"skinPercent \" ;\n\t\t\t\t$cmd += (\"-tv \"+$jnts[$floodIdx]+\" 1.0 \");\n\t\t\t\t$cmd += ($skinCl+\" \"+$comps[$i]+\" ;  \") ;\n\t\t\t\teval($cmd) ;\n\t\t\t\t}\n\t\n\t\n\t\t\t$cmd = \"skinPercent \" ;\n\t\n\t\t\tfor ($j=0; $j < size($jnts); ++$j)\n\t\t\t$cmd += (\"-tv \"+$jnts[$j]+\" \"+$wts[$j]+\" \");\n\t\n\t\t\t$cmd += ($skinCl+\" \"+$comps[$i]+\" ;\") ;\n\t\n\t\t\teval($cmd) ;\t\t// Load the weight!\n\t\t\t\t\n\t\t\t\n\t\t\t}\n\t\t\t\n    \tprint (\"// cometSaveWeights: Point position load done. //\\n\") ;\n    \t}\n    \t\n\n    setAttr ($skinCl+\".envelope\") 1.0 ;\t// RE-Enable\n    \t\n \n    waitCursor -state off; \n\n\n    fclose $fileId;\n\n}\n\n// --------------------------------------------------------------------------\n\n\n/*\n * cSaveW_stripCR - removes leading AND trailing \\r\\n stuff.\n */\nglobal proc string cSaveW_stripCR(string $s)\n{\n    return ( match( \"^[^(\\r\\n)]*\", $s ) );\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_selJntsUI() - Wrapper for sel jnts proc\n */\nglobal proc cSaveW_selJntsUI()\n{\n    string $file = `textField -q -tx tfFileWts` ;\n    string $search = `textField -q -tx tfSearch` ;\n    string $replace = `textField -q -tx tfReplace` ;\n\n    cSaveW_selJntsFromFile($file, $search, $replace) ;\n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_selJntsFromFile() - Selects skin joints from a while.\n */\nglobal proc cSaveW_selJntsFromFile(string $file, string $search, string $replace)\n{\n    string $jntsMissed[] ;\n    clear $jntsMissed ;\n    \n    \n    if ($file == \"\")\n    \t{\n    \terror -sl 0 (\"cometSaveWeights: You must choose a file to load from.\");\n    \t}\n\n    if (`filetest -r $file` != true)\t// Does file already exist? \n\terror -sl 0 (\"cometSaveWeights: The file \\\"\"+$file+\"\\\" does not exist.\") ;\n\n\n    $fileId = `fopen $file \"r\"`;\n    if ($fileId == 0) {\n\terror -sl 1 (\"saveWeights.mel: Error Opening File or File does not exist: \"+$file);\n\treturn;\n\t}        \n\n    waitCursor -state on; \n\n\t// Start the reading...\n    $line = `fgetline $fileId`;\t\t// get the first comment line/header\n    $line = cSaveW_stripCR($line);\n\n    string $parts[] ;\n\n    select -cl ;\t\t// Start with nada\n\n    do\n        {\n        \n        \n\tif ($line == \"\" || substring($line,1,1) == \" \" || substring($line,1,2) == \"//\")\n\t    $line = \"[COMMENT]\" ;\n\t\n\tswitch ($line)\n\t    {\n\t    case \"[JOINTS]\":    \n\t    \t// Orig jnt list, read until we hit the END marker for it...\n\t    \tstring $jntStr ;\n\t    \tdo \n\t    \t    {\n\t    \t    $jntStr = `fgetline $fileId` ;\t// orig jnt \n\t\t    $jntStr = cSaveW_stripCR($jntStr) ;\n\t\t    \n\t\t    if ($jntStr != \"\" && $jntStr != \"[END-JOINTS]\")\n\t\t    \t{\n\t\t    \t$jntStr = strSearchReplace($jntStr, $search, $replace) ;\n\t\t    \tif (objExists($jntStr))\n\t\t    \t    select -add $jntStr ;\n\t\t    \telse\n\t\t    \t    $jntsMissed[size($jntsMissed)] = $jntStr ;\n\t\t    \t}\n\t    \t    \n\t    \t    } while ($jntStr != \"[END-JOINTS]\" && !feof($fileId)) ;\n\t\tbreak ;\n\n\n\t    case \"[WEIGHTS]\":\n\t    case \"[COMPONENT]\":\n\t    case \"[END-WEIGHTS]\":\n\t    case \"[COMMENT]\":    \n\t    default:\n\t    \t; // Ignore it!\n\t    \tbreak ;\n\t    }\n\n\n\t// Attempt to read next line        \n\t$line = `fgetline $fileId`;\t\t// get the first comment line/header\n\t$line = cSaveW_stripCR($line);\n        \n        } while ( !feof($fileId) ) ;\n\n    \t\n    waitCursor -state off; \n\n\n    fclose $fileId;\n\n    if (size($jntsMissed) > 0)\n    \t{\n    \tstring $missedStr = \"\" ;\n    \tstring $j ;\n    \tfor ($j in $jntsMissed)\n    \t    $missedStr += ($j + \" \");\n    \t    \n    \twarning -sl 0 (\"cometSaveWeights: Could not re-select all joints, the following were missing: \"+$missedStr) ;\n    \t\n    \tconfirmDialog\n    \t\t-title (\"cometSaveWeights - WARNING\")\n    \t\t-message (\"Could not re-select all joints, the following were missing: \\n    \"+$missedStr) \n    \t\t-ma \"left\"\n    \t\t-button \"OK\" \n    \t\t;\n    \t\n    \t}\n\n    \n}\n\n// --------------------------------------------------------------------------\n\n/*\n * cSaveW_roundTo() - Rounds a float value to so many decimal places...\n *\n *   ie: cSaveW_roundTo(1.23456789,  1)  ---> 1.2\n *   ie: cSaveW_roundTo(1.23456789,  2)  ---> 1.23\n *   ie: cSaveW_roundTo(1.23456789,  3)  ---> 1.234\n *\tetc...\n */\nglobal proc float cSaveW_roundTo(float $val, int $places)\n{\n    float $mult = pow(10.0, $places) ;\n    $val = 1.0 * $val * $mult ;\t// Shift it all over to the left\n    int $nVal = (int)$val ;\t// Remove anything left in the decimal\n    $val = 1.0 * $nVal / $mult ;\t// Now shift back.\n    return $val ;\n}\n\n// --------------------------------------------------------------------------\n\n\n/*\n * cSaveW_pruneAndNormalize() - Given a weight float array this will go thru,\n *\t\tprune all weights to a certain # of decimal places, and normalize\n *\t\tso that any leftover goes back to the largest wt.\n *\t\tReturns which index had the largest value (for flooding).\n *  $prunePlaces  = Only keep up to N decimal places...anything smaller becomes 0.\n */\nglobal proc int cSaveW_pruneAndNormalize(float $wts[], int $prunePlaces)\n{\n\n    if (size($wts) <= 0)\n    \treturn -1;\n    \t\n    int $i ;\n    int $nWts = size($wts) ;\n\n\t\n    int $largestIdx = 0 ;\n    float $largestVal = $wts[0] ;\n    \n    float $fTotal  = 0.0 ;\n    \n    // Find largest index...and also round off weights\n    for ($i=0; $i < $nWts; ++$i)\n    \t{\n    \t// If bigger, then store that...\n    \tif ($wts[$i] > $largestVal)\n    \t    {\n    \t    $largestVal = $wts[$i] ;\n    \t    $largestIdx = $i ;\n    \t    }\n    \t\n\t\t$wts[$i] = cSaveW_roundTo($wts[$i], $prunePlaces) ;\n    \t$fTotal += $wts[$i] ;\t// Now keep track of total amount for current new values\n    \t}\n\n\t// If there is any leftover due to pruning removing causing normalization to be off,\n\t// then we'll just add that small amt back to the largest weight....\n    float $fLeftover = 1.0 - $fTotal ;    \n    $wts[$largestIdx] += $fLeftover ;\n\tif ($wts[$largestIdx] > 1.0)\n\t\t$wts[$largestIdx] = 1.0 ;\n\n\t\n    return $largestIdx ;\n}\n\n// --------------------------------------------------------------------------\n\n\n\n\ncometSaveWeights;" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "AS" 
+        -enableBackground 0
+        -align "center" 
+        -label "AS" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "AS_Skinny" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "AS_Skinny;" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Edit various component values for the selected object(s)" 
+        -enableBackground 0
+        -align "center" 
+        -label "Component Editor" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "CpEd" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "menuIconWindow.xpm" 
+        -image1 "menuIconWindow.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "ComponentEditor" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "weightWindow" 
+        -enableBackground 0
+        -align "center" 
+        -label "weightWindow" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "WW" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "weightWindow" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    artAttrCtx
+        -image1 "attrPaint.xpm" 
+        -image2 "vacantCell.xpm" 
+        -image3 "vacantCell.xpm" 
+        -tangentOutline 1
+        -surfaceConformedBrushVertices 0
+        -record 0
+        -importreassign 0
+        -selectclonesource 0
+        -preserveclonesource 1
+        -dynclonemode 1
+        -pickColor 0
+        -expandfilename 0
+        -usepressure 1
+        -reflectionaboutorigin 0
+        -reflection 0
+        -projective 0
+        -showactive 1
+        -brushfeedback 1
+        -outwhilepaint 0
+        -outline 1
+        -accopacity 1
+        -brushalignment 1
+        -exportaspectratio 1
+        -stampDepth 0.5
+        -stampSpacing 0.1
+        -screenRadius 1
+        -worldRadius 3.276717
+        -lowerradius 0
+        -opacity 1
+        -reflectionaxis "x" 
+        -exportfiletype "IFF" 
+        -exportfilemode "luminance" 
+        -importfilemode "luminance" 
+        -strokesmooth "spline" 
+        -mappressure "Opacity" 
+        -paintmode "tangent" 
+        -paintoperationtype "Paint" 
+        -dragSlider "none" 
+        -radius 3.276717
+        -stampProfile "poly" 
+        -exportfilesizex 256
+        -exportfilesizey 256
+        -whichTool "general" 
+        -selectedattroper "smooth" 
+        -value 0
+        -minvalue 0
+        -maxvalue 1
+        -clamplower 0
+        -clampupper 1
+        -alphaclamplower 0
+        -alphaclampupper 1
+        -clamp "none" 
+        -alphaclamp "none" 
+        -dataTypeIndex 1
+        -colorfeedback 1
+        -colorfeedbackOverride 0
+        -disablelighting 1
+        -colorrangelower 0
+        -colorrangeupper 1
+        -interactiveUpdate 1
+        -colorAlphaValue 0 
+        -useColorRamp 0
+        -useMaxMinColor 0
+        -rampMinColor 0 0 0 
+        -rampMaxColor 1 1 1 
+        -colorRamp "1,0,0,1,1,1,0.5,0,0.8,1,1,1,0,0.6,1,0,1,0,0.4,1,0,0,1,0,1" 
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "attrPaint.xpm" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    wireContext
+        -image1 "wire.xpm" 
+        -image2 "vacantCell.xpm" 
+        -image3 "vacantCell.xpm" 
+        -holder 0
+        -groupWithBase 0
+        -envelope 1
+        -crossingEffect 0
+        -dropoffDistance 1
+        -localInfluence 0
+        -deformationOrder "Default" 
+        -exclusivePartition "deformPartition" 
+        -exclusive 0
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "wire.xpm" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    setEditCtx
+        -image1 "setEdit.xpm" 
+        -image2 "vacantCell.xpm" 
+        -image3 "vacantCell.xpm" 
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "setEdit.xpm" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    artAttrSkinPaintCtx
+        -image1 "paintSkinWeights.xpm" 
+        -image2 "vacantCell.xpm" 
+        -image3 "vacantCell.xpm" 
+        -tangentOutline 1
+        -surfaceConformedBrushVertices 0
+        -record 0
+        -importreassign 0
+        -selectclonesource 0
+        -preserveclonesource 1
+        -dynclonemode 1
+        -pickColor 0
+        -expandfilename 0
+        -usepressure 0
+        -reflectionaboutorigin 0
+        -reflection 0
+        -projective 0
+        -showactive 1
+        -brushfeedback 1
+        -outwhilepaint 1
+        -outline 1
+        -accopacity 0
+        -brushalignment 1
+        -exportaspectratio 1
+        -stampDepth 0.5
+        -stampSpacing 0.1
+        -screenRadius 1
+        -worldRadius 0.131111
+        -lowerradius 0.001
+        -opacity 1
+        -reflectionaxis "x" 
+        -exportfiletype "IFF" 
+        -exportfilemode "luminance" 
+        -importfilemode "luminance" 
+        -strokesmooth "spline" 
+        -mappressure "Opacity" 
+        -paintmode "tangent" 
+        -paintoperationtype "Paint" 
+        -dragSlider "none" 
+        -radius 0.131111
+        -stampProfile "solid" 
+        -exportfilesizex 256
+        -exportfilesizey 256
+        -whichTool "skinWeights" 
+        -selectedattroper "additive" 
+        -value 1
+        -minvalue 0
+        -maxvalue 1
+        -clamplower 0
+        -clampupper 1
+        -alphaclamplower 0
+        -alphaclampupper 1
+        -clamp "none" 
+        -alphaclamp "none" 
+        -dataTypeIndex 1
+        -colorfeedback 0
+        -colorfeedbackOverride 0
+        -disablelighting 1
+        -colorrangelower 0.5
+        -colorrangeupper 0.5
+        -interactiveUpdate 1
+        -colorAlphaValue 1 
+        -useColorRamp 0
+        -useMaxMinColor 1
+        -rampMinColor 0 0 0 
+        -rampMaxColor 1 1 1 
+        -colorRamp "1,0,0,1,1,1,0.5,0,0.8,1,1,1,0,0.6,1,0,1,0,0.4,1,0,0,1,0,1" 
+        -influence "umbrella_a" 
+        -xrayJoints 0
+        -skinPaintMode 1
+        -paintSelectMode 1
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "paintSkinWeights.xpm" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    artPuttyCtx
+        -image1 "putty.png" 
+        -image2 "vacantCell.png" 
+        -image3 "vacantCell.png" 
+        -tangentOutline 1
+        -surfaceConformedBrushVertices 0
+        -record 0
+        -importreassign 0
+        -selectclonesource 0
+        -preserveclonesource 1
+        -dynclonemode 1
+        -pickColor 0
+        -expandfilename 0
+        -usepressure 1
+        -reflectionaboutorigin 0
+        -reflection 0
+        -projective 0
+        -showactive 1
+        -brushfeedback 1
+        -outwhilepaint 0
+        -outline 1
+        -accopacity 1
+        -brushalignment 1
+        -exportaspectratio 1
+        -stampDepth 0.5
+        -stampSpacing 0.1
+        -screenRadius 1
+        -worldRadius 6.03811
+        -lowerradius 0.001
+        -opacity 0.185366
+        -reflectionaxis "x" 
+        -exportfiletype "IFF" 
+        -exportfilemode "luminance" 
+        -importfilemode "luminance" 
+        -strokesmooth "spline" 
+        -mappressure "Opacity" 
+        -paintmode "tangent" 
+        -paintoperationtype "Paint" 
+        -dragSlider "none" 
+        -radius 6.03811
+        -stampProfile "poly" 
+        -exportfilesizex 256
+        -exportfilesizey 256
+        -whichTool "putty" 
+        -selectedattroper "absolute" 
+        -value 0.998438
+        -minvalue 0
+        -maxvalue 1
+        -clamplower 0
+        -clampupper 1
+        -alphaclamplower 0
+        -alphaclampupper 1
+        -clamp "none" 
+        -alphaclamp "none" 
+        -dataTypeIndex 1
+        -colorfeedback 1
+        -colorfeedbackOverride 0
+        -disablelighting 1
+        -colorrangelower 0
+        -colorrangeupper 1
+        -interactiveUpdate 1
+        -colorAlphaValue 0.998438 
+        -useColorRamp 0
+        -useMaxMinColor 0
+        -rampMinColor 0 0 0 
+        -rampMaxColor 1 1 1 
+        -colorRamp "1,0,0,1,1,1,0.5,0,0.8,1,1,1,0,0.6,1,0,1,0,0.4,1,0,0,1,0,1" 
+        -mouldtypemouse "relax" 
+        -mouldtypehead "relax" 
+        -mouldtypetail "erase" 
+        -refvector "normal" 
+        -refvectoru 1
+        -refvectorv 0
+        -maxdisp 8.84956e-008
+        -autosmooth 0
+        -smoothiters 1
+        -brushStrength 1
+        -refsurface 1
+        -erasesrfupd 0
+        -invertrefvector 0
+        -collapsecvtol 1
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "putty.png" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    softModCtx
+        -image1 "softMod.png" 
+        -image2 "vacantCell.png" 
+        -image3 "vacantCell.png" 
+        -reset 1
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "softMod.png" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Lattice" 
+        -enableBackground 0
+        -align "center" 
+        -label "Lattice" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "lattice.xpm" 
+        -image1 "lattice.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "global proc latticeGroup ()\r\n{\r\n\tstring $lattice[] = `lattice  -divisions 2 5 2 -objectCentered true  -ldv 2 2 2`;\r\n\tstring $group = `group $lattice`;\r\n}\r\n\r\nlatticeGroup;\r\n" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import dw_vault.tool\nreload(dw_vault.tool)\ndw_vault.tool.constrain_proxy(alternate = True)" 
+        -enableBackground 0
+        -align "center" 
+        -label "import dw_vault.tool\nreload(dw_vault.tool)\ndw_vault.tool.constra..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "ProxCon" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import dw_vault.tool\nreload(dw_vault.tool)\ndw_vault.tool.constrain_proxy(alternate = True)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\ndef createPMA():\n    \n    pmaNode = cmds.createNode('plusMinusAverage')\n    cmds.setAttr('%s.input1D[0]',0)\n    cmds.setAttr('%s.input1D[1]',0)" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\n\ndef createPMA():\n    \n    pmaNode = cm..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "PMA" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\ndef createPMA():\n    \n    pmaNode = cmds.createNode('plusMinusAverage')\n    cmds.setAttr('%s.input1D[0]'%pmaNode,0)\n    cmds.setAttr('%s.input1D[1]'%pmaNode,0)\n    cmds.select(pmaNode)\n\ncreatePMA()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "addGeoDeformerSet" 
+        -enableBackground 0
+        -align "center" 
+        -label "addGeoDeformerSet" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "MEM" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "string $sel[] = `ls -sl`;\n\nstring $deformer = $sel[0];\n\nfor ($obj in $sel)\n{\n\tif($obj == $deformer)\n\t{\n\t\tcontinue;\n\t}\n\telse\n\t{\n\t\tdeformer -e -g $obj $deformer;\n\t}\n}" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "toolBoxWin" 
+        -enableBackground 0
+        -align "center" 
+        -label "toolBoxWin" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "TBW" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "toolBoxWin" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "newCluster \" -envelope 1\";" 
+        -enableBackground 0
+        -align "center" 
+        -label "newCluster \" -envelope 1\";" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "newCL" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "sel = cmds.ls(sl = True)\nclusterHandles = []\nfor obj in sel:\n    clusterHandle = cmds.cluster(obj)[1]\n    pivotPos = cmds.xform(obj, q = True,ws = True,rp = True)\n    cmds.setAttr('%s.rotatePivotX'%clusterHandle,pivotPos[0])\n    cmds.setAttr('%s.rotatePivotY'%clusterHandle,pivotPos[1])\n    cmds.setAttr('%s.rotatePivotZ'%clusterHandle,pivotPos[2])\n    \n    cmds.setAttr('%s.scalePivotX'%clusterHandle,pivotPos[0])\n    cmds.setAttr('%s.scalePivotY'%clusterHandle,pivotPos[1])\n    cmds.setAttr('%s.scalePivotZ'%clusterHandle,pivotPos[2])\n    \n    clusterHandles.append(clusterHandle)\n    \ncmds.select(clusterHandles)\n" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "global proc setSkinValue ()\r{\r\r\tif (`window -q -exists setSkinVa..." 
+        -enableBackground 0
+        -align "center" 
+        -label "global proc setSkinValue ()\r{\r\r\tif (`window -q -exists setSkinVa..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "SSV" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "setSkinValue" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "removeUnusedInfluences" 
+        -enableBackground 0
+        -align "center" 
+        -label "removeUnusedInfluences" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "reInf" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "commandButton.png" 
+        -image1 "commandButton.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "removeUnusedInfluences" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import sys \nimport os\nimport maya.mel as mel\n\nif not 'C:/Users/bballout/workspace/BelalBallout' in sys.path:\n\tsys.path.append('C:/Users/bballout/workspace/BelalBallout')\n\nfrom mayaScripts import outliner\noutlinerWin = outliner.Outliner()\noutlinerWin.create()" 
+        -enableBackground 0
+        -align "center" 
+        -label "import sys \nimport os\nimport maya.mel as mel\n\nif not 'C:/Users/b..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "outLin" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys \nimport os\nimport maya.mel as mel\n\nif not 'C:/Users/bballout/workspace/BelalBallout' in sys.path:\n\tsys.path.append('C:/Users/bballout/workspace/BelalBallout')\n\nfrom mayaScripts import outliner\noutlinerWin = outliner.Outliner()\noutlinerWin.create()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import sys \nimport os\nimport maya.mel as mel\n\nif not 'C:/Users/bballout/workspace/BelalBallout' in sys.path:\n\tsys.path.append('C:/Users/bballout/workspace/BelalBallout')\n\nfrom mayaScripts import cbox_dock\ncbox = cbox_dock.ChannelBox()\ncbox.create()" 
+        -enableBackground 0
+        -align "center" 
+        -label "import sys \nimport os\nimport maya.mel as mel\n\nif not 'C:/Users/b..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "cbox" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys \nimport os\nimport maya.mel as mel\n\nif not 'C:/Users/bballout/workspace/BelalBallout' in sys.path:\n\tsys.path.append('C:/Users/bballout/workspace/BelalBallout')\n\nfrom mayaScripts import cbox_dock\ncbox = cbox_dock.ChannelBox()\ncbox.create()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import UILib\n\nwin = UILib.ToolBoxWin()\nwin.show()" 
+        -enableBackground 0
+        -align "center" 
+        -label "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "Tool" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys \nimport os\nimport maya.mel as mel\n\nif not 'C:/Users/bballout/workspace/BelalBallout' in sys.path:\n\tsys.path.append('C:/Users/bballout/workspace/BelalBallout')\n\n\npath = 'C:/Users/bballout/Documents/maya/2016/prefs/scripts'\nmelFiles = os.listdir('C:/Users/bballout/Documents/maya/2016/prefs/scripts')\n\n\nfor file in melFiles:\n\tmel.eval( 'source \"%s/%s\"'%(path,file))\n\nfrom mayaScripts import DeformerLib\nreload(DeformerLib)\nfrom mayaScripts import UILib\nreload(UILib)\nfrom mayaScripts import ToolBoxFn\nreload(ToolBoxFn)\n\ntry:\n\ttoolWin.close() # @UndefinedVariable\nexcept:\n\tpass\n\t\ntoolWin = UILib.ToolBoxWin()\ntoolWin.show()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True)\n\nfor obj in sel:\n    \n    cmds.move(0,0,0,obj,ws = True)\n    cmds.rotate(0,0,0,obj,ws = True)\n    cmds.scale(1,1,1,obj,ws = True)" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True)\n\nfor obj in s..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "Zero" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True)\n\nfor obj in sel:\n    \n    cmds.move(0,0,0,obj,os = True)\n    cmds.rotate(0,0,0,obj,os = True)\n    cmds.scale(1,1,1,obj,os = True)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import igLODGenerator;\nreload(igLODGenerator) \nigLODGenerator.commandlineLODExport( lodCountPercent = [[1,30], [2,55], [3,75]], detachRig = True, keepQuads = 0.9, sharp = 1.0, batchMode = True )" 
+        -enableBackground 0
+        -align "center" 
+        -label "import igLODGenerator;\nreload(igLODGenerator) \nigLODGenerator.co..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "LODit" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import igLODGenerator;\nreload(igLODGenerator) \nigLODGenerator.commandlineLODExport( lodCountPercent = [[1,30], [2,50], [3,65], [4,75],[5, 90]] , detachRig = True, keepQuads = 0.9, sharp = 1.0, batchMode = True )" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "path = '//win.dreamworks.com/home/GLD/bballout/Documents/maya/2013-x64/scripts'\nmelFiles = os.listdir(path)\n\n\nfor file in melFiles:\n\tmel.eval( 'source \"%s/%s\"'%(path,file))" 
+        -enableBackground 0
+        -align "center" 
+        -label "path = '//win.dreamworks.com/home/GLD/bballout/Documents/maya/20..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "Source" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import os\nimport maya.mel as mel\n\npath = '//win.dreamworks.com/home/GLD/bballout/Documents/maya/2013-x64/scripts'\nmelFiles = os.listdir(path)\n\n\nfor file in melFiles:\n\tprint '%s/%s'%(path,file)\n\tmel.eval( 'source \"%s/%s\"'%(path,file))" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\ndef reverseClusterControls():\n    \n    sel = cmds.ls(sl = True)\n    \n    for obj in sel:\n        name = obj.split('_Ctrl')[0]\n        loc = cmds.spaceLocator(name = '%s_Loc'%name)[0]\n        locShape = '%sShape'%loc\n    \n        cmds.setAttr('%s.rotateY'%loc,180)\n        cmds.setAttr('%s.scaleZ'%loc,-1)\n        \n        matchConstraint = cmds.pointConstraint(obj,loc,mo = False)\n        cmds.delete(matchConstraint)\n        \n        clusterConnection = cmds.connectionInfo('%s.translateX'%obj,dfs = True)[0]\n        cluster = clusterConnection.split('.')[0]\n        clusterDef = '%sCluster'%cluster\n        \n        cmds.parent(cluster,loc)\n        \n        cmds.connectAttr('%s.parentInverseMatrix[0]'%locShape,'%s.bindPreMatrix'%clusterDef)" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\n\ndef reverseClusterControls():\n    \n   ..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "RevCL" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\ndef reverseClusterControls():\n    \n    sel = cmds.ls(sl = True)\n    \n    for obj in sel:\n        name = obj.split('_Ctrl')[0]\n        loc = cmds.spaceLocator(name = '%s_Loc'%name)[0]\n        locShape = '%sShape'%loc\n    \n        cmds.setAttr('%s.rotateY'%loc,180)\n        cmds.setAttr('%s.scaleZ'%loc,-1)\n        \n        matchConstraint = cmds.pointConstraint(obj,loc,mo = False)\n        cmds.delete(matchConstraint)\n        \n        clusterConnection = cmds.connectionInfo('%s.translateX'%obj,dfs = True)[0]\n        cluster = clusterConnection.split('.')[0]\n        clusterDef = '%sCluster'%cluster\n        \n        cmds.parent(cluster,loc)\n        \n        cmds.connectAttr('%s.parentInverseMatrix[0]'%locShape,'%s.bindPreMatrix'%clusterDef)\n\nreverseClusterControls()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True)\n\nfromTransform = sel[0]\ntoTransform = sel[1]\n\n\ndef swapShapes(fromTransform,toTransform):\n    grp = cmds.group(empty = True)\n    cmds.parent(fromTransform, grp)\n    try:\n        cmds.move(0,0,0,fromTransform,ws = True)\n    except:\n        pass\n        \n    try:\n        cmds.rotate(0,0,0,fromTransform,ws = True)\n    except:\n        pass\n        \n    try:\n        cmds.scale(1,1,1,fromTransform,ws = True)\n    except:\n        pass\n    \n    constraint = cmds.parentConstraint(toTransform,grp)\n    cmds.delete(constraint)\n    \n    fromShapes = cmds.listRelatives(fromTransform,type = 'shape')\n    toShapes = cmds.listRelatives(toTransform,type = 'shape')\n    \n    for shape in fromShapes:\n        cmds.parent(shape,toTransform,r = True,s = True)\n        \n    for shape in toShapes:\n        cmds.delete(shape)\n\nswapShapes(fromTransform,toTransform)" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True)\n\nfromTransfor..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "SwapShape" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True)\n\nfromTransform = sel[0]\ntoTransform = sel[1]\n\n\ndef swapShapes(fromTransform,toTransform):\n    grp = cmds.group(empty = True)\n    cmds.parent(fromTransform, grp)\n    try:\n        cmds.move(0,0,0,fromTransform,ws = True)\n    except:\n        pass\n        \n    try:\n        cmds.rotate(0,0,0,fromTransform,ws = True)\n    except:\n        pass\n        \n    try:\n        cmds.scale(1,1,1,fromTransform,ws = True)\n    except:\n        pass\n    \n    constraint = cmds.parentConstraint(toTransform,grp)\n    cmds.delete(constraint)\n    \n    fromShapes = cmds.listRelatives(fromTransform,type = 'shape')\n    toShapes = cmds.listRelatives(toTransform,type = 'shape')\n    \n    for shape in fromShapes:\n        cmds.parent(shape,toTransform,r = True,s = True)\n        \n    for shape in toShapes:\n        cmds.delete(shape)\n\nswapShapes(fromTransform,toTransform)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import sys\n\nsys.path.append('T:/dwtv/hub/Tools_TC')\n\ntry :\n    CharacterSetupToolInst.close() \nexcept :\n    pass\n\n\nfrom tc_autoRig import technicolorCharacterSetupTool as tcCSTool\nreload(tcCSTool)\nCharacterSetupToolInst    = tcCSTool.tc_CharacterSetupTool()\nCharacterSetupToolInst.show()\n" 
+        -enableBackground 0
+        -align "center" 
+        -label "import sys\n\nsys.path.append('T:/dwtv/hub/Tools_TC')\n\ntry :\n    C..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "TCRig" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys\n\nsys.path.append('T:/dwtv/hub/Tools_TC')\n\ntry :\n    CharacterSetupToolInst.close() \nexcept :\n    pass\n\n\nfrom tc_autoRig import technicolorCharacterSetupTool as tcCSTool\nreload(tcCSTool)\nCharacterSetupToolInst    = tcCSTool.tc_CharacterSetupTool()\nCharacterSetupToolInst.show()\n" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import DeformerLib\nimport maya.cmds as cmds\n\nsel = cmds.ls(sl = True)\n\nfor obj in sel:\n    shape = cmds.listRelatives(obj,type = 'shape')[0]\n    deformerConnection = cmds.connectionInfo('%s.clusterTransforms[0]'%shape,dfs = True)[0]\n    deformerName = deformerConnection.split('.')[0]\n    print deformerName\n    DeformerLib.mirrorCluster(obj,deformerName,prefix = 'L_',oppPrefix = 'R_', axis = 'x',direction = '<', table = [-1,1,1])" 
+        -enableBackground 0
+        -align "center" 
+        -label "import DeformerLib\nimport maya.cmds as cmds\n\nsel = cmds.ls(sl = ..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "MiClu" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys \nimport maya.cmds as cmds\n\nif not '//win.dreamworks.com/home/CTL/bballout/Documents/workspace/BelalBallout' in sys.path:\n\tsys.path.append('//win.dreamworks.com/home/CTL/bballout/Documents/workspace/BelalBallout')\n\nfrom mayaScripts import DeformerLib\nimport maya.cmds as cmds\n\nsel = cmds.ls(sl = True)\n\nfor obj in sel:\n    shape = cmds.listRelatives(obj,type = 'shape')[0]\n    deformerConnection = cmds.connectionInfo('%s.clusterTransforms[0]'%shape,dfs = True)[0]\n    deformerName = deformerConnection.split('.')[0]\n    print deformerName\n    DeformerLib.mirrorCluster(obj,deformerName,prefix = 'L_',oppPrefix = 'R_', axis = 'x',direction = '<', table = [-1,1,1])" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import sys \nimport os\nimport maya.mel as mel\n\nif not '//win.dreamworks.com/home/CTL/bballout/Documents/workspace/BelalBallout' in sys.path:\n\tsys.path.append('//win.dreamworks.com/home/CTL/bballout/Documents/workspace/BelalBallout')\n\n\nfrom mayaScripts import cvShapeInverter\n\ncvShapeInverter.invert()" 
+        -enableBackground 0
+        -align "center" 
+        -label "import sys \nimport os\nimport maya.mel as mel\n\nif not '//win.drea..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "InvSh" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys \nimport os\nimport maya.mel as mel\n\nif not 'C:/Users/bballout/workspace/BelalBallout' in sys.path:\n\tsys.path.append('C:/Users/bballout/workspace/BelalBallout')\n\nfrom mayaScripts import cvShapeInverter\n\ncvShapeInverter.invert()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "igRigboxJr.igLaunchRigboxJr()" 
+        -enableBackground 0
+        -align "center" 
+        -label "igRigboxJr.igLaunchRigboxJr()" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "RgBxJr" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "igRigboxJr.igLaunchRigboxJr()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\njoints = cmds.ls(type = 'joint')\n\nfor joint in joints:\n    try:\n        cmds.setAttr('%s.liw'%joint,1)\n        print 'locked %s'%joint\n    except:\n        pass\n        \nselectedJoints = cmds.ls(sl = True)\n\nfor joint in selectedJoints:\n        print 'unlocked %s'%joint\n        cmds.setAttr('%s.liw'%joint,0)" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\njoints = cmds.ls(type = 'joint')\n\nfor j..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "UnLkJn" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\njoints = cmds.ls(type = 'joint')\n\nfor joint in joints:\n    try:\n        cmds.setAttr('%s.liw'%joint,1)\n        print 'locked %s'%joint\n    except:\n        pass\n        \nselectedJoints = cmds.ls(sl = True)\n\nfor joint in selectedJoints:\n    try:\n        cmds.setAttr('%s.liw'%joint,0)\n        print 'unlocked %s'%joint\n    except:\n        pass" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\nimport maya.mel as mel\n\nobj = cmds.ls(sl = True)[0]\n\nhistory = cmds.listHistory(obj)\nskinCluster = ''\n\nfor node in history:\n    if cmds.nodeType(node) == 'skinCluster':\n           skinCluster = node\n           \njoints = cmds.skinCluster(skinCluster,q = True,inf = True)\n\nunlockedJoints = []\n\nfor joint in joints:\n    lock = cmds.getAttr('%s.liw'%joint)\n    if not lock:\n        unlockedJoints.append(joint)\n        \ni += 1\nif i == len(unlockedJoints):\n    i = 0\n\ncurrentItem = cmds.artAttrSkinPaintCtx('artAttrSkinPaintCtx1',q = True,inf = True)\ncmds.artAttrSkinPaintCtx('artAttrSkinPaintCtx1',e = True,inf = unlockedJoints[i])\n\nmel.eval('artSkinInflListChanging %s 0'%currentItem)\nmel.eval('artSkinInflListChanging %s 1'%unlockedJoints[i])\nmel.eval('artSkinInflListChanged artAttrSkinPaintCtx')\n\nprint 'Paint Weights on %s'%unlockedJoints[i]" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\nimport maya.mel as mel\n\nobj = cmds.ls(s..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "SwInf" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\nimport maya.mel as mel\nimport maya.OpenMaya as om\nimport maya.mel as mel\n\nmel.eval('setToolTo artAttrSkinPaintCtx1;')\n\ndef switchInfluece(): \n\n    obj = cmds.ls(sl = True)[0]\n    \n    history = cmds.listHistory(obj,pdo = 1, il = 2)\n    skinCluster = ''\n    \n    for node in history:\n        if cmds.nodeType(node) == 'skinCluster':\n               skinCluster = node\n    \n\n    joints = cmds.skinCluster(skinCluster,q = True,inf = True)\n    \n    unlockedJoints = []\n    \n    print joints\n    \n    for joint in joints:\n        lock = cmds.getAttr('%s.liw'%joint)\n\n        if not lock:\n            unlockedJoints.append(joint)\n    \n    currentItem = cmds.artAttrSkinPaintCtx('artAttrSkinPaintCtx1',q = True,inf = True)\n    try:\n        i = unlockedJoints.index(currentItem)\n    except:\n        i = 0    \n    i += 1\n    if i == len(unlockedJoints):\n        i = 0\n    \n\tprint 'unlocked:',unlockedJoints\n    \n    cmds.artAttrSkinPaintCtx('artAttrSkinPaintCtx1',e = True,inf = unlockedJoints[i])\n    \n    mel.eval('artSkinInflListChanging %s 0'%currentItem)\n    mel.eval('artSkinInflListChanging %s 1'%unlockedJoints[i])\n    mel.eval('artSkinInflListChanged artAttrSkinPaintCtx')\n    \n    om.MGlobal.displayInfo('Paint Weights on %s'%unlockedJoints[i])\n\nswitchInfluece()\n    " 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+
+} 

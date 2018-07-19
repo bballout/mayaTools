@@ -1,0 +1,39 @@
+def createFollicle():
+
+    sel = cmds.ls(sl = True,fl = True)
+    joints = []
+    follicles = []
+    for i in range(len(sel)):
+    
+        surfaceTransform = sel[i].split('.')[0]
+        #surfaceShape = cmds.listRelatives(surfaceTransform,type = 'shape')[0]
+        surfaceShape = surfaceTransform
+        uvPoint = sel[i]
+        
+        uvValues = cmds.polyEditUV(uvPoint,query = True)
+        uValue = uvValues[0]
+        vValue = uvValues[1]
+        
+          
+        follicle = cmds.createNode('follicle')
+        follicles.append(follicle)
+        follicleTransform = cmds.listRelatives(follicle,parent = True)[0]
+        cmds.connectAttr('%s.outTranslate'%follicle,'%s.translate'%follicleTransform)
+        cmds.connectAttr('%s.outRotate'%follicle,'%s.rotate'%follicleTransform)
+        
+        cmds.setAttr('%s.parameterU'%follicle,uValue)
+        cmds.setAttr('%s.parameterV'%follicle,vValue)
+        
+        cmds.connectAttr('%s.outMesh'%surfaceShape, '%s.inputMesh'%follicle,f = True)
+        cmds.connectAttr('%s.worldMatrix[0]'%surfaceShape, '%s.inputWorldMatrix'%follicle)
+        
+        cmds.select(cl = True)
+        rivetJoint = cmds.joint()
+        cmds.parentConstraint(follicleTransform,rivetJoint)
+        
+        joints.append(rivetJoint)
+        print uvValues
+
+    cmds.group(joints)
+    cmds.group(follicles)
+createFollicle()

@@ -1,0 +1,36 @@
+def createFollicle():
+
+    sel = cmds.ls(sl = True,fl = True)
+    
+    for i in range(len(sel)):
+    
+        surfaceTransform = sel[i].split('.')[0]
+        surfaceShape = cmds.listRelatives(surfaceTransform,type = 'shape')[0]
+        surfaceShape = '%sShape'%surfaceTransform
+        uvPoint = sel[i]
+        
+        uvValues = cmds.polyEditUV(uvPoint,query = True)
+        uValue = uvValues[0]
+        vValue = uvValues[1]
+        
+            
+        follicle = cmds.createNode('follicle')
+        follicleTransform = cmds.listRelatives(follicle,parent = True)[0]
+        cmds.connectAttr('%s.outTranslate'%follicle,'%s.translate'%follicleTransform)
+        cmds.connectAttr('%s.outRotate'%follicle,'%s.rotate'%follicleTransform)
+        
+        cmds.setAttr('%s.parameterU'%follicle,uValue)
+        cmds.setAttr('%s.parameterV'%follicle,vValue)
+        
+        cmds.connectAttr('%s.outMesh'%surfaceShape, '%s.inputMesh'%follicle,f = True)
+        cmds.connectAttr('%s.worldMatrix[0]'%surfaceShape, '%s.inputWorldMatrix'%follicle)
+        
+createFollicle()       
+sel = cmds.ls(sl = True)
+grp = cmds.group(empty = True)
+for obj in sel:
+    cmds.select(cl = True)
+    jnt = cmds.joint()
+    cmds.parentConstraint(obj, jnt)
+    cmds.parent(jnt, grp)
+        

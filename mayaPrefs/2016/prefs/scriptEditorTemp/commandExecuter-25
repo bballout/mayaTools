@@ -1,0 +1,10 @@
+driver = 'wrinkle_driver'
+noise = 'noise'
+attrs = cmds.listAttr(driver, ud = True)
+
+for attr in attrs:
+    connection = cmds.connectionInfo('%s.%s'%(driver,attr),sfd = True)
+    pma = cmds.createNode('plusMinusAverage')    
+    cmds.connectAttr('%s.output'%noise,'%s.input1D[0]'%pma)
+    cmds.connectAttr(connection,'%s.input1D[1]'%pma)
+    cmds.connectAttr('%s.output1D'%pma,'%s.%s'%(driver,attr),f = True)

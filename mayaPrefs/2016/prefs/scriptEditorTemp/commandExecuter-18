@@ -1,0 +1,13 @@
+
+meshes = cmds.ls(type = 'mesh')
+skinnedMeshes = []
+
+for mesh in meshes:
+    
+    history  = cmds.listHistory(mesh,pdo = 1 ,il = 2)
+    if history:                      
+        for node in history:
+            if cmds.nodeType(node) == 'skinCluster':
+                skinnedMeshes.append(mesh)
+                
+cmds.select(skinnedMeshes)

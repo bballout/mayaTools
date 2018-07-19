@@ -1,0 +1,27 @@
+//Maya Preference 2016 (Release 1)
+//
+//
+
+//
+// The hotkey set
+//
+hotkeySet -source "Maya_Default" -current Maya_Default_Duplicate1;
+//
+// The hotkey contexts and hotkeys
+//
+hotkey -keyShortcut "e" -ctl -releaseName ("BSB_MM_ReleaseNameCommand");
+hotkey -keyShortcut "e" -ctl -name ("BSB_MM_PressNameCommand");
+hotkey -keyShortcut "v" -ctl -name ("");
+hotkey -keyShortcut "v" -ctl -alt -name ("");
+hotkeyCtx -type "Editor" -addClient "hyperShadePanel";
+hotkeyCtx -type "Editor" -addClient "polyTexturePlacementPanel";
+hotkeyCtx -type "Editor" -addClient "nodeEditorPanel";
+hotkeyCtx -type "Editor" -addClient "outlinerPanel";
+hotkeyCtx -type "Editor" -addClient "cteEditor";
+hotkeyCtx -type "Editor" -addClient "profilerPanel";
+hotkeyCtx -type "Editor" -addClient "hyperGraphPanel";
+hotkeyCtx -type "Editor" -addClient "graphEditor";
+hotkeyCtx -type "Tool" -addClient "texCutContext";
+hotkeyCtx -type "Tool" -addClient "sculptMeshCache";
+hotkeyCtx -type "Tool" -addClient "texSculptCacheContext";
+hotkeyCtx -type "Tool" -addClient "Unfold3DBrush";

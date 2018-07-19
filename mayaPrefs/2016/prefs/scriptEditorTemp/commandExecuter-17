@@ -1,0 +1,8 @@
+import maya.cmds as cmds
+
+sel = cmds.ls(sl = True)
+
+for obj in sel:
+    collGrp = cmds.group(empty = True, name = 'coll_%s'%obj)
+    pc = cmds.parentConstraint(obj, collGrp, mo = False)
+    cmds.delete(pc)

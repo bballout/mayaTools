@@ -1,0 +1,13 @@
+import sys
+
+if 'C:/Users/bballout/git/mayaTools' not in sys.path:
+    sys.path.append('C:/Users/bballout/git/mayaTools')
+
+from mayaScripts import BlendShapeLib
+
+shapeTool =  BlendShapeLib.ShapeTool('body_proxy113_inverted')
+translateVectors = shapeTool.getTranslationVectors('body_proxy114_inverted')
+shapeTool.setTranslation('base_to',translateVectors)
+
+
+reload(igGeoCache)

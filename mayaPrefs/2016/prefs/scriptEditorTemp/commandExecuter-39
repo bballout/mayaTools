@@ -1,0 +1,21 @@
+def checkThis():
+    connection = cmds.connectionInfo('%s.output'%sel,dfs=True)[0].split('.')[0]
+    unloadedKey = False
+
+    if cmds.nodeType(connection) == 'animBlendNodeAdditiveDL':
+        out = cmds.connectionInfo('%s.output'%connection,dfs=True)[0].split('.')[0]
+        print out
+        if cmds.nodeType(out) == 'reference':
+            print 'made it here'
+            unloadedKey = True
+    elif cmds.nodeType(connection) == 'reference':
+        
+        unloadedKey = True
+                    
+    if unloadedKey:
+        print 'skipping this key'
+sel = cmds.ls(sl=True)[0]        
+checkThis()
+
+if cmds.nodeType('innerdemon_03:LF_uparm_FK_CTRL') == 'reference':
+    print 'is ref'

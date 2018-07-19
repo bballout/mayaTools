@@ -1,0 +1,22 @@
+import maya.cmds as cmds
+
+blendShapeNodes = ['jacketBlends','pantsBlends']
+
+
+for blendShapeNode in blendShapeNodes:
+    
+    blendAttrs = cmds.aliasAttr(blendShapeNode, q = True)
+    attrs = []
+    
+    for attr in blendAttrs:
+        if not 'weight'in attr:
+            attrs.append(attr)
+    i = 0   
+    for attr in attrs:
+            connection = cmds.connectionInfo('%s.%s'%(blendShapeNode,attr),sfd = True)
+            attrName = 'igMorph_%s_target%i'%(blendShapeNode,i)
+            
+            cmds.addAttr('root', longName = attrName, attributeType = 'double',keyable = True )
+            cmds.connectAttr(connection,'root.%s'%attrName)
+            
+            i += 1

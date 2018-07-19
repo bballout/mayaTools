@@ -1,0 +1,11 @@
+driver = 'corrective_driver'
+tweaker = 'corrective_tweaker'
+driverAttrs = cmds.listAttr(driver,ud=True)
+
+for attr in driverAttrs:
+    connection = cmds.connectionInfo('%s.%s'%(driver,attr),sfd=True)
+    pma = cmds.createNode('plusMinusAverage')
+    cmds.connectAttr(connection,'%s.input1D[0]'%pma)
+    cmds.addAttr(tweaker,ln=attr,keyable=True)
+    cmds.connectAttr('%s.%s'%(tweaker,attr),'%s.input1D[1]'%pma)
+    cmds.connectAttr('%s.output1D'%pma,'%s.%s'%(driver,attr),f=True)

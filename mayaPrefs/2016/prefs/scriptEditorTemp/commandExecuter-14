@@ -1,0 +1,29 @@
+#extract blends
+
+import maya.cmds as cmds
+
+blendname = 'blendShape14'
+geoName = 'geo_jacketOpen_suit'
+
+blendAttrs = cmds.aliasAttr(blendname, q = True)
+attrs = []
+
+for attr in blendAttrs:
+    if not 'weight'in attr:
+        attrs.append(attr)
+        
+i = 0
+for attr in attrs:
+    cmds.setAttr('%s.%s'%(blendname,attr),0)
+    
+grp = cmds.group(empty = True)
+
+for attr in attrs:
+    print attr
+    for zAttr in attrs:
+        cmds.setAttr('%s.%s'%(blendname,zAttr),0)
+        
+    cmds.setAttr('%s.%s'%(blendname,attr),1.0)
+    dup = cmds.duplicate(geoName)
+    cmds.parent(dup,grp)
+    cmds.rename(dup,attr)

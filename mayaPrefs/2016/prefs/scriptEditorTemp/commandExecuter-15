@@ -1,0 +1,16 @@
+import sys 
+import os
+import maya.mel as mel
+import maya.OpenMaya as om
+
+if not 'C:/Users/bballout/git/mayaTools' in sys.path:
+	sys.path.append('C:/Users/bballout/git/mayaTools')
+	
+from mayaScripts import GenAPI
+
+
+inMesh = GenAPI.getMObject('pPlaneShape1')
+meshFn = om.MFnMesh(inMesh)
+colors = om.MColorArray()
+colorSet = 'polyColorPerVertex1'
+meshFn.getColors(colors)

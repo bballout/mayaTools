@@ -1,0 +1,1 @@
+ns = cmds.referenceQuery('hero:Skeleton', ns=1).strip(":")

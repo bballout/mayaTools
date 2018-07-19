@@ -1,0 +1,17 @@
+driver = 'turbulance_driver'
+
+        
+        
+attrs = cmds.listAttr(driver,ud = True)
+
+for attr in attrs:
+    if not attr == 'drive' and not attr == 'activate':
+        print attr
+        connection = cmds.connectionInfo('%s.%s'%(driver,attr),sfd = True)
+        mdNode = cmds.createNode('multiplyDivide')
+        cmds.connectAttr(connection,'%s.input1X'%mdNode)
+        cmds.connectAttr('root_CTRL.turbulance','%s.input2X'%mdNode)
+        cmds.connectAttr('%s.outputX'%mdNode,'%s.%s'%(driver,attr),f = True)
+        print connection
+        
+cmds.select(driver)

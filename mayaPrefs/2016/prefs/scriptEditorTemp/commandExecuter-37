@@ -1,0 +1,433 @@
+import simplejson as json
+import subprocess
+
+filePath = r'C:\Users\bballout\Desktop\muuid.validate'
+f = open(filePath)
+validationData = f.read()
+f.close()
+validation = json.loads(validationData)
+
+igRoot = os.environ['IG_ROOT']
+iconPath = igRoot + r"\tech_art\maya\shared\icons"
+
+from PyQt4 import QtGui,QtCore
+
+class ValidationWidget(QtGui.QDialog):
+    def __init__(self,parent=None,validationFile=''):
+        super(ValidationWidget,self).__init__(parent)
+        self.validationFile = validationFile
+        f = open(self.validationFile)
+        validationData = f.read()
+        f.close()
+        self.validation = json.loads(validationData)
+        
+        self.validationPass = ["MissingShotInfos",
+                                "MisMatchedNameshotInfos",
+                                "MisMatchedStartFrameShotInfos",
+                                "MisMatchedEndFrameShotInfos",
+                                "MisMatchedMuidsShotInfos",
+                                "ShotNotInBaseActorSplitInfos"]
+        self.validationItems = []
+        
+        if 'MisMatchedMuidsShotInfos' in self.validation.keys():
+            self.muuiWidget = MuuidMismatchWidget(mismatchInfo = self.validation['MisMatchedMuidsShotInfos'])
+        else:
+            self.muuiWidget = []
+        if 'ShotNotInBaseActorSplitInfos' in self.validation.keys():
+            self.shotNotInBaseWidget = ShotNotInBaseWidget(mismatchInfo = self.validation['ShotNotInBaseActorSplitInfos'])
+        else:
+            self.shotNotInBaseWidget = []
+        if 'MisMatchedStartFrameShotInfos' in self.validation.keys():
+            self.startFrameWidget = StartFrameWidget(mismatchInfo = self.validation['MisMatchedStartFrameShotInfos'])
+        else:
+            self.startFrameWidget = []
+        if 'MisMatchedEndFrameShotInfos' in self.validation.keys():
+            self.endFrameWidget = EndFrameWidget(mismatchInfo = self.validation['MisMatchedEndFrameShotInfos'])
+        else:
+            self.endFrameWidget = []             
+        if 'MisMatchedNameshotInfos' in self.validation.keys():
+            self.shotNameWidget = ShotNameWidget(mismatchInfo = self.validation['MisMatchedNameshotInfos'])
+        else:
+            self.shotNameWidget = [] 
+                  
+        self.initUI()
+                                
+    def initUI(self):
+        self.setFixedHeight(475)
+        self.setFixedWidth(380)
+        layout = QtGui.QHBoxLayout()
+        scrollArea = QtGui.QScrollArea()
+        scrollArea.setWidgetResizable(False)
+         
+        self.infoWidget = QtGui.QWidget()
+        infoLayout = QtGui.QVBoxLayout()
+        self.infoWidget.setLayout(infoLayout)
+        validationkeys = self.validation.keys()
+        
+        validationFileWidget = QtGui.QWidget()
+        validationLayout = QtGui.QHBoxLayout()
+        validationFileWidget.setLayout(validationLayout)
+        self.validationLineEdit = QtGui.QLineEdit()
+        self.validationLineEdit.setText(self.validationFile)
+        self.validationExplorerBtn = QtGui.QPushButton()
+        self.validationExplorerBtn.clicked.connect(self.openExplorer)
+        validationExplorerIcon = QtGui.QIcon(os.path.join(iconPath, "folder.bmp"))
+        self.validationExplorerBtn.setIcon(validationExplorerIcon)
+        validationLayout.addWidget(self.validationLineEdit)
+        validationLayout.addWidget(self.validationExplorerBtn)
+        
+        validWidget = QtGui.QWidget()
+        validLayout = QtGui.QHBoxLayout()
+        validWidget.setLayout(validLayout)
+        self.validData = self.validation['Valid']
+        validationStr = ''
+        if self.validData:
+            validLabel = QtGui.QLabel(text='Validation Passed')
+            palette = validLabel.palette()
+            palette.setColor(validLabel.foregroundRole(), QtCore.Qt.green)
+            validLabel.setPalette(palette)
+            font = validLabel.font()
+            font.setPointSize(12)
+            font.setBold(False)
+            validLabel.setFont(font)
+        else:
+            validLabel = QtGui.QLabel(text='Validation Failed')
+            palette = validLabel.palette()
+            palette.setColor(validLabel.foregroundRole(), QtCore.Qt.red)
+            validLabel.setPalette(palette)
+            font = validLabel.font()
+            font.setPointSize(12)
+            font.setBold(True)
+            validLabel.setFont(font)  
+        
+        validLayout.addWidget(validLabel)
+        
+        validationWidget = QtGui.QWidget()
+        validationLayout = QtGui.QVBoxLayout()
+        validationWidget.setLayout(validationLayout)
+        for key in self.validationPass:
+            if key in self.validation.keys():
+                validationItem = ValidationItem(label=key,passed=False)
+            else:
+                validationItem = ValidationItem(label=key,passed=True)
+            validationLayout.addWidget(validationItem)
+            self.validationItems.append(validationItem)
+            
+        for item in self.validationItems:
+            print item.label
+            if item.label == 'MisMatchedMuidsShotInfos':
+                if 'MisMatchedMuidsShotInfos' in self.validation.keys():
+                    item.passFailButton.clicked.connect(self.openMuuidWidget)
+            if item.label == 'ShotNotInBaseActorSplitInfos':
+                if 'ShotNotInBaseActorSplitInfos' in self.validation.keys():
+                    item.passFailButton.clicked.connect(self.openShotNotInBaseWidget)
+            if item.label == 'MisMatchedStartFrameShotInfos':
+                if 'MisMatchedStartFrameShotInfos' in self.validation.keys():
+                    item.passFailButton.clicked.connect(self.openStartFrameWidget)
+            if item.label == 'MisMatchedEndFrameShotInfos':
+                if 'MisMatchedEndFrameShotInfos' in self.validation.keys():
+                    item.passFailButton.clicked.connect(self.openEndFrameWidget)
+            if item.label == 'MisMatchedNameshotInfos':
+                if 'MisMatchedNameshotInfos' in self.validation.keys():
+                    item.passFailButton.clicked.connect(self.openShotNameWidget)
+                    
+        infoLayout.addWidget(validationFileWidget)
+        infoLayout.addWidget(validWidget)
+        infoLayout.addWidget(validationWidget)
+        
+        scrollArea.setWidget(self.infoWidget)
+        self.setLayout(layout)
+        layout.addWidget(scrollArea)
+        
+    def openExplorer(self):
+        subprocess.Popen(r'explorer /select,%s'%self.validationFile)
+        
+    def openMuuidWidget(self):
+        try:
+            self.muuiWidget.close()
+        except:
+            pass
+        self.muuiWidget.show()
+     
+    def openShotNotInBaseWidget(self):
+        try:
+            self.shotNotInBaseWidget.close()
+        except:
+            pass
+        self.shotNotInBaseWidget.show()
+        
+    def openEndFrameWidget(self):
+        try:
+            self.endFrameWidget.close()
+        except:
+            pass
+        self.endFrameWidget.show()
+        
+    def openStartFrameWidget(self):
+        try:
+            self.startFrameWidget.close()
+        except:
+            pass
+        self.startFrameWidget.show()
+        
+    def openShotNameWidget(self):
+        try:
+            self.shotNameWidget.close()
+        except:
+            pass
+        self.shotNameWidget.show()
+
+class ValidationItem(QtGui.QWidget):
+    def __init__(self,parent=None,label='temp',passed=False):
+        super(ValidationItem,self).__init__(parent)
+        self.label = label
+        self.passed = passed
+        self.initUI()
+    def initUI(self):
+         mainLayout = QtGui.QHBoxLayout()
+         self.setLayout(mainLayout)
+         if self.passed:
+            self.passFailIcon = QtGui.QIcon(os.path.join(iconPath, "greenCheck_icon.png"))
+            self.labelWidget = QtGui.QLabel(text='%s: Passed'%self.label)
+            palette = self.labelWidget.palette()
+            palette.setColor(self.labelWidget.foregroundRole(), QtCore.Qt.green)
+            font = self.labelWidget.font()
+            font.setPointSize(8)
+            font.setBold(False)
+            self.labelWidget.setFont(font)
+            self.labelWidget.setPalette(palette)
+         else:
+            self.passFailIcon = QtGui.QIcon(os.path.join(iconPath, "error_icon.png"))
+            self.labelWidget = QtGui.QLabel(text='%s: Failed'%self.label)
+            palette = self.labelWidget.palette()
+            palette.setColor(self.labelWidget.foregroundRole(), QtCore.Qt.red)
+            self.labelWidget.setPalette(palette)
+            font = self.labelWidget.font()
+            font.setPointSize(8)
+            font.setBold(True)
+            self.labelWidget.setFont(font)
+             
+         self.passFailButton = QtGui.QPushButton()
+         self.passFailButton.setIcon(self.passFailIcon)
+         self.passFailButton.setMaximumWidth(25)
+             
+         repairIcon = QtGui.QIcon(os.path.join(iconPath, "repair_icon.png"))
+         self.repairButton = QtGui.QPushButton()
+         self.repairButton.setIcon(repairIcon)
+         self.repairButton.setMaximumWidth(25)
+         if self.passed:
+             self.repairButton.setDisabled(True)
+             self.passFailButton.setDisabled(True)
+         
+         mainLayout.addWidget(self.passFailButton)
+         mainLayout.addWidget(self.labelWidget)
+         mainLayout.addWidget(self.repairButton)
+
+class MuuidMismatchWidget(QtGui.QWidget):
+    def __init__(self,mismatchInfo,parent=None):
+        super(MuuidMismatchWidget,self).__init__(parent)
+        self.mismatchInfo = mismatchInfo
+        self.setMinimumWidth(600)
+        self.initUI()
+    def initUI(self):
+        layout = QtGui.QVBoxLayout()
+        self.setLayout(layout)
+        
+        mainWidget = QtGui.QWidget()
+        mainWidgetLayout = QtGui.QVBoxLayout()
+        mainWidget.setLayout(mainWidgetLayout)
+        
+        for mismatch in self.mismatchInfo:
+            messageLabel = QtGui.QLabel(text = mismatch['Message'])             
+            table = QtGui.QTableWidget()
+            table.setRowCount(5)
+            table.setColumnCount(1)
+            
+            table.horizontalHeader().hide()
+            table.setVerticalHeaderLabels(QtCore.QString("MisMatchedFile;BaseFile;BaseMUID0;MisMatchedMUID0;MisMatchedMUID1").split(";"))
+            table.horizontalHeader().setStretchLastSection(True)
+            
+            # set data
+            table.setItem(0,0, QtGui.QTableWidgetItem(mismatch['MisMatchedFile']))
+            table.setItem(0,1, QtGui.QTableWidgetItem(mismatch['BaseFile']))
+            table.setItem(0,2, QtGui.QTableWidgetItem(mismatch['BaseMUID0']))
+            table.setItem(0,3, QtGui.QTableWidgetItem(mismatch['MisMatchedMUID0']))
+            table.setItem(0,4, QtGui.QTableWidgetItem(mismatch['MisMatchedMUID1']))
+            
+       
+            mainWidgetLayout.addWidget(messageLabel)
+            mainWidgetLayout.addWidget(table)
+        
+        layout.addWidget(mainWidget)
+            
+class ShotNotInBaseWidget(QtGui.QWidget):
+    def __init__(self,mismatchInfo,parent=None):
+        super(ShotNotInBaseWidget,self).__init__(parent)
+        self.mismatchInfo = mismatchInfo
+        self.setMinimumWidth(600)
+        self.initUI()
+    def initUI(self):
+        layout = QtGui.QVBoxLayout()
+        self.setLayout(layout)
+        
+        mainWidget = QtGui.QWidget()
+        mainWidgetLayout = QtGui.QVBoxLayout()
+        mainWidget.setLayout(mainWidgetLayout)
+        
+        for mismatch in self.mismatchInfo:
+            messageLabel = QtGui.QLabel(text = mismatch['Message'])         
+            table = QtGui.QTableWidget()
+            table.setRowCount(6)
+            table.setColumnCount(1)
+            
+            table.horizontalHeader().hide()
+            table.setVerticalHeaderLabels(QtCore.QString("File Name;Shot Name;MUID0;MUID1;Start Frame;End Frame").split(";"))
+            table.horizontalHeader().setStretchLastSection(True)
+            
+            # set data
+            table.setItem(0,0, QtGui.QTableWidgetItem(mismatch['FileName']))
+            table.setItem(0,1, QtGui.QTableWidgetItem(mismatch['Name']))
+            table.setItem(0,2, QtGui.QTableWidgetItem(mismatch['MUID0']))
+            table.setItem(0,3, QtGui.QTableWidgetItem(mismatch['MUID1']))
+            table.setItem(0,4, QtGui.QTableWidgetItem(str(mismatch['StartFrame'])))
+            table.setItem(0,5, QtGui.QTableWidgetItem(str(mismatch['EndFrame'])))
+            
+            mainWidgetLayout.addWidget(messageLabel)
+            mainWidgetLayout.addWidget(table)
+        
+        layout.addWidget(mainWidget)
+        
+class StartFrameWidget(QtGui.QWidget):
+    def __init__(self,mismatchInfo,parent=None):
+        super(StartFrameWidget,self).__init__(parent)
+        self.mismatchInfo = mismatchInfo
+        self.setMinimumWidth(600)
+        self.initUI()
+    def initUI(self):
+        layout = QtGui.QVBoxLayout()
+        self.setLayout(layout)
+        
+        mainWidget = QtGui.QWidget()
+        mainWidgetLayout = QtGui.QVBoxLayout()
+        mainWidget.setLayout(mainWidgetLayout)
+        
+        for mismatch in self.mismatchInfo:
+            messageLabel = QtGui.QLabel(text = mismatch['Message'])         
+            table = QtGui.QTableWidget()
+            table.setRowCount(5)
+            table.setColumnCount(1)
+            
+            table.horizontalHeader().hide()
+            table.setVerticalHeaderLabels(QtCore.QString("File Name;Mismatch File Name;Shot Name;Base Start Frame;Start Frame").split(";"))
+            table.horizontalHeader().setStretchLastSection(True)
+            
+            # set data
+            table.setItem(0,0, QtGui.QTableWidgetItem(mismatch['BaseFile']))
+            table.setItem(0,1, QtGui.QTableWidgetItem(mismatch['MisMatchedFile']))
+            table.setItem(0,2, QtGui.QTableWidgetItem(mismatch['Name']))
+            table.setItem(0,3, QtGui.QTableWidgetItem(str(mismatch['BaseFrame'])))
+            table.setItem(0,4, QtGui.QTableWidgetItem(str(mismatch['MisMatchedFrame'])))
+           
+            mainWidgetLayout.addWidget(messageLabel)
+            mainWidgetLayout.addWidget(table)
+
+        layout.addWidget(mainWidget)
+        
+class EndFrameWidget(QtGui.QWidget):
+    def __init__(self,mismatchInfo,parent=None):
+        super(EndFrameWidget,self).__init__(parent)
+        self.mismatchInfo = mismatchInfo
+        self.setMinimumWidth(600)
+        self.initUI()
+    def initUI(self):
+        layout = QtGui.QVBoxLayout()
+        self.setLayout(layout)
+        
+        mainWidget = QtGui.QWidget()
+        mainWidgetLayout = QtGui.QVBoxLayout()
+        mainWidget.setLayout(mainWidgetLayout)
+        
+        for mismatch in self.mismatchInfo:
+            messageLabel = QtGui.QLabel(text = mismatch['Message'])           
+            table = QtGui.QTableWidget()
+            table.setRowCount(5)
+            table.setColumnCount(1)
+            
+            table.horizontalHeader().hide()
+            table.setVerticalHeaderLabels(QtCore.QString("File Name;Mismatch File Name;Shot Name;Base End Frame;End Frame").split(";"))
+            table.horizontalHeader().setStretchLastSection(True)
+            
+            # set data
+            table.setItem(0,0, QtGui.QTableWidgetItem(mismatch['BaseFile']))
+            table.setItem(0,1, QtGui.QTableWidgetItem(mismatch['MisMatchedFile']))
+            table.setItem(0,2, QtGui.QTableWidgetItem(mismatch['Name']))
+            table.setItem(0,3, QtGui.QTableWidgetItem(str(mismatch['BaseFrame'])))
+            table.setItem(0,4, QtGui.QTableWidgetItem(str(mismatch['MisMatchedFrame'])))
+            
+            mainWidgetLayout.addWidget(messageLabel)
+            mainWidgetLayout.addWidget(table)
+        
+        layout.addWidget(mainWidget)
+        
+class ShotNameWidget(QtGui.QWidget):
+    def __init__(self,mismatchInfo,parent=None):
+        super(ShotNameWidget,self).__init__(parent)
+        self.mismatchInfo = mismatchInfo
+        self.setMinimumWidth(600)
+        self.initUI()
+    def initUI(self):
+        layout = QtGui.QVBoxLayout()
+        self.setLayout(layout)
+        
+        mainWidget = QtGui.QWidget()
+        mainWidgetLayout = QtGui.QVBoxLayout()
+        mainWidget.setLayout(mainWidgetLayout)
+        
+        for mismatch in self.mismatchInfo:
+            messageLabel = QtGui.QLabel(text = mismatch['Message'])           
+            table = QtGui.QTableWidget()
+            table.setRowCount(4)
+            table.setColumnCount(1)
+            
+            table.horizontalHeader().hide()
+            table.setVerticalHeaderLabels(QtCore.QString("File Name;Mismatch File Name;Shot Name;Base End Frame;End Frame").split(";"))
+            table.horizontalHeader().setStretchLastSection(True)
+            
+            # set data
+            table.setItem(0,0, QtGui.QTableWidgetItem(mismatch['BaseFile']))
+            table.setItem(0,1, QtGui.QTableWidgetItem(mismatch['BaseName']))
+            table.setItem(0,2, QtGui.QTableWidgetItem(mismatch['MisMatchedName']))
+            table.setItem(0,3, QtGui.QTableWidgetItem(str(mismatch['MisMatchedFile'])))
+            
+            mainWidgetLayout.addWidget(messageLabel)
+            mainWidgetLayout.addWidget(table)
+        
+        layout.addWidget(mainWidget)
+      
+validationWidget = ValidationWidget(validationFile=filePath)
+validationWidget.show()
+'''
+info = validation['MisMatchedMuidsShotInfos']
+muuidWidget = MuuidMismatchWidget(info)
+muuidWidget.show()
+info = validation['MisMatchedMuidsShotInfos']
+
+
+validationItem = ValidationItem()
+validationItem.show()
+
+
+info = validation['ShotNotInBaseActorSplitInfos']
+shotNotInBaseWidget = ShotNotInBaseWidget(info)
+shotNotInBaseWidget.show()
+
+
+info = validation['MisMatchedEndFrameShotInfos']
+widget = StartFrameWidget(info)
+widget.show()
+
+info = validation['MisMatchedNameshotInfos']
+widget = ShotNameWidget(info)
+widget.show()
+'''
+

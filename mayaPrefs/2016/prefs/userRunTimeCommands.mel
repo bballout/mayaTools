@@ -1,0 +1,20 @@
+//Maya Preference 2016 (Release 1)
+//
+//
+
+runTimeCommand
+	-annotation "BSB_MM (Press)"
+	-category "Other items.User Marking Menus"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("if (`popupMenu -exists tempMM`) { deleteUI tempMM; }\npopupMenu -button 1 -ctl true -alt false -sh false -allowOptionBoxes true -parent `findPanelPopupParent` -mm 1 tempMM; \nsource \"menu_BSB_MM\";\n")
+	BSB_MM_Press;
+
+runTimeCommand
+	-annotation "BSB_MM (Release)"
+	-category "Other items.User Marking Menus"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("if (`popupMenu -exists tempMM`) { deleteUI tempMM; }")
+	BSB_MM_Release;
+

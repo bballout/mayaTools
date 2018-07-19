@@ -1,0 +1,3 @@
+import maya.cmds as cmds
+
+cmds.setAttr('pSphereShape1.uuid','30B3F75E-4E98-C7D5-D4E8-C5920EEC7410')

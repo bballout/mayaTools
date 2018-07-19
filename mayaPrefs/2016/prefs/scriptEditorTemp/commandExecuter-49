@@ -1,0 +1,37 @@
+import collections
+shots = cmds.ls(type='shot')
+shotData = collections.OrderedDict()
+
+for shot in shots:
+    start = cmds.shot(shot,q=True,st=True)
+    end = cmds.shot(shot,q=True,et=True)
+    camera = cmds.shot(shot,q=True,cc=True)
+    shotData[shot] = [start,end,camera]
+    
+cmds.delete(shots)
+    
+for shot in shotData.keys():
+    shotKey = shotData[shot]
+    cmds.shot(shotName = shot,st=shotKey[0],et=shotKey[1],cc=shotKey[2] )
+    
+    
+    
+reload(igCinematicManager)
+
+
+
+
+ui = igCinematicManager.igCinematicManagerMainClass()
+sequencerName = ui.getSequencer()
+sequencer = pm.PyNode(sequencerName)
+#Sync masterShot widget text to maya camera sequencer
+#Find shot nodes from camera sequencer
+shots = pm.listConnections(sequencer, type="shot")
+
+ui.shots
+
+for shot in ui.shots:
+    print shot.shotNode
+    
+    
+cmds.getAttr('SHOT03.sequenceEndFrame')

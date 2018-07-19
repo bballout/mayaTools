@@ -991,7 +991,7 @@ def extrapToCluster(transform,meshes):
     progressWin.end()
  
     om.MGlobal.displayInfo('Extraped cluster from %s'%transform)
-    
+    return cluster
 
 #function for transfering weights to given deformer   
 def extrapWeightsToExistingDeformer(transform,meshes,deformer):

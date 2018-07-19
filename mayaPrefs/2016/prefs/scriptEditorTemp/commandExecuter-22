@@ -1,0 +1,20 @@
+assetPath = 'X:/i20/devel/assets...'
+
+import igPerforceTools
+
+p4 = igPerforceTools.igP4()
+p4.connect()
+p4.sync(assetPath)
+p4.disconnect()
+
+
+import sys 
+import os
+import maya.mel as mel
+
+if not 'C:/Users/bballout/git/mayaTools' in sys.path:
+	sys.path.append('C:/Users/bballout/git/mayaTools')
+
+from mayaScripts import cvshapeinverter
+
+cvshapeinverter.invert()

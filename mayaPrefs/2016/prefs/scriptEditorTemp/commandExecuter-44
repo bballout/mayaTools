@@ -1,0 +1,16 @@
+import igKeyPusher
+reload(igKeyPusher)
+
+pusher = igKeyPusher.KeyPusher()
+pusher.allAnimation = True
+
+keys = pusher.gatherKeys()
+
+if 'head_CTRL_rotate_doc_head_repo_inputBZ' in keys:
+    print 'found it'
+    
+cmds.currentTime(q=True)
+
+
+reload(igGeoCache)
+win = igGeoCache.CacheWin()

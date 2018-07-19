@@ -1,0 +1,39 @@
+import maya.cmds as cmds
+
+cmds.move(-1,0,0,'LF_uparm_bind_5',os = True, r = True)
+cmds.move(1,0,0,'LF_loarm_bind_1',os = True, r = True)
+
+cmds.move(1,0,0,'RT_uparm_bind_5',os = True, r = True)
+cmds.move(-1,0,0,'RT_loarm_bind_1',os = True, r = True)
+
+cmds.move(-1,0,0,'LF_upleg_bind_5',os = True, r = True)
+cmds.move(1,0,0,'LF_loleg_bind_1',os = True, r = True)
+
+cmds.move(1,0,0,'RT_upleg_bind_5',os = True, r = True)
+cmds.move(-1,0,0,'RT_loleg_bind_1',os = True, r = True)
+
+cmds.move(1,0,0,'LF_wrist',os = True, r = True)
+cmds.move(-1,0,0,'RT_wrist',os = True, r = True)
+
+cmds.move(1,0,0,'LF_uparm_bind_1',os = True, r = True)
+cmds.move(-1,0,0,'RT_uparm_bind_1',os = True, r = True)
+
+cmds.move(-1,0,0,'LF_upleg',os = True, r = True)
+cmds.move(1,0,0,'RT_upleg',os = True, r = True)
+##########################################################
+import maya.cmds as cmds
+
+cmds.move(1,0,0,'LF_uparm_bind_5',os = True, r = True)
+cmds.move(-1,0,0,'LF_loarm_bind_1',os = True, r = True)
+
+cmds.move(-1,0,0,'RT_uparm_bind_5',os = True, r = True)
+cmds.move(1,0,0,'RT_loarm_bind_1',os = True, r = True)
+
+cmds.move(1,0,0,'LF_upleg_bind_5',os = True, r = True)
+cmds.move(-1,0,0,'LF_loleg_bind_1',os = True, r = True)
+
+cmds.move(-1,0,0,'RT_upleg_bind_5',os = True, r = True)
+cmds.move(1,0,0,'RT_loleg_bind_1',os = True, r = True)
+
+cmds.move(-1,0,0,'LF_wrist',os = True, r = True)
+cmds.move(1,0,0,'RT_wrist',os = True, r = True)

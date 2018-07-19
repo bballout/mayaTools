@@ -1,0 +1,10 @@
+wrinkleAttrs = cmds.listAttr('wrinkle_driver', ud = True)
+correctiveAttrs = cmds.listAttr('corrective_driver', ud = True)
+
+for attr in wrinkleAttrs:
+    cmds.addAttr('root',ln = 'igAnim_%s'%attr, at = 'double',keyable = True)
+    cmds.connectAttr('wrinkle_driver.%s'%attr,'root.igAnim_%s'%attr)
+    
+for attr in correctiveAttrs:
+    cmds.addAttr('root',ln = 'igMorph_%s'%attr, at = 'double',keyable = True)
+    cmds.connectAttr('corrective_driver.%s'%attr,'root.igMorph_%s'%attr)

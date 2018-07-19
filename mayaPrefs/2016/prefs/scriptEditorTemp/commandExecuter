@@ -1,0 +1,24 @@
+sel = cmds.ls(sl = True)
+clusterHandles = []
+for obj in sel:
+    clusterHandle = cmds.cluster(obj)[1]
+    pivotPos = cmds.xform(obj, q = True,ws = True,rp = True)
+    cmds.setAttr('%s.rotatePivotX'%clusterHandle,pivotPos[0])
+    cmds.setAttr('%s.rotatePivotY'%clusterHandle,pivotPos[1])
+    cmds.setAttr('%s.rotatePivotZ'%clusterHandle,pivotPos[2])
+    
+    cmds.setAttr('%s.scalePivotX'%clusterHandle,pivotPos[0])
+    cmds.setAttr('%s.scalePivotY'%clusterHandle,pivotPos[1])
+    cmds.setAttr('%s.scalePivotZ'%clusterHandle,pivotPos[2])
+    
+    clusterHandles.append(clusterHandle)
+    
+handles = cmds.ls(sl = True)
+for handle in handles:
+    cmds.select(cl = True)
+    joint = cmds.joint()
+    constraint = cmds.parentConstraint(handle,joint)
+    cmds.delete(constraint)
+    cmds.select(cl = True)
+    
+cmds.delete(handles)

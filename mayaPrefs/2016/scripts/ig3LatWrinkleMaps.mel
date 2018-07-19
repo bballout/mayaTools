@@ -1,0 +1,148 @@
+addAttr -ln "igAnimWrinkle_blinkL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_blinkL;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_blink_L" "root.igAnimWrinkle_blinkL";
+
+addAttr -ln "igAnimWrinkle_blinkR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_blinkR;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_blink_R" "root.igAnimWrinkle_blinkR";
+
+addAttr -ln "igAnimWrinkle_browsRaiseInnerL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_browsRaiseInnerL;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_browsRaiseInner_L" "root.igAnimWrinkle_browsRaiseInnerL";
+
+addAttr -ln "igAnimWrinkle_browsRaiseInnerR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_browsRaiseInnerR;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_browsRaiseInner_R" "root.igAnimWrinkle_browsRaiseInnerR";
+
+addAttr -ln "igAnimWrinkle_browsRaiseOuterL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_browsRaiseOuterL;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_browsRaiseOuter_L" "root.igAnimWrinkle_browsRaiseOuterL";
+
+addAttr -ln "igAnimWrinkle_browsRaiseOuterR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_browsRaiseOuterR;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_browsRaiseOuter_R" "root.igAnimWrinkle_browsRaiseOuterR";
+
+addAttr -ln "igAnimWrinkle_chinRaiseL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_chinRaiseL;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_chinRaise_L" "root.igAnimWrinkle_chinRaiseL";
+
+addAttr -ln "igAnimWrinkle_chinRaiseR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_chinRaiseR;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_chinRaise_R" "root.igAnimWrinkle_chinRaiseR";
+
+addAttr -ln "igAnimWrinkle_jawOpen" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_jawOpen;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_jawOpen" "root.igAnimWrinkle_jawOpen";
+
+addAttr -ln "igAnimWrinkle_purseDL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_purseDL;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_purse_DL" "root.igAnimWrinkle_purseDL";
+
+addAttr -ln "igAnimWrinkle_purseDR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_purseDR;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_purse_DR" "root.igAnimWrinkle_purseDR";
+
+addAttr -ln "igAnimWrinkle_purseUL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_purseUL;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_purse_UL" "root.igAnimWrinkle_purseUL";
+
+addAttr -ln "igAnimWrinkle_purseUR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_purseUR;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_purse_UR" "root.igAnimWrinkle_purseUR";
+
+addAttr -ln "igAnimWrinkle_squintInnerL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_squintInnerL;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_squintInner_L" "root.igAnimWrinkle_squintInnerL";
+
+addAttr -ln "igAnimWrinkle_squintInnerR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_squintInnerR;
+connectAttr "FRM_WMmultipliers.head_wm1_normal__head_wm1_squintInner_R" "root.igAnimWrinkle_squintInnerR";
+
+addAttr -ln "igAnimWrinkle_browsDownL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_browsDownL;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_browsDown_L" "root.igAnimWrinkle_browsDownL";
+
+addAttr -ln "igAnimWrinkle_browsDownR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_browsDownR;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_browsDown_R" "root.igAnimWrinkle_browsDownR";
+
+addAttr -ln "igAnimWrinkle_browsLateralL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_browsLateralL;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_browsLateral_L" "root.igAnimWrinkle_browsLateralL";
+
+addAttr -ln "igAnimWrinkle_browsLateralR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_browsLateralR;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_browsLateral_R" "root.igAnimWrinkle_browsLateralR";
+
+addAttr -ln "igAnimWrinkle_mouthStretchL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_mouthStretchL;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_mouthStretch_L" "root.igAnimWrinkle_mouthStretchL";
+
+addAttr -ln "igAnimWrinkle_mouthStretchR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_mouthStretchR;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_mouthStretch_R" "root.igAnimWrinkle_mouthStretchR";
+
+addAttr -ln "igAnimWrinkle_neckStretchL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_neckStretchL;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_neckStretch_L" "root.igAnimWrinkle_neckStretchL";
+
+addAttr -ln "igAnimWrinkle_neckStretchR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_neckStretchR;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_neckStretch_R" "root.igAnimWrinkle_neckStretchR";
+
+addAttr -ln "igAnimWrinkle_noseWrinklerL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_noseWrinklerL;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_noseWrinkler_L" "root.igAnimWrinkle_noseWrinklerL";
+
+addAttr -ln "igAnimWrinkle_noseWrinklerR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_noseWrinklerR;
+connectAttr "FRM_WMmultipliers.head_wm2_normal__head_wm2_noseWrinkler_R" "root.igAnimWrinkle_noseWrinklerR";
+
+addAttr -ln "igAnimWrinkle_cheekRaiseInnerL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_cheekRaiseInnerL;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm3_cheekRaiseInner_L" "root.igAnimWrinkle_cheekRaiseInnerL";
+
+addAttr -ln "igAnimWrinkle_cheekRaiseInnerR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_cheekRaiseInnerR;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm3_cheekRaiseInner_R" "root.igAnimWrinkle_cheekRaiseInnerR";
+
+addAttr -ln "igAnimWrinkle_cheekRaiseOuterL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_cheekRaiseOuterL;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm3_cheekRaiseOuter_L" "root.igAnimWrinkle_cheekRaiseOuterL";
+
+addAttr -ln "igAnimWrinkle_lipsDR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_lipsDR;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm13_lips_DR" "root.igAnimWrinkle_lipsDR";
+
+addAttr -ln "igAnimWrinkle_cheekRaiseOuterR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_cheekRaiseOuterR;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm3_cheekRaiseOuter_R" "root.igAnimWrinkle_cheekRaiseOuterR";
+
+addAttr -ln "igAnimWrinkle_cheekRaiseUpperL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_cheekRaiseUpperL;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm3_cheekRaiseUpper_L" "root.igAnimWrinkle_cheekRaiseUpperL";
+
+addAttr -ln "igAnimWrinkle_cheekRaiseUpperR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_cheekRaiseUpperR;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm3_cheekRaiseUpper_R" "root.igAnimWrinkle_cheekRaiseUpperR";
+
+addAttr -ln "igAnimWrinkle_smileL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_smileL;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm3_smile_L" "root.igAnimWrinkle_smileL";
+
+addAttr -ln "igAnimWrinkle_smileR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_smileR;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm3_smile_R" "root.igAnimWrinkle_smileR";
+
+addAttr -ln "igAnimWrinkle_lipsDL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_lipsDL;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm13_lips_DL" "root.igAnimWrinkle_lipsDL";
+
+addAttr -ln "igAnimWrinkle_lipsUL" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_lipsUL;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm13_lips_UL" "root.igAnimWrinkle_lipsUL";
+
+addAttr -ln "igAnimWrinkle_lipsUR" -at "double" root;
+setAttr -e -k true root.igAnimWrinkle_lipsUR;
+connectAttr "FRM_WMmultipliers.head_wm3_normal__head_wm13_lips_UR" "root.igAnimWrinkle_lipsUR";
+

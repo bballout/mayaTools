@@ -1,0 +1,6 @@
+//Maya Preference 2016 (Release 1)
+//
+//
+evalDeferred("autoLoadPlugin(\"\", \"objExport\", \"objExport\")");
+evalDeferred("autoLoadPlugin(\"\", \"SimplygonMaya2016Releasex64\", \"SimplygonMaya2016Releasex64\")");
+evalDeferred("autoLoadPlugin(\"\", \"modelingToolkit\", \"modelingToolkit\")");

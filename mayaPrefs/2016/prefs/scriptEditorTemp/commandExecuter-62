@@ -1,0 +1,60 @@
+from mayaScripts import GenAPI,DeformerLib,SkinningLib
+import maya.OpenMaya as om
+
+holdJoint = 'LF_uparm_bind_1'
+twistJoints = ['RT_uparm_bind_1','RT_uparm_bind_2','RT_uparm_bind_3','RT_uparm_bind_4','RT_uparm_bind_5']
+meshes = ['geo_jacket_jacketUnbuttoned_skinned']
+jointPos = []
+
+#get joint positions
+for twistJoint in twistJoints:
+    pos = cmds.xform(twistJoint,q=True,ws=True,translation=True)
+    jointPos.append(pos)
+    
+#create curve
+curve = cmds.curve(d=1,p=jointPos)
+
+wiredeformers = []
+
+#create wire deformer
+for mesh in meshes:
+    cmds.select(mesh)
+    wire = cmds.wire(gw=False,en=1.000000,ce=0.000000,li=0.000000,w=(curve))
+    cmds.setAttr('%s.dropoffDistance[0]'%wire[0],9999999)
+    cmds.setAttr('%s.rotation'%wire[0],0)
+    wiredeformers.append(wire)
+    
+#create clusters on wire
+curveShape = cmds.listRelatives(curve,type='shape')[0]
+curvePath = GenAPI.getDagPath(curveShape)
+
+cvSelection = om.MSelectionList()
+cvItr = om.MItCurveCV(curvePath)
+clusters = []
+
+while not cvItr.isDone():
+    cvSelection.clear()
+    currentCV = cvItr.currentItem()
+    cvSelection.add(curvePath,currentCV)
+    om.MGlobal.setActiveSelectionList(cvSelection)
+    cluster = cmds.cluster()
+    clusters.append(cluster)
+    cvItr.next()
+
+extrapedClusters = []
+#extrap clusters
+for cluster in clusters:
+    extrapedCluster = DeformerLib.extrapToCluster(cluster[1],meshes)
+    extrapedClusters.append(extrapedCluster)
+    
+#some cleanup
+for deformer in wiredeformers:
+    cmds.delete(deformer)
+'''    
+#send weights
+for mesh in meshes:
+    for i, cluster in enumerate(extrapedClusters):
+        SkinningLib.clusterWeightToJoints(mesh,cluster[0],holdJoint,twistJoints[i])
+'''
+    
+   
