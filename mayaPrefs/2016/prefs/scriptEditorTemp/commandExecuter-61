@@ -1,4 +1,0 @@
-sel = cmds.ls(sl=True)
-
-for obj in sel:
-    cmds.connectAttr('root_CTRL.turbulenceStrength','%s.input2X'%obj)

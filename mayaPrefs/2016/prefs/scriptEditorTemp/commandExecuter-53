@@ -1,5 +1,0 @@
-import igColladaExport
-import igAnimClipManager
-managerClass = igAnimClipManager.igAnimClipManagerMainClass()
-managerClass.frameAll()
-igColladaExport.igColladaExport(function = 'animation')

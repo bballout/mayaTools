@@ -1,6 +1,0 @@
-numLods = 5
-
-for i in range(numLods):
-    cmds.select(cl=True)
-    sel = cmds.select('*LOD%i'%(i+1))
-    cmds.group(name='LOD%i'%(i+1))

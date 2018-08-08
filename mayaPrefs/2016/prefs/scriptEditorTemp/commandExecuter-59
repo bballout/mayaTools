@@ -1,3 +1,0 @@
-import igVanityToolkit
-vanwin = igVanityToolkit.igVanityToolkitClass()
-vanwin.havokClothExport()

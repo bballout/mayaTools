@@ -1,5 +1,0 @@
-from P4 import P4
-p4 = P4()
-p4.connect()
-info = p4.run( "info" ) 
-p4.disconnect()
