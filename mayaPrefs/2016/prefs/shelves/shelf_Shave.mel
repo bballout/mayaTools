@@ -1,0 +1,860 @@
+global proc shelf_Shave () {
+    global string $gBuffStr;
+    global string $gBuffStr0;
+    global string $gBuffStr1;
+
+
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: select guides" 
+        -enableBackground 0
+        -align "center" 
+        -label "Guides" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSQSelectStrand.xpm" 
+        -image1 "shaveSQSelectStrand.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectGuides" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: select vertices" 
+        -enableBackground 0
+        -align "center" 
+        -label "Verts" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSelectVert.xpm" 
+        -image1 "shaveSelectVert.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectVerts" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: select guides by their roots" 
+        -enableBackground 0
+        -align "center" 
+        -label "Roots" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSelectRoot.xpm" 
+        -image1 "shaveSelectRoot.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectByRoots" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: select tips" 
+        -enableBackground 0
+        -align "center" 
+        -label "Tips" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSelectTip.xpm" 
+        -image1 "shaveSelectTip.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectTips" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 0
+        -width 9
+        -height 16
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: Separator" 
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: grow selection by adding surrounding hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Grow Selection" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSelectGrow.xpm" 
+        -image1 "shaveSelectGrow.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectGrow" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: invert selection" 
+        -enableBackground 0
+        -align "center" 
+        -label "Invert Selection" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSelectInverse.xpm" 
+        -image1 "shaveSelectInverse.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectInverse" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: move selected verts higher up hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Rotate Selection Up" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSelectRotateUp.xpm" 
+        -image1 "shaveSelectRotateUp.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectRotateUp" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: hide selected hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Select Hide" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSelectHide.xpm" 
+        -image1 "shaveSelectHide.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectHide" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: unhide selected hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Select Unhide" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSelectUnHide.xpm" 
+        -image1 "shaveSelectUnHide.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSelectUnhide" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 0
+        -width 9
+        -height 16
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "separator" 
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: Brush Tool: brush/style hair" 
+        -enableBackground 0
+        -align "center" 
+        -label "Brush" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveBrush.xpm" 
+        -image1 "shaveBrush.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveBrushTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "shaveBrushToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: Cut Tool: cut hair" 
+        -enableBackground 0
+        -align "center" 
+        -label "Cut" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveCut.xpm" 
+        -image1 "shaveCut.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveCutTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "shaveCutTool" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 0
+        -width 9
+        -height 16
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "separator" 
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: attenuate hair" 
+        -enableBackground 0
+        -align "center" 
+        -label "Attenuate" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveAttenuate.xpm" 
+        -image1 "shaveAttenuate.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveAttenuate" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: pop selected hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Pop Selected" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shavePopSelect.xpm" 
+        -image1 "shavePopSelect.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shavePopSelected" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: pop zero-sized hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Pop Zero-Sized" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shavePopZeroSized.xpm" 
+        -image1 "shavePopZeroSized.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shavePopZeroSized" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: recomb hair" 
+        -enableBackground 0
+        -align "center" 
+        -label "Recomb" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveRecomb.xpm" 
+        -image1 "shaveRecomb.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveRecomb" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: replace rest position on hair" 
+        -enableBackground 0
+        -align "center" 
+        -label "Replace Rest" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveReplaceRest.xpm" 
+        -image1 "shaveReplaceRest.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveReplaceRest" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: toggle collisions" 
+        -enableBackground 0
+        -align "center" 
+        -label "Toggle Collision" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveToggleCollision.xpm" 
+        -image1 "shaveToggleCollision.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveTglCollision" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: toggle hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Toggle Hairs" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveToggleHairs.xpm" 
+        -image1 "shaveToggleHairs.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveTglHairs" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: lock hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Lock" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveLock.xpm" 
+        -image1 "shaveLock.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveLockHair" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: unlock hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Unlock" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveUnlock.xpm" 
+        -image1 "shaveUnlock.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveUnlockHair" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: undo last operation" 
+        -enableBackground 0
+        -align "center" 
+        -label "Undo Style" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveUndo.xpm" 
+        -image1 "shaveUndo.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveUndo" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 0
+        -width 9
+        -height 16
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "separator" 
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: split selected hairs from interpolation groups" 
+        -enableBackground 0
+        -align "center" 
+        -label "Split Selection" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveSplit.xpm" 
+        -image1 "shaveSplit.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveSplitSelection" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: merge interpolation groups of selected hairs" 
+        -enableBackground 0
+        -align "center" 
+        -label "Merge Selection" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "shaveMerge.xpm" 
+        -image1 "shaveMerge.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveMergeSelection" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 0
+        -width 9
+        -height 16
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "separator" 
+        -enableBackground 0
+        -align "center" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 39
+        -height 39
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Shave: refresh textures" 
+        -enableBackground 0
+        -align "center" 
+        -label "Update Textures" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "textureRefresh.xpm" 
+        -image1 "textureRefresh.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "shaveUpdateTexturesN" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+
+} 

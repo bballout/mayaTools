@@ -118,7 +118,7 @@ def build(**kwargs):
         inc += 1
         
     joints = MayaScripts.makeFloatingJoints(locators = rivetLocators, name = name)
-    latticeMainGrp = cmds.group(name = '%s_Lattic_Grp'%name,empty = True)
+    latticeMainGrp = cmds.group(name = '%s_Lattice_Grp'%name,empty = True)
     
     for i in range(len(joints)):
         

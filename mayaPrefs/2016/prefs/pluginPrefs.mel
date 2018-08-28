@@ -1,6 +1,23 @@
 //Maya Preference 2016 (Release 1)
 //
 //
+evalDeferred("autoLoadPlugin(\"\", \"GamePipeline\", \"GamePipeline\")");
+evalDeferred("autoLoadPlugin(\"\", \"CloudImportExport\", \"CloudImportExport\")");
+evalDeferred("autoLoadPlugin(\"\", \"bifrostvisplugin\", \"bifrostvisplugin\")");
+evalDeferred("autoLoadPlugin(\"\", \"dx11Shader\", \"dx11Shader\")");
+evalDeferred("autoLoadPlugin(\"\", \"matrixNodes\", \"matrixNodes\")");
+evalDeferred("autoLoadPlugin(\"\", \"AbcImport\", \"AbcImport\")");
+evalDeferred("autoLoadPlugin(\"\", \"BifrostMain\", \"BifrostMain\")");
+evalDeferred("autoLoadPlugin(\"\", \"autoLoader\", \"autoLoader\")");
+evalDeferred("autoLoadPlugin(\"\", \"sceneAssembly\", \"sceneAssembly\")");
+evalDeferred("autoLoadPlugin(\"\", \"xgenToolkit\", \"xgenToolkit\")");
+evalDeferred("autoLoadPlugin(\"\", \"AbcExport\", \"AbcExport\")");
+evalDeferred("autoLoadPlugin(\"\", \"shaderFXPlugin\", \"shaderFXPlugin\")");
 evalDeferred("autoLoadPlugin(\"\", \"objExport\", \"objExport\")");
-evalDeferred("autoLoadPlugin(\"\", \"SimplygonMaya2016Releasex64\", \"SimplygonMaya2016Releasex64\")");
+evalDeferred("autoLoadPlugin(\"\", \"bifrostshellnode\", \"bifrostshellnode\")");
+evalDeferred("autoLoadPlugin(\"\", \"gameFbxExporter\", \"gameFbxExporter\")");
+evalDeferred("autoLoadPlugin(\"\", \"ArubaTessellator\", \"ArubaTessellator\")");
+evalDeferred("autoLoadPlugin(\"\", \"Unfold3D\", \"Unfold3D\")");
+evalDeferred("autoLoadPlugin(\"\", \"xgenMR.py\", \"xgenMR\")");
+evalDeferred("autoLoadPlugin(\"\", \"quatNodes\", \"quatNodes\")");
 evalDeferred("autoLoadPlugin(\"\", \"modelingToolkit\", \"modelingToolkit\")");

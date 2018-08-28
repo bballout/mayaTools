@@ -1,0 +1,605 @@
+global proc createGroupsForUI ()
+{
+	string $suffix = `textField -q -text suffixNameField`;
+	int $freeze = `checkBox -q -v  freezCheckBox`;
+	createGroups $suffix $freeze;
+}
+
+global proc renameGroupsForUI ()
+{
+	string $suffix = `textField -q -text suffixRenameField`;
+	renameGroup $suffix;
+}
+
+global proc createGroupsUI ()
+{
+	if(`window -q -exists createGroupsWin`)
+		deleteUI createGroupsWin;
+		
+	window -t "Create Groups"  -w 280 -h 95  createGroupsWin;
+	
+	columnLayout -adj true;
+	text -al "left" -l "Suffix:";
+	textField suffixNameField;
+	checkBox -l "Freeze:" -v 1 freezCheckBox;
+	button -l "Group" -c "createGroupsForUI";
+	showWindow createGroupsWin;
+}
+
+global proc renameGroupsUI ()
+{
+	if(`window -q -exists createNullPointMatchWin`)
+		deleteUI createNullPointMatchWin;
+		
+	window -t "Rename Groups"  -w 280 -h 95  createNullPointMatchWin;
+	
+	columnLayout -adj true;
+	text -al "left" -l "Suffix:";
+	textField suffixRenameField;
+	button -l "Rename" -c "renameGroupsForUI";
+	showWindow createNullPointMatchWin;
+}
+
+
+global proc nullPointsForUI ()
+{
+	string $suffix = `textField -q -text suffixNullNameField`;
+	createNullPointMatch $suffix;
+}
+
+global proc createNullPointMatchUI ()
+{
+	if(`window -q -exists createNullPointMatchWin`)
+		deleteUI createNullPointMatchWin;
+		
+	window -t "Create Null Point Match"  -w 280 -h 85  createNullPointMatchWin;
+	columnLayout -adj true;
+	text -al "left" -l "Suffix:";
+	textField suffixNullNameField;
+	button -l "Create" -c "nullPointsForUI";
+	showWindow createNullPointMatchWin; 
+}
+
+global proc quickConnectUIReset ()
+{
+
+	checkBoxGrp -e -v1 1 AllTranslatesCheckBox;
+	checkBoxGrp	-e -v1 0  -v2 0   -v3 0 translateCheckBox;
+	checkBoxGrp -e -v1 1 AllRotatesCheckBox;
+	checkBoxGrp -e -v1 0  -v2 0   -v3 0  rotateCheckBox;
+	checkBoxGrp -e -v1 1 AllScalesCheckBox;
+	checkBoxGrp -e -v1 0  -v2 0   -v3 0  scaleCheckBox;
+	checkBoxGrp -e -v1 0 pivotCheckBox;
+}
+
+global proc quickConnectInUI ()
+{
+	int $translateAll = `checkBoxGrp -q -v1  AllTranslatesCheckBox`;
+	int $rotateAll = `checkBoxGrp -q -v1  AllRotatesCheckBox`;
+	int $scaleAll = `checkBoxGrp -q -v1  AllScalesCheckBox`;
+	
+	int $translateX = `checkBoxGrp -q -v1 translateCheckBox`;
+	int $translateY = `checkBoxGrp -q -v2 translateCheckBox`;
+	int $translateZ = `checkBoxGrp -q -v3 translateCheckBox`;
+	
+	int $rotateX = `checkBoxGrp -q -v1 rotateCheckBox`;
+	int $rotateY = `checkBoxGrp -q -v2 rotateCheckBox`;
+	int $rotateZ = `checkBoxGrp -q -v3 rotateCheckBox`;
+	
+	int $scaleX = `checkBoxGrp -q -v1 scaleCheckBox`;
+	int $scaleY = `checkBoxGrp -q -v2 scaleCheckBox`;
+	int $scaleZ = `checkBoxGrp -q -v3 scaleCheckBox`;
+	
+	int $pivot = `checkBoxGrp -q -v1 pivotCheckBox`;
+	
+	quickConnect $translateAll $rotateAll $scaleAll $pivot;
+	quickConnectSpecific $translateX $translateY $translateZ $rotateX $rotateY $rotateZ $scaleX $scaleY $scaleZ $pivot;
+	
+}
+
+
+global proc connectButtonQuickConnect ()
+{
+	quickConnectInUI;
+	deleteUI quickConnectWin;
+}
+
+global proc quickConnectUI ()
+{
+	if(`window -q -exists quickConnectWin`)
+		deleteUI quickConnectWin;
+		
+	window -w 425 -h 270 -t "Quick Connect Options"  -mb 1 quickConnectWin;
+	
+	menu -label "Edit";
+    menuItem -label "Reset Settings" -c "quickConnectUIReset";
+	menu -label "Help" -helpMenu true;
+    menuItem -label "Fuck Off!!!";
+	
+	formLayout masterLayout;
+		
+	string $checkBoxLayout = `frameLayout -label "Connect:" -labelAlign "top" -borderStyle "etchedIn"  checkBoxLayout`;
+	string $columnLayout = `rowColumnLayout -nr 6`;
+	
+	string $connectAllTranslates = `checkBoxGrp -numberOfCheckBoxes 1 -label "Translate:" -l1 "All" -v1 1 
+		-on1 "checkBoxGrp -e -v1 0 -v2 0 -v3 0 translateCheckBox" AllTranslatesCheckBox`;
+	string $connectTranslate = `checkBoxGrp -numberOfCheckBoxes 3 -label " " -labelArray3 "X" "Y" "Z" 
+		-on1 "checkBoxGrp -e -v1 0 AllTranslatesCheckBox"
+		-on2 "checkBoxGrp -e -v1 0 AllTranslatesCheckBox"
+		-on3 "checkBoxGrp -e -v1 0 AllTranslatesCheckBox"
+		translateCheckBox`;
+	
+	string $connectAllRotates = `checkBoxGrp -numberOfCheckBoxes 1 -label "Rotate:" -l1 "All" -v1 1 
+		-on1 "checkBoxGrp -e -v1 0 -v2 0 -v3 0 rotateCheckBox" AllRotatesCheckBox`;
+	string $connectRotate = `checkBoxGrp -numberOfCheckBoxes 3 -label " " -labelArray3 "X" "Y" "Z" 
+		-on1 "checkBoxGrp -e -v1 0  AllRotatesCheckBox" 
+		-on2 "checkBoxGrp -e -v1 0  AllRotatesCheckBox" 
+		-on3 "checkBoxGrp -e -v1 0  AllRotatesCheckBox"
+		rotateCheckBox`;
+	
+	string $connectAllScales = `checkBoxGrp -numberOfCheckBoxes 1 -label "Scale:" -l1 "All" -v1 1 
+		-on1 "checkBoxGrp -e -v1 0 -v2 0 -v3 0 scaleCheckBox" AllScalesCheckBox`;
+	string $connectScales = `checkBoxGrp -numberOfCheckBoxes 3 -label " " -labelArray3 "X" "Y" "Z" 
+		-on1 "checkBoxGrp -e -v1 0 AllScalesCheckBox"
+		-on2 "checkBoxGrp -e -v1 0 AllScalesCheckBox"
+		-on3 "checkBoxGrp -e -v1 0 AllScalesCheckBox"
+		scaleCheckBox`;
+	
+	
+	setParent..;
+	setParent..;
+	
+	string $pivotMatch = `checkBoxGrp -numberOfCheckBoxes 1 -label "Match Pivot:" -v1 0  pivotCheckBox`;
+	
+	string $connectButton = `button -l "Connect" -c "connectButtonQuickConnect"`;
+	string $applyButton = `button -l "Apply" -c "quickConnectInUI"`;
+	string $closeButton = `button -l "Close" -c "deleteUI quickConnectWin"`;
+	
+	formLayout -e 
+	
+	-af $checkBoxLayout  "left" 10
+	-af $checkBoxLayout  "top" 10
+	-af $checkBoxLayout  "right" 10
+	
+	-af $pivotMatch  "left" 10
+	-ac $pivotMatch  "top" 10 $checkBoxLayout
+	-af $pivotMatch  "right" 10
+	
+	-af $connectButton "left" 5 
+	-af $connectButton "bottom" 5
+	-ac $connectButton "right" 5 $applyButton
+
+	-ap $applyButton "left" 5 33
+	-af $applyButton "bottom" 5
+	-ac $applyButton "right" 5 $closeButton
+
+	-ap $closeButton "left" 5 66
+	-af $closeButton "bottom" 5
+	-af $closeButton "right" 5 
+	
+	masterLayout;
+	
+	showWindow quickConnectWin;	
+}
+
+global proc multiAutoMDforUI ()
+{
+	string $MDSource = `textField -q -text autoMDSource`;
+	connectMultiAutoMD  $MDSource;
+}
+
+global proc multiAutoMDUI ()
+{
+	
+	if(`window -q -exists multiAutoMDWin`)
+		deleteUI multiAutoMDWin;
+		
+	window -t "Multi Auto MD" -w 225 -h 90 multiAutoMDWin;
+	formLayout masterLayout;
+	columnLayout -adj true topLayout;
+	text -align "left" -l "Source Object:" ;
+	textField autoMDSource;
+	
+	setParent..;
+	
+	button -l "Connect" -c "multiAutoMDforUI"  connectButton ;
+	
+	formLayout -e
+	
+	-af topLayout "top" 5
+	-af topLayout "right" 5 
+	-af topLayout "left" 5 
+	
+	-af connectButton "bottom" 5
+	-af connectButton "right" 5 
+	-af connectButton "left" 5 
+	-ac connectButton "top" 5 topLayout
+	
+	masterLayout;
+	
+	showWindow multiAutoMDWin;
+	
+}
+
+global proc massConnectUI ()
+{
+	if(`window -q -exists massConnectWin`)
+		deleteUI massConnectWin;
+		
+	window -t "Mass Connect" -w 220 -h 125 massConnectWin;
+	columnLayout -adj true;
+	text -align "left" -l "Source =====> object.attribute";
+	textField massConnectSourceText;
+	
+	separator;
+	
+	text -align "left" -l "Targets =====>  attribute";
+	textField massConnectTargetText;
+	
+	button -l "Connect" -c "massConnectionForUI";
+	
+	showWindow massConnectWin;
+}
+
+global proc massConnectionForUI ()
+{
+	string $Source = `textField -q -text massConnectSourceText`;
+	string $Target = `textField -q -text massConnectTargetText`;
+	
+	massConnect $Source $Target;
+}
+
+global proc weightedConstraintIncludeUIForUI()
+{
+	string $includedTarget = `textField -q -text includedTargetText`;
+	weightedConstraintInclude $includedTarget;
+}
+
+global proc weightedConstraintIncludeUI ()
+{
+	if(`window -q -exists weightedConstraintIncludeWin`)
+		deleteUI weightedConstraintIncludeWin;
+		
+	window -t "Weighted Constraint Include" -w 220 -h 125 weightedConstraintIncludeWin;
+	columnLayout -adj true;
+	text -align "left" -l "Included Target:";
+	textField includedTargetText;
+	string $includedTarget = `textField -q -text includedTargetText`;
+	
+	button -l "Constrain" -c weightedConstraintIncludeUIForUI;
+	
+	showWindow weightedConstraintIncludeWin;
+}
+
+global proc wieghtedConstraintIncludeForUI ()
+{
+	string $target = `textField -q -text includedTargetText`;
+	weightedConstraintInclude $target;
+}
+
+global proc averageAllForUI ()
+{
+	averageDist ".translateX";
+	averageDist ".translateY";
+	averageDist ".translateZ";
+}
+
+global proc RibbonRivetForUI ()
+{
+	string $name = `textField -q -text RibbonNameField`;
+	int $spans = `intField -q -v SpanNumberField`;
+	
+	rivetRibbonIK $name $spans;
+}
+
+global proc RibbonRivetUI ()
+{
+	if(`window -q -exists RibbonRivetWin`)
+		deleteUI RibbonRivetWin;
+		
+	window -t "Create Null Point Match"  -w 280 -h 185  RibbonRivetWin;
+	columnLayout -adj true;
+	text -al "left" -l "Ribbon Surface:";
+	textField RibbonNameField;
+	text -al "left" -l "Number of Spans:";
+	intField SpanNumberField;
+	button -l "Rivet" -c "RibbonRivetForUI";
+	showWindow RibbonRivetWin; 
+}
+
+global proc JointsOnCVsForUI ()
+{
+	string $sel[] = `ls -sl`;
+	string $curve = $sel[0];
+	string $name = `textField -q -text OnCvsNameField`;
+	jointsOnCurveCVs $curve $name;
+}
+
+global proc JointsOnPointsForUI ()
+{
+	string $name = `textField -q -text OnPointsNameField`;
+	int $numJoints = `intField -q -v OnPointsNameNumber`;
+	string $front = `optionMenu -q -v frontAxisMenu`;
+	string $up = `optionMenu -q -v upAxisMenu`;
+	string $sel[] = `ls -sl`;
+	string $curve = $sel[0];
+	
+	jointsOnCurvePoints $curve $numJoints $up $front $name;
+}
+
+global proc JointsOnCurveUI ()
+{
+	if(`window -q -exists JointsOnCurveWin`)
+		deleteUI JointsOnCurveWin;
+	
+	window -t "Joints On Curve" -w 280 -h 280 JointsOnCurveWin;
+	columnLayout -adj true;
+	text " ";
+	text -al "left" -l "On CV's:";
+	text "Name:";
+	textField OnCvsNameField;
+	button -l "Create" -c "JointsOnCVsForUI"; 
+	text " ";
+	separator;
+	text " ";
+	text -al "left" -l "On Points:";
+	text "Name:";
+	textField OnPointsNameField;
+	rowColumnLayout -nr 1;
+	text -al "left" -l "Number of Joints:   ";
+	intField OnPointsNameNumber;
+	
+	optionMenu -label "Front Axis" frontAxisMenu;
+		 menuItem -label "X";
+         menuItem -label "-X";
+         menuItem -label "Y";
+         menuItem -label "-Y";
+         menuItem -label "Z";
+		 menuItem -label "-Z";
+		 
+	optionMenu -label "Up Axis" upAxisMenu;
+		 menuItem -label "X";
+         menuItem -label "-X";
+         menuItem -label "Y";
+         menuItem -label "-Y";
+         menuItem -label "Z";
+		 menuItem -label "-Z";
+	
+	
+	setParent..;
+	button -l "Create" -c "JointsOnPointsForUI";
+	
+	
+	
+	showWindow JointsOnCurveWin;
+}
+
+global proc pointOnCurveLocForUI ()
+{
+	string $name = `textField -q -text nameCurveField`;
+	int $locators = `intField -q -v numLocField`;
+	string $frontAxis = `optionMenu -q -v frontAxisLocMenu`;
+	string $upAxis = `optionMenu -q -v upAxisLocMenu`;
+	
+}
+
+global proc pointCurveLocUI ()
+{
+	if(`window -q -exists pointCurveLocWin`)
+		deleteUI pointCurveLocWin;
+	
+	 window -t "Joints On Curve" -w 280 -h 155 pointCurveLocWin;
+	
+	columnLayout -adj true;
+	text -al "left" -l "name:";
+	textField nameCurveField;
+	rowColumnLayout -nr 1;
+	text -al "left" -l "Locators:";
+	
+	intField numLocField;
+	
+	optionMenu -label "Front Axis" frontAxisLocMenu;
+		 menuItem -label "X";
+         menuItem -label "-X";
+         menuItem -label "Y";
+         menuItem -label "-Y";
+         menuItem -label "Z";
+		 menuItem -label "-Z";
+	
+	optionMenu -label "Up Axis" upAxisLocMenu;
+		 menuItem -label "X";
+         menuItem -label "-X";
+         menuItem -label "Y";
+         menuItem -label "-Y";
+         menuItem -label "Z";
+		 menuItem -label "-Z";
+	optionMenu -e -v "Z" upAxisLocMenu;
+		 
+	setParent..;
+	button -l "Create" -c "pointOnCurveLocForUI";
+		
+	showWindow pointCurveLocWin;
+}
+
+
+global proc toolBoxWin ()
+
+{
+	if(`window -q -exists toolBoxWin`)
+		deleteUI toolBoxWin;
+	
+	window -t "Ball-Out Love Box" -w 320 -h 450 toolBoxWin;
+	
+	scrollLayout -cr 1 scrollLayout;
+	
+	
+	columnLayout -adj true;
+	formLayout masterLayout;
+	columnLayout -adj true subLayout;
+	
+			frameLayout -label "Groups" -labelAlign "center"
+                -borderStyle "etchedIn" -cll 1 -cl 1 groupsLayout;
+				
+				columnLayout -adj true;
+				
+				 button -l "~~Create Groups~~" -bgc 1 0.5 0.2 -c "createGroupsUI"; 
+				 
+				 button -l "~~Rename Groups~~" -bgc 1 0.5 0.2 -c  "renameGroupsUI";
+				 
+				 setParent subLayout;
+				 
+	
+			frameLayout -label "Match" -labelAlign "center"
+                -borderStyle "etchedIn" -cll 1 -cl 1 matchLayout;
+				
+				columnLayout -adj true;
+				
+				 button -l "Match Position" -bgc 0.8 0.8 1 -c "matchPosition"; 
+				 
+				 button -l "Match Orient" -bgc 0.8 0.8 1 -c "matchOrient" ; 
+				 
+				 button -l "Match Space" -bgc 0.8 0.8 1 -c "matchSpace";
+				 
+				 button -l "Match Pivot" -bgc 0.8 0.8 1 -c "matchPivot";
+				 
+				 button -l "~~Null Point Match~~" -bgc 0.8 0.8 1 -c "createNullPointMatchUI";
+				 
+				 button -l "Smart Freeze Transform" -bgc 0.8 0.8 1 -c "smartFreezeTransform";
+				
+				setParent subLayout;
+				
+		
+            frameLayout -label "Connect" -labelAlign "top"
+				 -borderStyle "etchedIn" -cll 1 -cl 1 connectLayout;
+				 
+				 columnLayout -adj true;
+				 
+				button -l "~~Quick Connect~~" -w 100 -bgc 1 1 0 -c "quickConnectUI";
+				
+				button -l "**Translate Offset**" -w 100  -bgc 1 1 0;
+				popupMenu -button 3 -mm true;
+				menuItem -l "Add from Source" -c "connectTranslateOffset \"add\" \"source\""
+				-radialPosition "W";
+				menuItem -l "Add from Target" -c "connectTranslateOffset \"add\" \"target\""
+				-radialPosition "E";
+				menuItem -l "Subtract from Source" -c "connectTranslateOffset \"subtract\" \"source\""
+				-radialPosition "N";
+				menuItem -l "Subtract from Target" -c "connectTranslateOffset \"subtract\" \"target\""
+				-radialPosition "S";
+				
+				button -l "**Rotate Offset**" -w 100  -bgc 1 1 0;
+				popupMenu -button 3 -mm true;
+				menuItem -l "Add from Source" -c "connectRotateOffset \"add\" \"source\""
+				-radialPosition "W";
+				menuItem -l "Add from Target" -c "connectRotateOffset \"add\" \"target\""
+				-radialPosition "E";
+				menuItem -l "Subtract from Source" -c "connectRotateOffset \"subtract\" \"source\""
+				-radialPosition "N";
+				menuItem -l "Subtract from Target" -c "connectRotateOffset \"subtract\" \"target\""
+				-radialPosition "S";
+				
+				button -l "Auto Rotation MD"  -bgc 1 1 0 -w 100  -c "connectAutoMD";
+				
+				button -l "~~Multi Rotation Auto MD~~"  -bgc 1 1 0 -w 100  -c "multiAutoMDUI";
+				
+				button -l "~~Mass Connect~~" -bgc 1 1 0 -w 100 -c "massConnectUI";
+				 
+				
+				setParent subLayout;
+			
+				
+            frameLayout -label "Constraint" -labelAlign "center"
+                -borderStyle "etchedIn" -cll 1 -cl 1 constraintLayout;
+				
+				columnLayout -adj true;
+				
+				 button -l "Weighted Constraint" -bgc 0.5 1 1 -c "weightedConstraint"; 
+				 
+				 button -l "~~Weighted Constraint Include~~" -bgc 0.5 1 1 -c "weightedConstraintIncludeUI " ; 
+				 
+				 button -l "~~Aim Constraint /w Up~~" -bgc 0.5 1 1 -c "weightedConstraintIncludeUI " ; 
+				 
+				 button -l "Delete Incoming Constraints" -bgc 0.5 1 1 -c "deleteInputConstraints";
+				
+				setParent subLayout;
+				
+            frameLayout -label "Rigging" -labelAlign "center"
+                -borderStyle "etchedIn" -cll 1 -cl 1 riggingLayout;
+				
+				columnLayout -adj true;
+				
+				 button -l "Find Center" -bgc 0.9 0.3 0.4 -c "findCenter"; 
+				 
+				 button -l "**Average Distance**" -bgc 0.9 0.3 0.4; 
+				 popupMenu -button 3 -mm true;
+				 menuItem -l "TranslateX" -c "averageDist  \".translateX\""
+				-radialPosition "W";
+				menuItem -l "TranslateY" -c "averageDist  \".translateY\""
+				-radialPosition "E";
+				menuItem -l "TranslateZ" -c "averageDist  \".translateZ\""
+				-radialPosition "N";
+				menuItem -l "All Translates" -c "averageAllForUI"
+				-radialPosition "S";
+				 
+				 button -l "**Aim Orient Joints**" -bgc 0.9 0.3 0.4; 
+				 popupMenu -button 3 -mm true;
+				 menuItem -l "Y Up" -c "AimOrientJoints  \"Y\""
+				-radialPosition "W";
+				menuItem -l "-Y Up" -c "AimOrientJoints  \"-Y\""
+				-radialPosition "E";
+				menuItem -l "Z Up" -c "AimOrientJoints  \"Z\""
+				-radialPosition "N";
+				menuItem -l "-Z Up" -c "AimOrientJoints  \"-Z\""
+				-radialPosition "S";
+				 
+				 button -l "~~Ribbon Rivets~~" -bgc 0.9 0.3 0.4 -c "RibbonRivetUI";
+				 
+				 button -l "~~Joints On Curve~~" -bgc 0.9 0.3 0.4 -c "JointsOnCurveUI";
+				 
+				 button -l "~~Point On Curve Locators~~" -bgc 0.9 0.3 0.4;
+				 
+				 button -l "Point On Curve Twist" -bgc 0.9 0.3 0.4;
+				 
+				 button -l "Pivot Control" -bgc 0.9 0.3 0.4;
+				 
+				
+				setParent subLayout;
+				
+			frameLayout -label "Deformers" -labelAlign "bottom"
+                -borderStyle "etchedIn" -cll 1 -cl 1 DeformersLayout;
+				columnLayout -adj true;
+				 
+				 button -l "Cluster Controls" -bgc 0.3 0.4 1 -c "OhShiznit"; 
+				 
+				 button -l "Add Membership" -bgc 0.3 0.4 1 -c "findDuplicateName"; 
+				 			
+				setParent subLayout;
+				
+				
+            frameLayout -label "Clean Up" -labelAlign "bottom"
+                -borderStyle "etchedIn" -cll 1 -cl 1 cleanUpLayout;
+				columnLayout -adj true;
+				 
+				 button -l "OH SHIZNIT" -bgc 0 0.85 0.35 -c "OhShiznit"; 
+				 
+				 button -l "Find Duplicate Names" -bgc 0 0.85 0.35 -c "findDuplicateName"; 
+				 
+				 button -l "Non-Render Ctrls" -bgc 0 0.85 0.35 -c "controlRenderVis";
+				
+				setParent subLayout;
+			
+				
+			formLayout -e
+			
+			-af subLayout "top" 5
+			-af subLayout "bottom" 5
+			-af subLayout "left" 5
+			-af subLayout "right" 5
+			
+			
+			
+			
+			masterLayout;
+	
+	showWindow toolBoxWin;	
+}

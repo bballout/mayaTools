@@ -198,7 +198,7 @@ class SkinningTool():
         
         index = self.skinclusterFn.indexForInfluenceObject(influence)
         weights = om.MDoubleArray()
-        self.skinclusterFn.getWeights(self.shape,verts,index,weights)
+        self.skinclusterFn.getWeights(GenAPI.getDagPath(self.shape),verts,index,weights)
         return weights
     
 
@@ -300,171 +300,151 @@ def extrapFromLattice(latticeTransform):
     
     '''function for extraping skincluster from ffd'''
     
-
+    progressWin = UILib.ProgressWin()
+    progressWin.setTitle('Extrap Skincluster from Lattice')
+    progressWin.itr = 7
+    
+    progressWin.inc = 1
+    progressWin.progress()  
     #gather lattice nodes
     latticeShape = cmds.listRelatives(latticeTransform, type = 'shape')[0]
     
-    if cmds.nodeType(latticeShape) == 'lattice':
-        
-        
-        progressWin = UILib.ProgressWin()
-        progressWin.setTitle('Extrap Skincluster from Lattice')
-        progressWin.itr = 7
-        
-        progressWin.inc = 1
-        progressWin.progress()  
-            
-        
-        latticeFFD = cmds.listConnections(latticeShape, type = 'ffd')[0]
-        #get skincluster and gather influences in lattice skincluster
-        
-        try:
-            latticeSkinCluster = SkinningTool.getSkinCluster(latticeShape)
-            latticeSkinningTool = SkinningTool(skincluster = latticeSkinCluster[1],shape = latticeShape)
-            influenceArray = latticeSkinningTool.getInfluencesFromSkincluster()
-            floatingJointList = []
-            
-            progressWin.inc = 2
-            progressWin.progress() 
-            #create string list from influence array
-            latticeInfluenceStringList = []
-            for latInf in range(influenceArray.length()):
-            
-                latticeInfluenceStringList.append(influenceArray[latInf].fullPathName())
-                print influenceArray[latInf].fullPathName()
-            
-            progressWin.inc = 3
-            progressWin.progress() 
-            #swapping influence for floating joints
-            for influenceInc in range(influenceArray.length()):
-                    
-                    currentInfluenceString = influenceArray[influenceInc].fullPathName()
-                    
-                    #clear selection and gather verts
-                    om.MGlobal.clearSelectionList()
-                    
-                    #creating floating joint
-                    transformFn = om.MFnTransform(influenceArray[influenceInc])
-                    position = transformFn.getTranslation(om.MSpace.kWorld)
-                    
-                    floatingJoint = [cmds.joint()][0]
-                    floatingJointPath = GenAPI.getDagPath(floatingJoint)
-                    transformFn.setObject(floatingJointPath)
-                    transformFn.setTranslation(position,om.MSpace.kWorld)
-                    floatingJointList.append(floatingJoint)
-                    
-                    #add floating joint to skin cluster and swap weights
-                    cmds.skinCluster(latticeSkinCluster[1],e = True , weight = 0,addInfluence = floatingJoint)
-                    
-                    latticeWeightList = latticeSkinningTool.getWeightsFromLattice(influenceArray[influenceInc])
-            
-                    #re-gather influences after adding floating joint
-                    latticeInfluenceStringList02 = []
-                    
-                    influenceArray02 = latticeSkinningTool.getInfluencesFromSkincluster()
-            
-                    for latInf in range(influenceArray02.length()):
-                    
-                        latticeInfluenceStringList02.append(influenceArray02[latInf].fullPathName())
-                    
-                    #lock influences        
-                    for influence in latticeInfluenceStringList02:
-                        
-                        cmds.setAttr('%s.lockInfluenceWeights'%influence,1)
-        
-                    cmds.setAttr('%s.lockInfluenceWeights'%floatingJoint,0)
-                    cmds.setAttr('%s.lockInfluenceWeights'%currentInfluenceString,0)                
-                    
-                    #swapWeights
-        
-                    latticeSkinningTool.setWeightsForLattice(floatingJointPath,latticeWeightList)   
-            
-            progressWin.inc = 4
-            progressWin.progress() 
-            #gather meshes affected by lattice
-            latticeFn = oma.MFnLatticeDeformer(GenAPI.getMObject(latticeFFD))
-            meshObjArray = om.MObjectArray()
-            latticeFn.getAffectedGeometry(meshObjArray)
-            
-            progressWin.inc = 5
-            progressWin.progress() 
-            #iterate meshes and gather weightLists   
-            for meshInc in range(meshObjArray.length()):
-                
-                weightLists = []
-           
-                #creating weightList from floating joint      
-                for floatingJoint in floatingJointList:
-        
-                    #creating weightList
-                    weightList = MeasuringLib.MeasuringTool.createWeigthListFromInfluence2(GenAPI.getStringFromMObject(meshObjArray[meshInc]),floatingJoint) 
-                    weightLists.append(weightList)
-                
-        
-                #remove mesh from lattice
-                latticeFn.removeGeometry(meshObjArray[meshInc])
-                        
-                #create skincluster for current mesh in iteration 
-                
-                history  = cmds.listHistory(GenAPI.getStringFromMObject(meshObjArray[meshInc]),pdo = 1 ,il = 2)
-                                            
-                for node in history:
-                    if cmds.nodeType(node) == 'skinCluster':
-                        cmds.delete(node)
-                    
-                meshSkinCluster = cmds.skinCluster(GenAPI.getStringFromMObject(meshObjArray[meshInc]),latticeInfluenceStringList)[0]
-                meshSkinningTool = SkinningTool(meshSkinCluster,GenAPI.getStringFromMObject(meshObjArray[meshInc]))
-        
-                #unlock all influences
-                for influence in latticeInfluenceStringList:
-                    
-                    cmds.setAttr('%s.lockInfluenceWeights'%influence,0)
-            
-                #setWeightLists 
-                for influenceInc in range(influenceArray.length()):
-                    
-                    meshSkinningTool.setWeights(influenceArray[influenceInc], weightLists[influenceInc])
-                             
-                    cmds.setAttr('%s.lockInfluenceWeights'%influenceArray[influenceInc].fullPathName(),1)
-            
-            progressWin.inc = 6
-            progressWin.progress()                      
-            #reset weighting
-            
-            for inc in range(influenceArray.length()):
-                
-                floatingJointPath = GenAPI.getDagPath(floatingJointList[inc])
-                weightList = latticeSkinningTool.getWeightsFromLattice(floatingJointPath)
-                
-                allLatticeInfluences = latticeSkinningTool.getInfluencesFromSkincluster()
-                
-                #lock all inluences
-                
-                for influence in range(allLatticeInfluences.length()):
-                    cmds.setAttr('%s.lockInfluenceWeights'%allLatticeInfluences[influence].fullPathName(),1)
-                    
-                    
-                #unlock current influences
-                cmds.setAttr('%s.lockInfluenceWeights'%floatingJointList[inc],0)
-                cmds.setAttr('%s.lockInfluenceWeights'%influenceArray[inc].fullPathName(),0)
-                
-                
-                latticeSkinningTool.setWeightsForLattice(influenceArray[inc],weightList)
-                
-            progressWin.inc = 7
-            progressWin.progress() 
-            #delete floating joints   
-            for joint in floatingJointList: 
-                cmds.delete(joint)
-                
-            progressWin.end()
-        
-        except:
-            progressWin.end()
-            om.MGlobal.displayError('There is no skincluster on %s'%latticeShape)
+    latticeFFD = cmds.listConnections(latticeShape, type = 'ffd')[0]
+    #get skincluster and gather influences in lattice skincluster
+
+    latticeSkinCluster = SkinningTool.getSkinCluster(latticeShape)
+    latticeSkinningTool = SkinningTool(skincluster = latticeSkinCluster[1],shape = latticeShape)
+    influenceArray = latticeSkinningTool.getInfluencesFromSkincluster()
+    floatingJointList = []
     
-    else:
-        om.MGlobal.displayError('%s is not a lattice'%latticeShape)    
+    progressWin.inc = 2
+    progressWin.progress() 
+    #create string list from influence array
+    latticeInfluenceStringList = []
+    for latInf in range(influenceArray.length()):
+    
+        latticeInfluenceStringList.append(influenceArray[latInf].fullPathName())
+        print influenceArray[latInf].fullPathName()
+    
+    progressWin.inc = 3
+    progressWin.progress() 
+    #swapping influence for floating joints
+    for influenceInc in range(influenceArray.length()):
+            
+            currentInfluenceString = influenceArray[influenceInc].fullPathName()
+            
+            #clear selection and gather verts
+            om.MGlobal.clearSelectionList()
+            
+            #creating floating joint
+            transformFn = om.MFnTransform(influenceArray[influenceInc])
+            position = transformFn.getTranslation(om.MSpace.kWorld)
+            
+            floatingJoint = [cmds.joint()][0]
+            floatingJointPath = GenAPI.getDagPath(floatingJoint)
+            transformFn.setObject(floatingJointPath)
+            transformFn.setTranslation(position,om.MSpace.kWorld)
+            floatingJointList.append(floatingJoint)
+            
+            #add floating joint to skin cluster and swap weights
+            cmds.skinCluster(latticeSkinCluster[1],e = True , weight = 0,addInfluence = floatingJoint)
+            
+            latticeWeightList = latticeSkinningTool.getWeightsFromLattice(influenceArray[influenceInc])
+    
+            #re-gather influences after adding floating joint
+            latticeInfluenceStringList02 = []
+            
+            influenceArray02 = latticeSkinningTool.getInfluencesFromSkincluster()
+    
+            for latInf in range(influenceArray02.length()):
+            
+                latticeInfluenceStringList02.append(influenceArray02[latInf].fullPathName())
+            
+            #lock influences        
+            for influence in latticeInfluenceStringList02:
+                
+                cmds.setAttr('%s.lockInfluenceWeights'%influence,1)
+
+            cmds.setAttr('%s.lockInfluenceWeights'%floatingJoint,0)
+            cmds.setAttr('%s.lockInfluenceWeights'%currentInfluenceString,0)                
+            
+            #swapWeights
+
+            latticeSkinningTool.setWeightsForLattice(floatingJointPath,latticeWeightList)   
+    
+    progressWin.inc = 4
+    progressWin.progress() 
+    #gather meshes affected by lattice
+    latticeFn = oma.MFnLatticeDeformer(GenAPI.getMObject(latticeFFD))
+    meshObjArray = om.MObjectArray()
+    latticeFn.getAffectedGeometry(meshObjArray)
+    
+    progressWin.inc = 5
+    progressWin.progress() 
+    #iterate meshes and gather weightLists   
+    for meshInc in range(meshObjArray.length()):
+        
+        weightLists = []
+   
+        #creating weightList from floating joint      
+        for floatingJoint in floatingJointList:
+
+            #creating weightList
+            weightList = MeasuringLib.MeasuringTool.createWeigthListFromInfluence2(GenAPI.getStringFromMObject(meshObjArray[meshInc]),floatingJoint) 
+            weightLists.append(weightList)
+        
+
+        #remove mesh from lattice
+        latticeFn.removeGeometry(meshObjArray[meshInc])
+                  
+        #create skincluster for current mesh in iteration  
+        meshSkinCluster = cmds.skinCluster(GenAPI.getStringFromMObject(meshObjArray[meshInc]),latticeInfluenceStringList)[0]
+        meshSkinningTool = SkinningTool(meshSkinCluster,GenAPI.getStringFromMObject(meshObjArray[meshInc]))
+
+        #unlock all influences
+        for influence in latticeInfluenceStringList:
+            
+            cmds.setAttr('%s.lockInfluenceWeights'%influence,0)
+    
+        #setWeightLists 
+        for influenceInc in range(influenceArray.length()):
+            
+            meshSkinningTool.setWeights(influenceArray[influenceInc], weightLists[influenceInc])
+                     
+            cmds.setAttr('%s.lockInfluenceWeights'%influenceArray[influenceInc].fullPathName(),1)
+    
+    progressWin.inc = 6
+    progressWin.progress()                      
+    #reset weighting
+    
+    for inc in range(influenceArray.length()):
+        
+        floatingJointPath = GenAPI.getDagPath(floatingJointList[inc])
+        weightList = latticeSkinningTool.getWeightsFromLattice(floatingJointPath)
+        
+        allLatticeInfluences = latticeSkinningTool.getInfluencesFromSkincluster()
+        
+        #lock all inluences
+        
+        for influence in range(allLatticeInfluences.length()):
+            cmds.setAttr('%s.lockInfluenceWeights'%allLatticeInfluences[influence].fullPathName(),1)
+            
+            
+        #unlock current influences
+        cmds.setAttr('%s.lockInfluenceWeights'%floatingJointList[inc],0)
+        cmds.setAttr('%s.lockInfluenceWeights'%influenceArray[inc].fullPathName(),0)
+        
+        
+        latticeSkinningTool.setWeightsForLattice(influenceArray[inc],weightList)
+        
+    progressWin.inc = 7
+    progressWin.progress() 
+    #delete floating joints   
+    for joint in floatingJointList: 
+        cmds.delete(joint)
+        
+    progressWin.end()
+        
         
 def extrapFromWire(wire):
     
@@ -600,21 +580,23 @@ def clusterWeightToJoints(geo,cluster,jointFrom,jointTo):
     
     weightTool = DeformerLib.WeightListTool(geo,cluster)
     weightList = weightTool.getWeightList()
+    print weightList
     
     skincluster = SkinningTool.getSkinCluster(geo)[1]
     print skincluster
     
     skinningTool = SkinningTool(skincluster,geo)
     influences = skinningTool.getInfluencesFromSkincluster()
-
+    
     
     for i in range(influences.length()):
         cmds.setAttr('%s.liw'%influences[i].fullPathName(), 1)
         
     cmds.setAttr('%s.liw'%jointFrom, 0)
     cmds.setAttr('%s.liw'%jointTo, 0)
-
+    
     skinningTool.setWeights(GenAPI.getDagPath(jointTo), weightList)
+    print jointFrom,jointTo
     
 def skinclusterFromMesh(meshFrom,meshTo,joints):
     

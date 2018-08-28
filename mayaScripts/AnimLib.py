@@ -11,39 +11,59 @@ import GenAPI
 
 class AnimTool():
     
-    curveData = dict()
+    transformObjects = []
+    transformDagPaths = []
     
     def __init__(self,transformNodes = []):
 
         self.transformNodes = transformNodes
-        self.curves = dict()
+        
+        for node in self.transformNodes:
             
+            self.transformObjects.append(GenAPI.getMObject(node))
+            self.transformDagPaths.append(GenAPI.getDagPath(node))
+            
+    @staticmethod
     #method for finding all animation curves
-    def getAnimCurveNodes(self):
+    #output animList (MObjectArray)
+    def getAllAnimation():
         
-        animCurves = []
+        animCurveTU = cmds.ls(type = 'animCurveTU')
+        animCurveTA = cmds.ls(type = 'animCurveTA')
+        animCurveTL = cmds.ls(type = 'animCurveTU')
         
-        for transform in self.transformNodes:
-            
-            self.curves
-            
-            
-            animCurveTU = cmds.listConnections(transform,type = 'animCurveTU')
-            animCurveTA = cmds.listConnections(transform,type = 'animCurveTA')
-            animCurveTL = cmds.listConnections(transform,type = 'animCurveTL')
+        animCurves = animCurveTU + animCurveTA + animCurveTL
         
-            for curve in animCurveTU:
-                animCurves.append(curve)
-                
-            for curve in animCurveTA:
-                animCurves.append(curve)
-                
-            for curve in animCurveTL:
-                animCurves.append(curve)
+        objectArray = om.MObjectArray()
+        
+        for curve in animCurves:
             
-        return animCurves
-        self.curves = animCurves
+            mobject = GenAPI.getMObject(curve)
+            objectArray.add(mobject)
+            
+        return objectArray
+        
         
     
-        def decomposeCurves(self):
-            pass
+    #method for collecting animation
+    #output animationList (python list [MObjectArray,''....])
+    def getAnimation(self,curveArray):
+        
+        
+        animUtil = oma.MAnimUtil()
+        animationList = []
+        
+        for path in self.transformDagPaths:
+        
+            animatedPlugArray = om.MPlugArray()
+            animUtil.findAnimatedPlugs(path,animatedPlugArray,False)
+            
+            for plug in animatedPlugArray:
+                
+                print plug.name()
+            
+                animUtil.findAnimation(plug,curveArray)
+                
+                animationList.append(curveArray)
+                
+        return animationList                   

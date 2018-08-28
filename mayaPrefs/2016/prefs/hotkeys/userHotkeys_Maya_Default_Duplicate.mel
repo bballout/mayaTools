@@ -9,10 +9,7 @@ hotkeySet -source "Maya_Default" -current Maya_Default_Duplicate;
 //
 // The hotkey contexts and hotkeys
 //
-hotkey -keyShortcut "e" -ctl -releaseName ("BSB_MM_ReleaseNameCommand");
-hotkey -keyShortcut "v" -ctl -name ("");
 hotkey -keyShortcut "e" -ctl -name ("BSB_MM_PressNameCommand");
-hotkey -keyShortcut "v" -ctl -alt -name ("");
 hotkeyCtx -type "Editor" -addClient "hyperShadePanel";
 hotkeyCtx -type "Editor" -addClient "polyTexturePlacementPanel";
 hotkeyCtx -type "Editor" -addClient "nodeEditorPanel";

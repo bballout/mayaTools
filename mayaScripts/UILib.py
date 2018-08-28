@@ -8,59 +8,19 @@ import maya.OpenMaya as om
 import maya.OpenMayaUI as mui
 import maya.cmds as cmds
 
-#QT4
 try:
-  try:
-      from PySide import QtGui,QtCore
-      from PySide.QtGui import QWidget as QWidget
-      from PySide.QtGui import QMainWindow as QMainWindow
-      from PySide.QtGui import QDialog as QDialog
-      from PySide.QtGui import QMenuBar as QMenuBar
-      from PySide.QtGui import QMenu as QMenu
-      from PySide.QtGui import QAction as QAction
-      from PySide.QtGui import QFrame as QFrame
-      from PySide.QtGui import QGridLayout as QGridLayout
-      from PySide.QtGui import QPushButton as QPushButton
-      from PySide.QtGui import QHBoxLayout as QHBoxLayout
-      from PySide.QtGui import QVBoxLayout as QVBoxLayout
-      from PySide.QtGui import QLineEdit as QLineEdit
-      from PySide.QtGui import QSlider as QSlider
-      from PySide.QtGui import QDoubleSpinBox as QDoubleSpinBox
-      from PySide.QtGui import QLabel as QLabel
-      from PySide.QtGui import QGroupBox as QGroupBox
-      from PySide.QtGui import QRadioButton as QRadioButton
-      from PySide.QtGui import QCheckBox as QCheckBox
-      from PySide.QtGui import QListWidget as QListWidget
-      from PySide.QtGui import QColor as QColor
-      
-      from PySide import shiboken 
-  except ImportError:
-      import shiboken
-#QT5      
+    from PySide import QtGui,QtCore  # @UnresolvedImport
+    
+    try:
+        from PySide import shiboken
+    except ImportError:
+        import shiboken
 except ImportError:
-  from PySide2 import QtGui,QtWidgets,QtCore
-  from PySide2.QtWidgets import QWidget as QWidget
-  from PySide2.QtWidgets import QMainWindow as QMainWindow
-  from PySide2.QtWidgets import QDialog as QDialog
-  from PySide2.QtWidgets import QMenuBar as QMenuBar
-  from PySide2.QtWidgets import QMenu as QMenu
-  from PySide2.QtWidgets import QAction as QAction
-  from PySide2.QtWidgets import QFrame as QFrame
-  from PySide2.QtWidgets import QGridLayout as QGridLayout
-  from PySide2.QtWidgets import QPushButton as QPushButton
-  from PySide2.QtWidgets import QHBoxLayout as QHBoxLayout
-  from PySide2.QtWidgets import QVBoxLayout as QVBoxLayout
-  from PySide2.QtWidgets import QLineEdit as QLineEdit
-  from PySide2.QtWidgets import QSlider as QSlider
-  from PySide2.QtWidgets import QDoubleSpinBox as QDoubleSpinBox
-  from PySide2.QtWidgets import QLabel as QLabel
-  from PySide2.QtWidgets import QGroupBox as QGroupBox
-  from PySide2.QtWidgets import QRadioButton as QRadioButton
-  from PySide2.QtWidgets import QCheckBox as QCheckBox
-  from PySide2.QtWidgets import QListWidget as QListWidget
-  from PySide2.QtGui import QColor as QColor
-  import shiboken2
-   
+    from PySide2 import QtWidgets as QtGui
+    from PySide2 import QtCore
+    import shiboken2 as shiboken
+    
+
 
 import ToolBoxFn
 import MayaScripts
@@ -68,14 +28,16 @@ import MayaScripts
 
 #Get the maya main window as a QMainWindow instance
 def getMayaWindow():
-    ptr = mui.MQtUtil.mainWindow()
-    if not ptr == None:
-      try:
-        return shiboken.wrapInstance(long(ptr), QMainWindow)
-      except:
-        return shiboken2.wrapInstance(long(ptr), QMainWindow)
-      
-    return (long(ptr), QMainWindow)
+    
+    try:
+        ptr = mui.MQtUtil.mainWindow()
+        
+        if not ptr == None:
+            return shiboken.wrapInstance(long(ptr), QtGui.QMainWindow)
+        
+    except AttributeError:
+        
+        return None
     
 
 #fuction for creating an image from the viewPort
@@ -143,18 +105,18 @@ class ProgressWin(mui.MProgressWindow):
         self.endProgress()
          
         
-class ButtonPopUpMenu(QWidget):
+class ButtonPopUpMenu(QtGui.QWidget):
 
     def __init__(self, objectName ='Button', parent=None):
         super(ButtonPopUpMenu, self).__init__(parent)
 
-        layout = QHBoxLayout()
+        layout = QtGui.QHBoxLayout()
         self.setLayout(layout)
         
-        self.button = QPushButton()
+        self.button = QtGui.QPushButton()
         self.button.setText('Button')
         self.button.setGeometry(0,10,10,20)
-        self.menu = QMenu()
+        self.menu = QtGui.QMenu()
 
         self.button.setMenu(self.menu)
 
@@ -165,16 +127,16 @@ class ButtonPopUpMenu(QWidget):
         action = self.menu.addAction(label)
         action.triggered.connect(func)
         
-class ButtonFieldGroup(QWidget):
+class ButtonFieldGroup(QtGui.QWidget):
     
     def __init__(self, objectName  ='ButtonField', parent=None):
         super(ButtonFieldGroup, self).__init__(parent)
         
-        layout = QHBoxLayout()
+        layout = QtGui.QHBoxLayout()
         self.setLayout(layout)
         
-        self.field = QLineEdit() 
-        self.button = QPushButton()
+        self.field = QtGui.QLineEdit() 
+        self.button = QtGui.QPushButton()
         self.button.setGeometry(20,20,20,20)
         self.button.setText('<<<')
         
@@ -197,38 +159,6 @@ class FillSelectedField(ButtonFieldGroup):
         if not sel == []:
             
             self.field.setText(sel[0])
-            
-class FloatSlider(QWidget):
-    
-    def __init__(self,parent = None):
-        super(FloatSlider, self).__init__(parent = parent)
-        
-        layout = QHBoxLayout()
-        self.setLayout(layout)
-        
-        self.slider = QSlider()
-        self.slider.setOrientation(QtCore.Qt.Horizontal)
-        self.spinBox = QDoubleSpinBox()
-        self.spinBox.setButtonSymbols(QtGui.QAbstractSpinBox.NoButtons)
-        
-        layout.addWidget(self.slider)
-        layout.addWidget(self.spinBox)
-        
-        self.connect(self.slider,QtCore.SIGNAL('sliderReleased()'),self.sliderValueChanged)
-        self.connect(self.spinBox,QtCore.SIGNAL('editingFinished()'),self.spinBoxValueChanged)
-        
-    def sliderValueChanged(self):
-        value = self.slider.sliderPosition()
-        self.spinBox.setValue(value)
-        
-    def spinBoxValueChanged(self):
-        value = self.spinBox.value()
-        self.slider.setSliderPosition(value)
-        
-    def getValue(self):
-        value = self.spinBox.value()
-        return value
-        
             
 class FillDeformerNameField(ButtonFieldGroup):
     
@@ -263,7 +193,7 @@ class FillDeformerNameField(ButtonFieldGroup):
                 self.field.setText(deformerName)
 
             
-class TransferWeightsDialog(QDialog):
+class TransferWeightsDialog(QtGui.QDialog):
     
     def __init__(self, parent = getMayaWindow()):
         super(TransferWeightsDialog,self).__init__(parent)
@@ -273,52 +203,52 @@ class TransferWeightsDialog(QDialog):
         
     def initUI(self):
         
-        layout = QVBoxLayout()
+        layout = QtGui.QVBoxLayout()
         self.setLayout(layout)
         layout.setSpacing(0)
         self.setGeometry(450,200,450,200)
         self.setWindowTitle('Transfer Deformer Weights')
         
-        self.fromDeformerLabel = QLabel()
+        self.fromDeformerLabel = QtGui.QLabel()
         self.fromDeformerLabel.setText('From Deformer:')
         self.fromDeformerField = FillDeformerNameField()
         layout.addWidget(self.fromDeformerLabel)
         layout.addWidget(self.fromDeformerField)
         
-        self.toDeformerLabel = QLabel()
+        self.toDeformerLabel = QtGui.QLabel()
         self.toDeformerLabel.setText('To Deformer:')
         self.toDeformerField = FillDeformerNameField()
         layout.addWidget(self.toDeformerLabel)
         layout.addWidget(self.toDeformerField)
         
-        divider01 = QFrame()
-        divider01.setFrameShape(QFrame.HLine)
+        divider01 = QtGui.QFrame()
+        divider01.setFrameShape(QtGui.QFrame.HLine)
         layout.addWidget(divider01)
         
-        fromMeshLabel = QLabel()
+        fromMeshLabel = QtGui.QLabel()
         fromMeshLabel.setText('From Mesh:')
         self.fromMeshField = FillSelectedField()
         layout.addWidget(fromMeshLabel)
         layout.addWidget(self.fromMeshField)
         
-        toMeshLabel = QLabel()
+        toMeshLabel = QtGui.QLabel()
         toMeshLabel.setText('To Mesh:')
         self.toMeshfield = FillSelectedField()
         layout.addWidget(toMeshLabel)
         layout.addWidget(self.toMeshfield)      
         
-        operationWidget = QWidget()
-        operationWidgetLayout  = QHBoxLayout()
+        operationWidget = QtGui.QWidget()
+        operationWidgetLayout  = QtGui.QHBoxLayout()
         operationWidget.setLayout(operationWidgetLayout)
         
-        operationButtons = QGroupBox()
-        operationButtonsLayout = QHBoxLayout()
-        self.transferButton = QRadioButton()
+        operationButtons = QtGui.QGroupBox()
+        operationButtonsLayout = QtGui.QHBoxLayout()
+        self.transferButton = QtGui.QRadioButton()
         self.transferButton.setText('transfer')
         self.transferButton.setChecked(True)
-        self.mirrorButton = QRadioButton()
+        self.mirrorButton = QtGui.QRadioButton()
         self.mirrorButton.setText('mirror')
-        self.reverseButton = QRadioButton()
+        self.reverseButton = QtGui.QRadioButton()
         self.reverseButton.setText('reverse')
         operationButtons.setTitle('operation:')
         operationButtonsLayout.addWidget(self.transferButton)
@@ -329,18 +259,18 @@ class TransferWeightsDialog(QDialog):
         operationWidgetLayout.addWidget(operationButtons)
         layout.addWidget(operationWidget)
         
-        axisWidget = QWidget()
-        axisWidgetLayout  = QHBoxLayout()
+        axisWidget = QtGui.QWidget()
+        axisWidgetLayout  = QtGui.QHBoxLayout()
         axisWidget.setLayout(axisWidgetLayout)
         
-        axisButtons = QGroupBox()
-        axisButtonsLayout = QHBoxLayout()
-        self.axisXButton = QRadioButton()
+        axisButtons = QtGui.QGroupBox()
+        axisButtonsLayout = QtGui.QHBoxLayout()
+        self.axisXButton = QtGui.QRadioButton()
         self.axisXButton.setText('x')
         self.axisXButton.setChecked(True)
-        self.axisYButton = QRadioButton()
+        self.axisYButton = QtGui.QRadioButton()
         self.axisYButton.setText('y')
-        self.axisZButton = QRadioButton()
+        self.axisZButton = QtGui.QRadioButton()
         self.axisZButton.setText('z')
         axisButtons.setTitle('axis:')
         axisButtonsLayout.addWidget(self.axisXButton)
@@ -348,7 +278,7 @@ class TransferWeightsDialog(QDialog):
         axisButtonsLayout.addWidget(self.axisZButton)
         axisButtons.setLayout(axisButtonsLayout)
                 
-        self.directionCheckBox = QCheckBox()
+        self.directionCheckBox = QtGui.QCheckBox()
         self.directionCheckBox.setText('Pos to Neg') 
         self.directionCheckBox.setChecked(True) 
         axisButtonsLayout.addWidget(self.directionCheckBox)
@@ -356,15 +286,15 @@ class TransferWeightsDialog(QDialog):
         axisWidgetLayout.addWidget(axisButtons)
         layout.addWidget(axisWidget)
         
-        buttonsWidget = QWidget()
-        butttonsWidgetLayout = QHBoxLayout()
+        buttonsWidget = QtGui.QWidget()
+        butttonsWidgetLayout = QtGui.QHBoxLayout()
         buttonsWidget.setLayout(butttonsWidgetLayout)
         
-        self.applyButton = QPushButton()
+        self.applyButton = QtGui.QPushButton()
         self.applyButton.setText('Apply')
         self.connect(self.applyButton,QtCore.SIGNAL('clicked()'),self.applyFn)
 
-        self.closeButton = QPushButton()
+        self.closeButton = QtGui.QPushButton()
         self.closeButton.setText('Close')
         self.connect(self.closeButton,QtCore.SIGNAL('clicked()'),self.close)
         butttonsWidgetLayout.addWidget(self.applyButton)
@@ -425,7 +355,7 @@ class TransferWeightsDialog(QDialog):
             om.MGlobal.displayError('Not enough info for request')
               
         
-class MirrorWeightsDialog(QDialog):
+class MirrorWeightsDialog(QtGui.QDialog):
     
     def __init__(self, parent = getMayaWindow()):
         super(MirrorWeightsDialog,self).__init__(parent)
@@ -435,81 +365,81 @@ class MirrorWeightsDialog(QDialog):
         
     def initDialog(self):
         
-        layout = QVBoxLayout()
+        layout = QtGui.QVBoxLayout()
         self.setLayout(layout)
         self.setWindowTitle('Mirror Cluster')
         self.setGeometry(425,300,425,300)
         
-        tranformNameWidget = QWidget()
-        transformNameLayout = QVBoxLayout()
+        tranformNameWidget = QtGui.QWidget()
+        transformNameLayout = QtGui.QVBoxLayout()
         tranformNameWidget.setLayout(transformNameLayout)
-        transformNameLabel = QLabel()
+        transformNameLabel = QtGui.QLabel()
         transformNameLabel.setText('Transform Name:')
         self.transformButton = FillSelectedField()
         transformNameLayout.addWidget(transformNameLabel)
         transformNameLayout.addWidget(self.transformButton)
         
-        deformerNameWidget = QWidget()
-        deformerNameWidgetLayout = QVBoxLayout()
+        deformerNameWidget = QtGui.QWidget()
+        deformerNameWidgetLayout = QtGui.QVBoxLayout()
         deformerNameWidget.setLayout(deformerNameWidgetLayout)
-        deformerNameLabel = QLabel()
+        deformerNameLabel = QtGui.QLabel()
         deformerNameLabel.setText('Deformer Name:')
-        self.deformerNameField = QLineEdit()        
+        self.deformerNameField = QtGui.QLineEdit()        
         deformerNameWidgetLayout.addWidget(deformerNameLabel)
         deformerNameWidgetLayout.addWidget(self.deformerNameField)
         
-        divider01 = QFrame()
-        divider01.setFrameShape(QFrame.HLine)
+        divider01 = QtGui.QFrame()
+        divider01.setFrameShape(QtGui.QFrame.HLine)
         
-        prefixWidget = QWidget()
-        prefixWidgetLayout = QVBoxLayout()
+        prefixWidget = QtGui.QWidget()
+        prefixWidgetLayout = QtGui.QVBoxLayout()
         prefixWidget.setLayout(prefixWidgetLayout)
-        searchPrefixLabel = QLabel()
+        searchPrefixLabel = QtGui.QLabel()
         searchPrefixLabel.setText('Search for:')
-        self.searchPrefixField = QLineEdit()
+        self.searchPrefixField = QtGui.QLineEdit()
         self.searchPrefixField.setText('L_')
-        replacePrefixLabel = QLabel()
+        replacePrefixLabel = QtGui.QLabel()
         replacePrefixLabel.setText('Replace with')
-        self.replacePrefixField = QLineEdit()
+        self.replacePrefixField = QtGui.QLineEdit()
         self.replacePrefixField.setText('R_')
         prefixWidgetLayout.addWidget(searchPrefixLabel)
         prefixWidgetLayout.addWidget(self.searchPrefixField)
         prefixWidgetLayout.addWidget(replacePrefixLabel)
         prefixWidgetLayout.addWidget(self.replacePrefixField) 
         
-        divider02 = QFrame()
-        divider02.setFrameShape(QFrame.HLine)
+        divider02 = QtGui.QFrame()
+        divider02.setFrameShape(QtGui.QFrame.HLine)
         
-        operationWidget = QWidget()
-        operationLayout = QHBoxLayout()
+        operationWidget = QtGui.QWidget()
+        operationLayout = QtGui.QHBoxLayout()
         operationWidget.setLayout(operationLayout)
-        operationButtonGrp = QGroupBox()
-        operationButtonGrpLayout = QHBoxLayout()
+        operationButtonGrp = QtGui.QGroupBox()
+        operationButtonGrpLayout = QtGui.QHBoxLayout()
         operationButtonGrp.setLayout(operationButtonGrpLayout)
         operationButtonGrp.setTitle('operation:')
-        self.mirrorButton = QRadioButton()
+        self.mirrorButton = QtGui.QRadioButton()
         self.mirrorButton.setText('mirror cluster')
         self.mirrorButton.setChecked(True)
-        self.mirrorWeightButton = QRadioButton()
+        self.mirrorWeightButton = QtGui.QRadioButton()
         self.mirrorWeightButton.setText('mirror weights')   
-        self.flipButton = QRadioButton()
+        self.flipButton = QtGui.QRadioButton()
         self.flipButton.setText('flip weights')
         operationButtonGrpLayout.addWidget(self.mirrorButton)
         operationButtonGrpLayout.addWidget(self.mirrorWeightButton)
         operationButtonGrpLayout.addWidget(self.flipButton)
         operationLayout.addWidget(operationButtonGrp)
         
-        mirrorSetttingWidget = QWidget()
-        mirrorSetttingWidgetLayout  = QHBoxLayout()
+        mirrorSetttingWidget = QtGui.QWidget()
+        mirrorSetttingWidgetLayout  = QtGui.QHBoxLayout()
         mirrorSetttingWidget.setLayout(mirrorSetttingWidgetLayout)
-        axisButtonGroup = QGroupBox()
-        axisButtonLayout = QHBoxLayout()
-        self.axisXButton = QRadioButton()
+        axisButtonGroup = QtGui.QGroupBox()
+        axisButtonLayout = QtGui.QHBoxLayout()
+        self.axisXButton = QtGui.QRadioButton()
         self.axisXButton.setText('x')
         self.axisXButton.setChecked(True)
-        self.axisYButton = QRadioButton()
+        self.axisYButton = QtGui.QRadioButton()
         self.axisYButton.setText('y')
-        self.axisZButton = QRadioButton()
+        self.axisZButton = QtGui.QRadioButton()
         self.axisZButton.setText('z')
         axisButtonGroup.setTitle('Axis:')
         axisButtonLayout.addWidget(self.axisXButton)
@@ -518,22 +448,22 @@ class MirrorWeightsDialog(QDialog):
         axisButtonGroup.setLayout(axisButtonLayout)
         mirrorSetttingWidgetLayout.addWidget(axisButtonGroup)
         
-        self.directionCheckBox = QCheckBox()
+        self.directionCheckBox = QtGui.QCheckBox()
         self.directionCheckBox.setText('Pos to Neg') 
         self.directionCheckBox.setChecked(True) 
         axisButtonLayout.addWidget(self.directionCheckBox)
         
-        buttonsWidget = QWidget()
-        butttonsWidgetLayout = QHBoxLayout()
+        buttonsWidget = QtGui.QWidget()
+        butttonsWidgetLayout = QtGui.QHBoxLayout()
         buttonsWidget.setLayout(butttonsWidgetLayout)
         
         self.connect(self.transformButton.button, QtCore.SIGNAL('clicked()'),self.fillDeformerName)
         
-        self.applyButton = QPushButton()
+        self.applyButton = QtGui.QPushButton()
         self.applyButton.setText('Apply')
         self.connect(self.applyButton, QtCore.SIGNAL('clicked()'), self.applyFn)
         
-        self.closeButton = QPushButton()
+        self.closeButton = QtGui.QPushButton()
         self.closeButton.setText('Close')
         self.connect(self.closeButton,QtCore.SIGNAL('clicked()'),self.close)
         
@@ -620,7 +550,7 @@ class MirrorWeightsDialog(QDialog):
             
             om.MGlobal.displayError('Not enough info provided for request.')
             
-class ClustertoJointWin(QDialog):
+class ClustertoJointWin(QtGui.QDialog):
     
     def __init__(self,parent = None):
         super(ClustertoJointWin,self).__init__(parent)
@@ -631,66 +561,66 @@ class ClustertoJointWin(QDialog):
         
     def initDialog(self):
         
-        layout = QVBoxLayout()
+        layout = QtGui.QVBoxLayout()
         self.setLayout(layout)
         self.setWindowTitle('Cluster To Joint')
         self.setGeometry(425,300,425,300)
         
-        geoFieldWidget = QWidget()
-        deformerFieldLayout = QVBoxLayout()
+        geoFieldWidget = QtGui.QWidget()
+        deformerFieldLayout = QtGui.QVBoxLayout()
         geoFieldWidget.setLayout(deformerFieldLayout)
-        geoNameLabel = QLabel()
+        geoNameLabel = QtGui.QLabel()
         geoNameLabel.setText('Geo Name:')
         self.geoNameField = FillSelectedField()
         
         deformerFieldLayout.addWidget(geoNameLabel)
         deformerFieldLayout.addWidget(self.geoNameField)
         
-        deformerFieldWidget = QWidget()
-        deformerFieldLayout = QVBoxLayout()
+        deformerFieldWidget = QtGui.QWidget()
+        deformerFieldLayout = QtGui.QVBoxLayout()
         deformerFieldWidget.setLayout(deformerFieldLayout)
-        deformerNameLabel = QLabel()
+        deformerNameLabel = QtGui.QLabel()
         deformerNameLabel.setText('From Deformer Weights')
         self.deformerFillField = FillDeformerNameField()
         
         deformerFieldLayout.addWidget(deformerNameLabel)
         deformerFieldLayout.addWidget(self.deformerFillField)
         
-        jointFieldWidget = QWidget()
-        jointFieldLayout = QVBoxLayout()
+        jointFieldWidget = QtGui.QWidget()
+        jointFieldLayout = QtGui.QVBoxLayout()
         jointFieldWidget.setLayout(jointFieldLayout)
-        jointFromLabel = QLabel()
+        jointFromLabel = QtGui.QLabel()
         jointFromLabel.setText('Take Influence Weight From:')
         self.jointFromButton = FillSelectedField()
         
         jointFieldLayout.addWidget(jointFromLabel)
         jointFieldLayout.addWidget(self.jointFromButton)
         
-        jointToLabel = QLabel()
+        jointToLabel = QtGui.QLabel()
         jointToLabel.setText('Set Influence Weight for:')
         self.jointToButton = FillSelectedField()
         
-        divider01 = QFrame()
-        divider01.setFrameShape(QFrame.HLine)
+        divider01 = QtGui.QFrame()
+        divider01.setFrameShape(QtGui.QFrame.HLine)
         
-        divider02 = QFrame()
-        divider02.setFrameShape(QFrame.HLine)
+        divider02 = QtGui.QFrame()
+        divider02.setFrameShape(QtGui.QFrame.HLine)
         
-        divider03 = QFrame()
-        divider03.setFrameShape(QFrame.HLine)
+        divider03 = QtGui.QFrame()
+        divider03.setFrameShape(QtGui.QFrame.HLine)
 
         jointFieldLayout.addWidget(jointToLabel)
         jointFieldLayout.addWidget(self.jointToButton)
         
-        buttonsWidget = QWidget()
-        butttonsWidgetLayout = QHBoxLayout()
+        buttonsWidget = QtGui.QWidget()
+        butttonsWidgetLayout = QtGui.QHBoxLayout()
         buttonsWidget.setLayout(butttonsWidgetLayout)
         
-        self.applyButton = QPushButton()
+        self.applyButton = QtGui.QPushButton()
         self.applyButton.setText('Apply')
         self.connect(self.applyButton,QtCore.SIGNAL('clicked()'),self.applyFn)
         
-        self.closeButton = QPushButton()
+        self.closeButton = QtGui.QPushButton()
         self.closeButton.setText('Close')
         self.connect(self.closeButton,QtCore.SIGNAL('clicked()'),self.close)
         butttonsWidgetLayout.addWidget(self.applyButton)
@@ -718,7 +648,7 @@ class ClustertoJointWin(QDialog):
         except:
             om.MGlobal.displayError('Can not send weights on %s.'%geoName)
             
-class OptimizeDeformerDialog(QDialog):
+class OptimizeDeformerDialog(QtGui.QDialog):
     
     def __init__(self,parent = None):
         super(OptimizeDeformerDialog,self).__init__(parent)
@@ -726,33 +656,33 @@ class OptimizeDeformerDialog(QDialog):
         self.setWindowTitle('Optimize Deformer')
         self.setGeometry(600,325,300,325)
         
-        mainLayout = QVBoxLayout()
+        mainLayout = QtGui.QVBoxLayout()
         self.setLayout(mainLayout)
         
-        listLayout = QVBoxLayout()
+        listLayout = QtGui.QVBoxLayout()
         
-        self.deformerList = QListWidget()
-        self.deformerLoadButton = QPushButton()
+        self.deformerList = QtGui.QListWidget()
+        self.deformerLoadButton = QtGui.QPushButton()
         self.deformerLoadButton.setText('Load Deformers')
 
-        frame = QFrame()
-        frame.setFrameStyle(QFrame.Panel)
+        frame = QtGui.QFrame()
+        frame.setFrameStyle(QtGui.QFrame.Panel)
         mainLayout.addWidget(frame)
 
         frame.setLayout(listLayout)
         
-        self.spinBoxButtonGrp = QWidget()
-        spinBoxButtonLayout = QGridLayout()
+        self.spinBoxButtonGrp = QtGui.QWidget()
+        spinBoxButtonLayout = QtGui.QGridLayout()
         self.spinBoxButtonGrp.setLayout(spinBoxButtonLayout)
-        pruneLabel = QLabel()
+        pruneLabel = QtGui.QLabel()
         pruneLabel.setText('Prune Weight:')
-        self.pruneSpinBox = QDoubleSpinBox()
+        self.pruneSpinBox = QtGui.QDoubleSpinBox()
         self.pruneSpinBox.setMinimum(0.0005)
         self.pruneSpinBox.setMaximum(1.000)
         self.pruneSpinBox.setValue(0.001)
         self.pruneSpinBox.setDecimals(4)
         self.pruneSpinBox.setSingleStep(0.001)
-        self.optimizeButton = QPushButton()
+        self.optimizeButton = QtGui.QPushButton()
         self.optimizeButton.setText('Optimize')
         spinBoxButtonLayout.addWidget(pruneLabel,0,0)
         spinBoxButtonLayout.addWidget(self.pruneSpinBox,1,0)
@@ -813,29 +743,29 @@ class OptimizeDeformerDialog(QDialog):
                 pass
         
            
-class RenameWindow(QDialog):
+class RenameWindow(QtGui.QDialog):
     
     def __init__(self,parent = getMayaWindow()):
         super(RenameWindow,self).__init__(parent)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
-        layout = QVBoxLayout()
+        layout = QtGui.QVBoxLayout()
         
         self.setLayout(layout)
         self.setWindowTitle('Renamer')
         self.setGeometry(900,600,250,75)
         
-        textHelp = QLabel()
+        textHelp = QtGui.QLabel()
         textHelp.setText('Name_**_Name')
-        self.textField = QLineEdit()
-        self.renameButton = QPushButton()
+        self.textField = QtGui.QLineEdit()
+        self.renameButton = QtGui.QPushButton()
         self.renameButton.setText('Apply')
         
         layout.addWidget(textHelp)
         layout.addWidget(self.textField)
         layout.addWidget(self.renameButton)
 
-        self.applyButton = QPushButton()
+        self.applyButton = QtGui.QPushButton()
         self.applyButton.setText('Apply')
         self.connect(self.renameButton, QtCore.SIGNAL('clicked()'),self.applyFn)
         #self.connect(self.applyButton, QtCore.SIGNAL('clicked()'), self.applyFn)
@@ -844,22 +774,22 @@ class RenameWindow(QDialog):
         name = self.textField.text()
         MayaScripts.renamer(name)
 
-class MoveAttrWin(QDialog):
+class MoveAttrWin(QtGui.QDialog):
     
     def __init__(self,parent = None):
         super(MoveAttrWin,self).__init__(parent)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle('Move Attributes')
         
-        mainLayout = QVBoxLayout()
+        mainLayout = QtGui.QVBoxLayout()
         self.setLayout(mainLayout)
         
         self.setWindowTitle('Move Attributes')
         self.setGeometry(900,600,200,75)
       
-        self.moveUpButton = QPushButton()
+        self.moveUpButton = QtGui.QPushButton()
         self.moveUpButton.setText('Move Up')
-        self.moveDownButton = QPushButton('Move Down')
+        self.moveDownButton = QtGui.QPushButton('Move Down')
         
         mainLayout.addWidget(self.moveUpButton)
         mainLayout.addWidget(self.moveDownButton)
@@ -873,7 +803,7 @@ class MoveAttrWin(QDialog):
     def moveDown(self):
         MayaScripts.moveAttrUp('down')
     
-class ExtrapClusterWin(QDialog):
+class ExtrapClusterWin(QtGui.QDialog):
     
     def __init__(self,parent = None):
         super(ExtrapClusterWin,self).__init__(parent)
@@ -881,26 +811,26 @@ class ExtrapClusterWin(QDialog):
         self.setWindowTitle('Extrapolate Clusters')
         self.setGeometry(600,450,300,450)
         
-        mainLayout = QVBoxLayout()
+        mainLayout = QtGui.QVBoxLayout()
         self.setLayout(mainLayout)
         
-        listLayout = QVBoxLayout()
+        listLayout = QtGui.QVBoxLayout()
         
-        self.transformList = QListWidget()
-        self.transformButton = QPushButton()
+        self.transformList = QtGui.QListWidget()
+        self.transformButton = QtGui.QPushButton()
         self.transformButton.setText('Load Transforms')
         
-        self.meshList = QListWidget()
-        self.meshButton = QPushButton()
+        self.meshList = QtGui.QListWidget()
+        self.meshButton = QtGui.QPushButton()
         self.meshButton.setText('Load Meshes')
         
-        frame = QFrame()
-        frame.setFrameStyle(QFrame.Panel)
+        frame = QtGui.QFrame()
+        frame.setFrameStyle(QtGui.QFrame.Panel)
         mainLayout.addWidget(frame)
         
         frame.setLayout(listLayout)
         
-        self.extrapButton = QPushButton()
+        self.extrapButton = QtGui.QPushButton()
         self.extrapButton.setText('Extrapolate')
         
         listLayout.addWidget(self.transformList)
@@ -961,7 +891,7 @@ class ExtrapClusterWin(QDialog):
                 
             ToolBoxFn.extrapToCluster(sel)
             
-class MeshToSkinclusterWin(QDialog):
+class MeshToSkinclusterWin(QtGui.QDialog):
     
     def __init__(self,parent = None):
         super(MeshToSkinclusterWin,self).__init__(parent)
@@ -969,31 +899,31 @@ class MeshToSkinclusterWin(QDialog):
         self.setWindowTitle('Mesh To Skincluster')
         self.setGeometry(600,450,350,450)
         
-        mainLayout = QVBoxLayout()
+        mainLayout = QtGui.QVBoxLayout()
         self.setLayout(mainLayout)
         
-        listLayout = QVBoxLayout()
+        listLayout = QtGui.QVBoxLayout()
         
-        meshFromLabel = QLabel()
+        meshFromLabel = QtGui.QLabel()
         meshFromLabel.setText('Mesh From:')
         
-        meshToLabel = QLabel()
+        meshToLabel = QtGui.QLabel()
         meshToLabel.setText('Mesh To:')
         
-        self.jointList = QListWidget()
+        self.jointList = QtGui.QListWidget()
         self.meshFromButton = FillSelectedField()
         self.meshToButton = FillSelectedField()
         
-        frame = QFrame()
-        frame.setFrameStyle(QFrame.Panel)
+        frame = QtGui.QFrame()
+        frame.setFrameStyle(QtGui.QFrame.Panel)
         
         
         frame.setLayout(listLayout)
         
-        self.loadJointsButton = QPushButton()
+        self.loadJointsButton = QtGui.QPushButton()
         self.loadJointsButton.setText('Load Joints')
         
-        self.meshToSkinclusterButton = QPushButton()
+        self.meshToSkinclusterButton = QtGui.QPushButton()
         self.meshToSkinclusterButton.setText('Mesh To Skincluster')
         
         mainLayout.addWidget(meshFromLabel)
@@ -1032,7 +962,7 @@ class MeshToSkinclusterWin(QDialog):
             
         ToolBoxFn.meshToSkincluster(meshFrom, meshTo, joints)
             
-class ColorPalette(QDialog):
+class ColorPalette(QtGui.QDialog):
     
     def __init__(self,parent = None):
         super(ColorPalette,self).__init__(parent)
@@ -1076,7 +1006,7 @@ class ColorPalette(QDialog):
                             [0.43596,0.189,0.63],
                             [0.63,0.189,0.41391])
         
-        self.layout = QGridLayout()
+        self.layout = QtGui.QGridLayout()
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
         
@@ -1085,9 +1015,9 @@ class ColorPalette(QDialog):
         
         for i in range(len(self.indexColors)):
             
-            button = QPushButton()
+            button = QtGui.QPushButton()
             palette = button.palette()
-            color = QColor()
+            color = QtGui.QColor()
             color.setRgbF(self.indexColors[i][0],self.indexColors[i][1],self.indexColors[i][2])
             palette.setColor(button.backgroundRole(),color)
             button.setPalette(palette)
@@ -1111,7 +1041,7 @@ class ColorPalette(QDialog):
             try:
         
                 for obj in sel:
-                    shapeNodes = cmds.listRelatives(obj, type = 'shape',f = True)
+                    shapeNodes = cmds.listRelatives(obj, type = 'shape')
                     
                     for node in shapeNodes:
                         shapes.append(node)
@@ -1125,7 +1055,7 @@ class ColorPalette(QDialog):
                 pass
  
         
-class ToolBoxMenuBar(QMenuBar):
+class ToolBoxMenuBar(QtGui.QMenuBar):
     
     def __init__(self, parent = None):
         super(ToolBoxMenuBar,self).__init__(parent)
@@ -1136,23 +1066,31 @@ class ToolBoxMenuBar(QMenuBar):
 
         winMenu = self.addMenu('&Window')
         
-        renamerAction = QAction('&Renamer',self,triggered = self.openRenamer)
+        renamerAction = QtGui.QAction('&Renamer',self,triggered = self.openRenamer)
         winMenu.addAction(renamerAction)
         
-        moveAttrAction = QAction('&Move Attributes',self,triggered = self.openMoveAttrDialog)
+        moveAttrAction = QtGui.QAction('&Move Attributes',self,triggered = self.openMoveAttrDialog)
         winMenu.addAction(moveAttrAction)
         
-        reorderHistoryAction = QAction('&Reorder History',self,triggered = self.reorderHistory)
+        reorderHistoryAction = QtGui.QAction('&Reorder History',self,triggered = self.reorderHistory)
         editMenu.addAction(reorderHistoryAction)
         
-        colorPaletteAction = QAction('&Color Palette',self,triggered = self.openColorPalette)
+        colorPaletteAction = QtGui.QAction('&Color Palette',self,triggered = self.openColorPalette)
         winMenu.addAction(colorPaletteAction)
         
-        saveClusterAction = QAction('&Save Clusters',self, triggered = ToolBoxFn.saveClusters)
+        saveClusterAction = QtGui.QAction('&Save Clusters',self, triggered = ToolBoxFn.saveClusters)
         fileMenu.addAction(saveClusterAction)
         
-        loadClusterAction = QAction('&Load Clusters',self, triggered = ToolBoxFn.loadClusters)
+        loadClusterAction = QtGui.QAction('&Load Clusters',self, triggered = ToolBoxFn.loadClusters)
         fileMenu.addAction(loadClusterAction)
+        
+        fileMenu.addSeparator()
+        
+        saveEyePlacementAction = QtGui.QAction('&Save Eye Placement',self, triggered = ToolBoxFn.saveEyePlacement)
+        fileMenu.addAction(saveEyePlacementAction)
+        
+        loadEyePlacementAction = QtGui.QAction('&Load Eye Placement',self, triggered = ToolBoxFn.loadEyePlacment)
+        fileMenu.addAction(loadEyePlacementAction)
         
     def openRenamer(self): 
         
@@ -1186,19 +1124,19 @@ class ToolBoxMenuBar(QMenuBar):
         self.colorPalette.show() 
         
         
-class ToolBoxWidget(QWidget):
+class ToolBoxWidget(QtGui.QWidget):
     
     def __init__(self,parent = None):
         super(ToolBoxWidget,self).__init__(parent)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         
-        frame = QFrame()
-        frame.setFrameStyle(QFrame.Panel)
+        frame = QtGui.QFrame()
+        frame.setFrameStyle(QtGui.QFrame.Panel)
         
-        mainLayout = QHBoxLayout()
+        mainLayout = QtGui.QHBoxLayout()
         self.setLayout(mainLayout)
         
-        gridLayout = QGridLayout()
+        gridLayout = QtGui.QGridLayout()
         gridLayout.setSpacing(0)
         frame.setLayout(gridLayout)
         
@@ -1221,27 +1159,27 @@ class ToolBoxWidget(QWidget):
         skinclusterButton.addMenuItem('Mesh To Skincluster',self.openMeshToSkinclusterDialog)
         
         #mirror
-        mirrorButton = QPushButton()
+        mirrorButton = QtGui.QPushButton()
         mirrorButton.setText('Mirror Cluster')
         mirrorButton.setGeometry(60,33,60,33)
         
         self.connect(mirrorButton, QtCore.SIGNAL('clicked()'),self.openMirrorClusterDialog)
         
         #transfer
-        transferButton = QPushButton()
+        transferButton = QtGui.QPushButton()
         transferButton.setText('Transfer Weights')
         transferButton.setGeometry(60,33,60,33)
         
         self.connect(transferButton, QtCore.SIGNAL('clicked()'),self.openTransferDialog)
         
         #optimize deformer
-        optimizeDeformerButton  = QPushButton()
+        optimizeDeformerButton  = QtGui.QPushButton()
         optimizeDeformerButton.setText('Optimize Deformer')
         optimizeDeformerButton.setGeometry(60,33,60,33)
         self.connect(optimizeDeformerButton, QtCore.SIGNAL('clicked()'),self.openOptimizeDeformerDialog)
         
         #skinningTool
-        skinningButton = QPushButton()
+        skinningButton = QtGui.QPushButton()
         skinningButton.setText('Skin Tool')
         skinningButton.setGeometry(60,33,60,33)
         self.connect(skinningButton, QtCore.SIGNAL('clicked()'),ToolBoxFn.skinningTool)
@@ -1317,19 +1255,18 @@ class ToolBoxWidget(QWidget):
         self.meshToSkinclusterDialog.show()
                  
                        
-class ToolBoxWin(QMainWindow):
+class ToolBoxWin(QtGui.QMainWindow):
     
     def __init__(self, parent = getMayaWindow()):
         super(ToolBoxWin,self).__init__(parent)
         self.setWindowTitle('Tool Box')
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-
-        layout = QHBoxLayout()
+        
+        layout = QtGui.QHBoxLayout()
         self.setLayout(layout)
         
         centralWidget = ToolBoxWidget(self)
-        centralLayout = QGridLayout()
-          
+        centralLayout = QtGui.QGridLayout()
         centralWidget.setLayout(centralLayout)
  
         menuBar = ToolBoxMenuBar(self)

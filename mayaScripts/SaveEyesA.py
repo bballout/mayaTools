@@ -41,7 +41,7 @@ placementAttrs =  ['Eye_Transform_Ctrl.leftEyeIrisScale',
                     'Eye_Transform_Ctrl.rightEyeLidThickness']
 
 def save(filePath):
-    
+    cmds.undoInfo(openChunk = True)
     output = open(filePath,'wb')
     
     eyePlacement = dict()
@@ -149,11 +149,12 @@ def save(filePath):
     
     pickle.dump(eyePlacement,output)
     output.close()
+    cmds.undoInfo(closeChunk = True)
     
-    print 'saved %s'%filePath
+    om.MGlobal.displayInfo('Saved %s'%filePath) 
     
 def load(filePath):
-        
+    cmds.undoInfo(openChunk = True)   
     inputFile = open(filePath,'rb')
     eyePlacement = pickle.load(inputFile)
     inputFile.close()
@@ -223,7 +224,8 @@ def load(filePath):
     setLatticePointPos(leftEyeLat,leftEyeLatPointPos)
     setLatticePointPos(rightEyeLat,rightEyeLatPointPos)
     
-    print 'loaded %s'%filePath
+    om.MGlobal.displayInfo('Loaded %s'%filePath)
+    cmds.undoInfo(closeChunk = True)
 
 
 def getLatticePointPos(latticeShape):

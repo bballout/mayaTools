@@ -89,4 +89,5 @@ class SetFn():
             for member in objectSet['components']:
                 cmds.sets(member,e = True,add = newSet)
                 
-        print 'I\'m Done!'
+        print 'I\'m Done!' 
+            

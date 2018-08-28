@@ -7,8 +7,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -24,8 +24,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgDEditor.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgDEditor.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgDEditor.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgDEditor.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -38,8 +38,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -55,8 +55,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPreview.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPreview.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPreview.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPreview.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -69,8 +69,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -86,8 +86,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPreviewClear.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPreviewClear.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPreviewClear.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPreviewClear.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -100,8 +100,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -117,8 +117,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgCreateDescription.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgCreateDescription.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgCreateDescription.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgCreateDescription.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -131,8 +131,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -148,8 +148,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgBindFaces.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgBindFaces.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgBindFaces.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgBindFaces.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -162,8 +162,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -179,8 +179,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgGuideContext.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgGuideContext.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgGuideContext.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgGuideContext.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -193,8 +193,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -210,8 +210,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgToggleGuide.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgToggleGuide.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgToggleGuide.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgToggleGuide.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -224,8 +224,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -241,8 +241,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgToggleGuideReference.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgToggleGuideReference.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgToggleGuideReference.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgToggleGuideReference.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -255,8 +255,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -272,8 +272,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgFlipGuides.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgFlipGuides.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgFlipGuides.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgFlipGuides.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -286,8 +286,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -303,8 +303,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgSyncPatchVisibility.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgSyncPatchVisibility.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgSyncPatchVisibility.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgSyncPatchVisibility.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -317,8 +317,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -334,8 +334,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgSelectionToggle.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgSelectionToggle.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgSelectionToggle.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgSelectionToggle.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -348,8 +348,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -365,8 +365,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPrimSelection.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPrimSelection.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPrimSelection.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgPrimSelection.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -379,8 +379,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -396,8 +396,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgCullPrimContextSelect.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgCullPrimContextSelect.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgCullPrimContextSelect.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgCullPrimContextSelect.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
@@ -410,8 +410,8 @@ global proc shelf_XGen () {
     shelfButton
         -enableCommandRepeat 1
         -enable 1
-        -width 35
-        -height 35
+        -width 34
+        -height 34
         -manage 1
         -visible 1
         -preventOverride 0
@@ -427,8 +427,8 @@ global proc shelf_XGen () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgGuideSculptTool.png" 
-        -image1 "C:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgGuideSculptTool.png" 
+        -image "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgGuideSculptTool.png" 
+        -image1 "E:/Program Files/Autodesk/Maya2016/plug-ins/xgen//icons/xgGuideSculptTool.png" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1

@@ -1,0 +1,470 @@
+global proc shelf_Fluids () {
+    global string $gBuffStr;
+    global string $gBuffStr0;
+    global string $gBuffStr1;
+
+
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "3D Fluid Container: Create a 3D fluid container" 
+        -enableBackground 0
+        -align "center" 
+        -label "3D Fluid Container" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidCreate3D.xpm" 
+        -image1 "fluidCreate3D.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "Create3DContainer" 
+        -sourceType "mel" 
+        -doubleClickCommand "Create3DContainerOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "2D Fluid Container: Create a 2D fluid container" 
+        -enableBackground 0
+        -align "center" 
+        -label "2D Fluid Container" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidCreate2D.xpm" 
+        -image1 "fluidCreate2D.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "Create2DContainer" 
+        -sourceType "mel" 
+        -doubleClickCommand "Create2DContainerOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Paint Fluids Tool: Paint fluid properties" 
+        -enableBackground 0
+        -align "center" 
+        -label "Paint Fluids Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidPaint.xpm" 
+        -image1 "fluidPaint.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "PaintFluidsTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "PaintFluidsToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "3D Fluid Container with Emitter: Create an emitter and a 3D fluid container" 
+        -enableBackground 0
+        -align "center" 
+        -label "3D Fluid Container with Emitter" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidCreate3DEmitter.xpm" 
+        -image1 "fluidCreate3DEmitter.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "Create3DContainerEmitter" 
+        -sourceType "mel" 
+        -doubleClickCommand "Create3DContainerEmitterOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "2D Fluid Container with Emitter: Create an emitter and a 2D fluid container" 
+        -enableBackground 0
+        -align "center" 
+        -label "2D Fluid Container with Emitter" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidCreate2DEmitter.xpm" 
+        -image1 "fluidCreate2DEmitter.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "Create2DContainerEmitter" 
+        -sourceType "mel" 
+        -doubleClickCommand "Create2DContainerEmitterOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Fluid Emitter: Create an emitter and attach it to a fluid shape" 
+        -enableBackground 0
+        -align "center" 
+        -label "Fluid Emitter" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidEmitterAdd.xpm" 
+        -image1 "fluidEmitterAdd.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "FluidEmitter" 
+        -sourceType "mel" 
+        -doubleClickCommand "FluidEmitterOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Ocean Material: Assign a new ocean material to the active objects" 
+        -enableBackground 0
+        -align "center" 
+        -label "Ocean Material" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "render_oceanShader.xpm" 
+        -image1 "render_oceanShader.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "createAndAssignShader oceanShader \"\"" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Emit Fluid from Object: Select a fluid and the emitting object(s)" 
+        -enableBackground 0
+        -align "center" 
+        -label "Emit Fluid from Object" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidObjectEmit.xpm" 
+        -image1 "fluidObjectEmit.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "EmitFluidFromObject" 
+        -sourceType "mel" 
+        -doubleClickCommand "EmitFluidFromObjectOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Extend Fluid Resolution: Extend fluid resolution, preserving contents and voxel size" 
+        -enableBackground 0
+        -align "center" 
+        -label "Extend Fluid Resolution" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidExtend.xpm" 
+        -image1 "fluidExtend.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "ExtendFluid" 
+        -sourceType "mel" 
+        -doubleClickCommand "ExtendFluidOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Edit Fluid Resolution: Modify fluid resolution, preserving contents" 
+        -enableBackground 0
+        -align "center" 
+        -label "Edit Fluid Resolution" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidEditRes.xpm" 
+        -image1 "fluidEditRes.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "EditFluidResolution" 
+        -sourceType "mel" 
+        -doubleClickCommand "EditFluidResolutionOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Make Collide: Select fluid object(s) and geometry object(s) to collide" 
+        -enableBackground 0
+        -align "center" 
+        -label "Make Collide" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidCollide.xpm" 
+        -image1 "fluidCollide.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "MakeFluidCollide" 
+        -sourceType "mel" 
+        -doubleClickCommand "MakeFluidCollideOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Set Initial State: Set current state of fluid as its initial conditions" 
+        -enableBackground 0
+        -align "center" 
+        -label "Set Initial State" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidInitialStateSet.xpm" 
+        -image1 "fluidInitialStateSet.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "SetInitialState" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Clear Initial State: Remove previously set initial conditions" 
+        -enableBackground 0
+        -align "center" 
+        -label "Clear Initial State" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidInitialStateClear.xpm" 
+        -image1 "fluidInitialStateClear.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "ClearInitialState" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Create Cache: Runup to create playback and render cache" 
+        -enableBackground 0
+        -align "center" 
+        -label "Create Cache" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidCacheCreate.xpm" 
+        -image1 "fluidCacheCreate.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "CreateFluidCache" 
+        -sourceType "mel" 
+        -doubleClickCommand "CreateFluidCacheOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Delete Cache: Delete cache on selected fluid object." 
+        -enableBackground 0
+        -align "center" 
+        -label "Delete Cache" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "fluidCacheDelete.xpm" 
+        -image1 "fluidCacheDelete.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "fluidDeleteCache" 
+        -sourceType "mel" 
+        -doubleClickCommand "fluidDeleteCacheOpt" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+
+} 

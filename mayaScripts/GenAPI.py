@@ -321,3 +321,17 @@ def getHierarchy(nodeObject):
         nodeItr.next()
         
     return outputSelectionList
+
+def createListFromDoubleArray(doubleArray):
+    pyList = []
+    for i in range(doubleArray.length()):
+        pyList.append(doubleArray[i])
+        
+    return pyList
+
+def createDoubleArrayFromList(pyList):
+    doubleArray = om.MDoubleArray()
+    for i in range(len(pyList)):
+        doubleArray.append(pyList[i])
+        
+    return doubleArray

@@ -991,7 +991,7 @@ def extrapToCluster(transform,meshes):
     progressWin.end()
  
     om.MGlobal.displayInfo('Extraped cluster from %s'%transform)
-    return cluster
+    
 
 #function for transfering weights to given deformer   
 def extrapWeightsToExistingDeformer(transform,meshes,deformer):
@@ -1111,11 +1111,6 @@ def mirrorCluster(transform,deformerName,prefix = 'L',oppPrefix = 'R', axis = 'x
 def createClusterFromSoftSelection(name):
     
     '''function for creating a cluster from a soft selection'''
-    
-    sel = cmds.ls(sl = True)
-    cmds.select(cl = True)
-    
-    cmds.select(sel)
     
     clusterData = MeasuringLib.MeasuringTool.createWeightListFromSoftSelection()
     cluster = cmds.cluster(name = name)

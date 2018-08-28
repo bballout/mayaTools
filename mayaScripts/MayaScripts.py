@@ -172,53 +172,8 @@ def makeRivets(**kwargs):
         i += 1
     return rivets
 
-def moPathJnts(curve,joints):
-  sel = cmds.ls(sl=True)
-  
-  for obj in joints:
-    curveObj = GenAPI.getDagPath(curve)
-    objPos = cmds.xform(obj,q=True,ws=True,translation=True)
-    curveFn = om.MFnNurbsCurve(curveObj)
-    objPosPoint = om.MPoint(objPos[0],objPos[1],objPos[2])
-    util = om.MScriptUtil()
-    doublePtr = util.asDoublePtr()
-    curveFn.getParamAtPoint(objPosPoint,doublePtr,om.MSpace.kWorld)
-    uValue = util.getDouble(doublePtr)
-    
-    loc = cmds.spaceLocator(name='%s_loc'%obj)[0]
-    poc = cmds.createNode('pointOnCurveInfo',name='%s_poc'%obj)
-    cmds.connectAttr('%s.worldSpace[0]'%curve,'%s.inputCurve'%poc)
-    cmds.setAttr('%s.parameter'%poc,uValue)
-    cmds.connectAttr('%s.position'%poc,'%s.translate'%loc)
-    cmds.parentConstraint(loc,obj,mo=True)
-    
-def createFollicesAtLocs(locators=[],surface=''):
-  locators = cmds.ls(sl=True)
-  surfaceFn = om.MFnNurbsSurface(GenAPI.getDagPath(surface))
-  surfaceShape = cmds.listRelatives(surface,type='shape')[0]
-  util = om.MScriptUtil()
-  for obj in locators:
-      pos = cmds.xform(obj,q=True,ws=True,translation=True)
-      point = om.MPoint(pos[0],pos[1],pos[2])
-      vutil = om.MScriptUtil()
-      uutil = om.MScriptUtil()
-      uutil.createFromDouble(0.0)
-      Uptr = uutil.asDoublePtr()
-      vutil.createFromDouble(0.0)
-      Vptr = vutil.asDoublePtr()
-      closestPoint = surfaceFn.closestPoint(point,Uptr,Vptr,om.MSpace.kWorld)
-      surfaceFn.getParamAtPoint(closestPoint,Uptr,Vptr,om.MSpace.kWorld)
-      uVal = uutil.asFloat() 
-      vVal = vutil.asFloat()
-      print util.getDouble(Uptr),util.getDouble(Vptr)
-      follicle = cmds.createNode('follicle')
-      cmds.connectAttr('%s.worldSpace[0]'%surfaceShape,'%s.inputSurface'%follicle)
-      cmds.setAttr('%s.parameterU'%follicle,util.getDouble(Uptr))
-      cmds.setAttr('%s.parameterV'%follicle,util.getDouble(Vptr)/18.0)
-      follicleTransform = cmds.listRelatives(follicle,parent = True)[0]
-      cmds.connectAttr('%s.outTranslate'%follicle,'%s.translate'%follicleTransform)
-      cmds.connectAttr('%s.outRotate'%follicle,'%s.rotate'%follicleTransform)
-
+def moPathJnts(curve):
+    pass
 
 def deleteRivets():
 
@@ -756,3 +711,10 @@ def setConstraint(control = '',worldNodes = []):
         
         cmds.parentConstraint(control,offset, mo = True)
         cmds.scaleConstraint(control,offset, mo = True)
+		
+def set_constraint_menu_item():
+	sel = cmds.ls(sl = True)
+	if not sel == None:
+		target = sel[0]
+		constrainedObjs = sel[1:]
+		setConstraint(target,constrainedObjs)

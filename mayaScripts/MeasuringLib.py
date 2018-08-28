@@ -281,7 +281,7 @@ class MeasuringTool():
     def getComponentPoints(mesh):
         
         meshPath = GenAPI.getDagPath(mesh)
-        vertItr = om.MItGeometry(meshPath)
+        vertItr = om.MItMeshVertex(meshPath)
         
         pointArray = []
         

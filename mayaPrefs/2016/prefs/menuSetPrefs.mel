@@ -9,7 +9,7 @@ menuSet -permanent 0 -hotBoxVisible 1 -label "Rigging" -menuArray { "mainRigSkel
 menuSet -moveMenuSet riggingMenuSet 2;
 menuSet -permanent 0 -hotBoxVisible 1 -label "Animation" -menuArray { "mainKeysMenu", "mainPlaybackMenu", "mainVisualizeMenu", "mainDeformationMenu", "mainConstraintsMenu" } animationMenuSet;
 menuSet -moveMenuSet animationMenuSet 3;
-menuSet -permanent 0 -hotBoxVisible 1 -label "FX" -menuArray { "mainParticlesMenu", "mainFluidsMenu", "mainNClothMenu", "mainHairMenu", "mainNConstraintMenu", "mainNCacheMenu", "mainFieldsSolverMenu", "mainDynEffectsMenu", "mainBifrostMenu", "bullet_MainMenu" } dynamicsMenuSet;
+menuSet -permanent 0 -hotBoxVisible 1 -label "FX" -menuArray { "mainParticlesMenu", "mainFluidsMenu", "mainNClothMenu", "mainHairMenu", "mainNConstraintMenu", "mainNCacheMenu", "mainFieldsSolverMenu", "mainDynEffectsMenu", "mainBifrostMenu" } dynamicsMenuSet;
 menuSet -moveMenuSet dynamicsMenuSet 4;
-menuSet -permanent 0 -hotBoxVisible 1 -label "Rendering" -menuArray { "mainShadingMenu", "mainRenTexturingMenu", "mainRenderMenu", "mainCartoonMenu", "mainStereoMenu" } renderingMenuSet;
+menuSet -permanent 0 -hotBoxVisible 0 -label "Rendering" -menuArray { "mainShadingMenu", "mainRenTexturingMenu", "mainRenderMenu", "mainCartoonMenu", "mainStereoMenu" } renderingMenuSet;
 menuSet -moveMenuSet renderingMenuSet 5;

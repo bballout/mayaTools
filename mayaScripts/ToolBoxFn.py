@@ -9,6 +9,7 @@ import maya.mel as mel
 import SkinningLib
 import DeformerLib
 import MayaScripts
+import SaveEyesA
 
 '''Create Clusters'''
 
@@ -156,14 +157,21 @@ def reorderHistory():
 #skinning tool
 
 def skinningTool():
-    
     try:
-        mel.eval('source \"weightWindow.mel\"')
-        
+        mel.eval('source \"weightWindow.mel\"')    
     except:
         pass
-    
     mel.eval('weightWindow;')
+    
+
+def saveEyePlacement():
+    filePath = cmds.fileDialog2(dialogStyle =  0)
+    SaveEyesA.save(filePath[0])
+
+def loadEyePlacment():
+    filePath = cmds.fileDialog2(fm=1, ds=2, okc = 'Open', cap = 'Open')
+    SaveEyesA.load(filePath[0])
+    
 
 
     

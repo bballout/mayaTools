@@ -28,15 +28,16 @@ class ShapeTool():
         
         self.origShape = ''
         shapes = cmds.listRelatives(self.transform,shapes = True)
-        '''
-        for obj in shapes:
 
+        for obj in shapes:
+            
+            print obj
+            
             if cmds.getAttr('%s.intermediateObject'%obj) and cmds.listConnections('%s.worldMesh'%obj,source=False):
                 self.origShape = obj
                 break
         else:
             raise RuntimeError('No deformers found for %s.' % self.shape)
-        '''
     
     @staticmethod    
     def getPointArray(shape):
@@ -103,44 +104,55 @@ class ShapeTool():
                 
         return  outVectorArray
     
-    def getOrigPoints(self):
-        origPoints = self.getPointArray(self.origShape)
-        return origPoints
-    
-    def getDeltas(self):
-        deformedPoints = self.getPointArray(self.shape)
-        origPoints = self.getPointArray(self.origShape)
+    def getPointTransformations(self,fromMesh):
         
-        vectorArray = om.MVectorArray()
-        
-        for i in range(deformedPoints.length()):
-            
-            vectorA = om.MVector(origPoints[i])
-            vectorB = om.MVector(deformedPoints[i])
-            vectorC = vectorB - vectorA
-            
-            vectorArray.append(vectorC)
-            
-        return vectorArray
-    
-    def getInverseMatricies(self,correctivePoints):
-        
-        deformedPoints = self.getPointArray(self.shape)
-        origPoints = self.getPointArray(self.origShape)
+        vectors = self.getTranslationVectors(fromMesh)
         matrixArray = om.MMatrixArray()
         
-        deltas = self.getDeltas()
-
-        for i in range(deformedPoints.length()):
-            matrix = om.MMatrix()
-            setMatrixRow(matrix, deltas[i], 0)
-            setMatrixRow(matrix, deltas[i], 1)
-            setMatrixRow(matrix, deltas[i], 2)
-            setMatrixRow(matrix, correctivePoints[i], 3)
-            matrixArray.append(matrix.inverse())
-                 
+        for i in range(vectors.length()):
+            
+            transformation = om.MTransformationMatrix()
+            transformation.setTranslation(vectors[i], om.MSpace.kObject)
+            matrix = transformation.asMatrix()
+            matrixArray.append(matrix)
+            
         return matrixArray
+    
+    def getInverseMatrices(self):
 
+        outMatrixArray = om.MMatrixArray()
+         
+        meshPointArray = ShapeTool.getPointArray(self.shape)
+        origMeshPointArray = ShapeTool.getPointArray(self.origShape)
+        
+        for i in range(meshPointArray.length()):
+            '''
+            vectorA = om.MVector(meshPointArray[i])
+            vectorB = om.MVector(origMeshPointArray[i])
+            vectorC = vectorA - vectorB              
+            
+            matrix = om.MMatrix()
+            om.MScriptUtil.setDoubleArray(matrix[0], 0, vectorC.x)
+            om.MScriptUtil.setDoubleArray(matrix[1], 1, vectorC.y)
+            om.MScriptUtil.setDoubleArray(matrix[2], 2, vectorC.z)
+            '''
+            matrix = om.MMatrix()
+            vectorA = om.MVector(meshPointArray[i])
+            vectorB = om.MVector(origMeshPointArray[i])
+            
+            setMatrixRow(matrix, vectorB - vectorA, 0)
+            setMatrixRow(matrix, vectorB - vectorA, 1)
+            setMatrixRow(matrix, vectorB - vectorA, 2)
+            
+            '''
+            transformationMatrix = om.MTransformationMatrix()
+            transformationMatrix.setTranslation(vectorC,om.MSpace.kObject)
+            matrix = transformationMatrix.asMatrix()
+            
+            '''
+            outMatrixArray.append(matrix.inverse())
+            
+        return outMatrixArray
     
     @staticmethod
     def createPointArrayFromMatrixArray(matrixArray):
@@ -188,12 +200,12 @@ class ShapeTool():
             
     #class end
     
-def transferPointPos(fromShape,toShape):
+def invertShapeA(poseMesh,correctiveMesh):
     
-    points = ShapeTool.getPointArray(fromShape)
-    ShapeTool.setPointArray(toShape, points)
-    
-def invertDeformer(poseMesh,corrective):
+    shapeTool = ShapeTool(poseMesh)
+    delta = shapeTool.getTranslationVectors(correctiveMesh)
+    invMatrices = shapeTool.getInverseMatrices()
+    origMeshPoints = shapeTool.getPointArray(shapeTool.origShape)
     
     newMesh = cmds.duplicate(poseMesh)[0]
     
@@ -201,27 +213,37 @@ def invertDeformer(poseMesh,corrective):
     for shape in shapes:
         if cmds.getAttr('%s.intermediateObject'%shape):
             cmds.delete(shape)
-            
-    correctivePoints = ShapeTool.getPointArray(corrective)
     
-    shapeTool = ShapeTool(poseMesh)
-    invMatricies = shapeTool.getInverseMatricies(correctivePoints)
-    deltas = shapeTool.getTranslationVectors(corrective)
+    shapeTool.setPointArray(newMesh,origMeshPoints)
+    newPointArray = om.MPointArray()
     
-    geoItr = om.MItGeometry(GenAPI.getDagPath(poseMesh))
-    
-    pointArray = om.MPointArray()
+    newMeshPath = GenAPI.getDagPath(newMesh)
+    geoItr = om.MItGeometry(newMeshPath)
     
     while not geoItr.isDone():
         i = geoItr.index()
-        pt = geoItr.position()
-        invPt = pt * invMatricies[i]
-        newPt = om.MVector(invPt)
-        pointArray.append(om.MPoint(invPt))
+        offset = delta[i] * invMatrices[i]
+        
+        newPos = geoItr.position() + offset
+        newPointArray.append(om.MPoint(newPos))
         geoItr.next()
         
-    shapeTool.setPointArray(newMesh, pointArray)
-             
+    shapeTool.setPointArray(newMesh, newPointArray)
+        
+def invertShapeB(poseMesh,correctiveMesh):
+    
+    shapeTool = ShapeTool(poseMesh)
+    invMatrices = shapeTool.getInverseMatrices()
+    
+    newMesh = cmds.duplicate(poseMesh)[0]
+    
+    shapes = cmds.listRelatives(newMesh,type = 'shape')
+    for shape in shapes:
+        if cmds.getAttr('%s.intermediateObject'%shape):
+            cmds.delete(shape)
+    
+    shapeTool.multiplyPointsByMatrices(newMesh, invMatrices)
+
 def setBlendTargetWeights(blendShape = '',target = 0,geo = '',weightList = []):
     
     geoPath = GenAPI.getDagPath(geo)
@@ -264,20 +286,19 @@ def setMatrixRow(matrix, newVector, row):
     setMatrixCell(matrix, newVector.x, row, 0)
     setMatrixCell(matrix, newVector.y, row, 1)
     setMatrixCell(matrix, newVector.z, row, 2)
+# end setMatrixRow
 
+
+## @brief Sets a matrix cell
+#
+# @param[in/out] matrix Matrix to set.
+# @param[in] newVector Vector to use.
+# @param[in] row Row number.
+# @param[in] column Column number.
+#
 def setMatrixCell(matrix, value, row, column):
     om.MScriptUtil.setDoubleArray(matrix[row], column, value)
-    
-def getMatrix(matrix):
-    out = []
-    
-    for i in range(4):
-        for x in range(4):
-            out.append(matrix(x,i))
-            
-    return out
-            
-            
+# end setMatrixCell
 
 
 def addInbetweenShape():

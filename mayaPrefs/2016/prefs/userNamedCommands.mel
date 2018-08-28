@@ -14,3 +14,15 @@ nameCommand
 	-command ("BSB_MM_Release")
 	BSB_MM_ReleaseNameCommand;
 
+nameCommand
+	-annotation "ohShizntNameCommand"
+	-sourceType "mel"
+	-command ("ohShiznt")
+	ohShizntNameCommand;
+
+nameCommand
+	-annotation "Selection Mask Stuff"
+	-sourceType "mel"
+	-command ("dkSelectionMask;")
+	nmpSelectionMask;
+

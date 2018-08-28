@@ -1,0 +1,1010 @@
+global proc shelf_Skinning () {
+    global string $gBuffStr;
+    global string $gBuffStr0;
+    global string $gBuffStr1;
+
+
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Joint Tool: Click to place joint, click on existing joint to add to skeleton, click/drag to position joint" 
+        -enableBackground 0
+        -align "center" 
+        -label "Joint Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinJoint.xpm" 
+        -image1 "kinJoint.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "JointTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "JointToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Remove Joint: Select a joint to remove" 
+        -enableBackground 0
+        -align "center" 
+        -label "Remove Joint" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinRemove.xpm" 
+        -image1 "kinRemove.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "RemoveJoint" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "IK Handle Tool: Create IK handle on joint chain" 
+        -enableBackground 0
+        -align "center" 
+        -label "IK Handle Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinHandle.xpm" 
+        -image1 "kinHandle.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "IKHandleTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "IKHandleToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "IK Spline Handle Tool: Create IK spline handle on joint chain" 
+        -enableBackground 0
+        -align "center" 
+        -label "IK Spline Handle Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "kinSplineHandle.xpm" 
+        -image1 "kinSplineHandle.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "IKSplineHandleTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "IKSplineHandleToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "OrientJointOptions;" 
+        -enableBackground 0
+        -align "center" 
+        -label "OrientJointOptions;" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "JtOr" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "OrientJointOptions;" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Smooth Bind" 
+        -enableBackground 0
+        -align "center" 
+        -label "Smooth Bind" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "smoothSkin.xpm" 
+        -image1 "smoothSkin.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "SmoothBindSkin" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Copy Skin Weights" 
+        -enableBackground 0
+        -align "center" 
+        -label "Copy Skin Weights" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "copySkinWeight.xpm" 
+        -image1 "copySkinWeight.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "CopySkinWeights" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Mirror Skin Weights" 
+        -enableBackground 0
+        -align "center" 
+        -label "Mirror Skin Weights" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "mirrorSkinWeight.xpm" 
+        -image1 "mirrorSkinWeight.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "MirrorSkinWeights" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "source \"cometSkinWeight.mel\"; cometSkinWeight();" 
+        -enableBackground 0
+        -align "center" 
+        -label "source \"cometSkinWeight.mel\"; cometSkinWeight();" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "C:/Users/Bill/Documents/maya/2009/prefs/icons/cometSkinWeight.bmp" 
+        -image1 "C:/Users/Bill/Documents/maya/2009/prefs/icons/cometSkinWeight.bmp" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "source \"cometSkinWeight.mel\"; cometSkinWeight();" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "cometSaveWeights" 
+        -enableBackground 0
+        -align "center" 
+        -label "cometSaveWeights" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "C:/Users/Bill/Documents/maya/2009/prefs/icons/cometSaveWeights.bmp" 
+        -image1 "C:/Users/Bill/Documents/maya/2009/prefs/icons/cometSaveWeights.bmp" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "cometSaveWeights" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Edit various component values for the selected object(s)" 
+        -enableBackground 0
+        -align "center" 
+        -label "Component Editor" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "CpEd" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "menuIconWindow.xpm" 
+        -image1 "menuIconWindow.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "ComponentEditor" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    artAttrCtx
+        -image1 "attrPaint.xpm" 
+        -image2 "vacantCell.xpm" 
+        -image3 "vacantCell.xpm" 
+        -tangentOutline 1
+        -surfaceConformedBrushVertices 0
+        -record 0
+        -importreassign 0
+        -selectclonesource 0
+        -preserveclonesource 1
+        -dynclonemode 1
+        -pickColor 0
+        -expandfilename 0
+        -usepressure 1
+        -reflectionaboutorigin 0
+        -reflection 0
+        -projective 0
+        -showactive 1
+        -brushfeedback 1
+        -outwhilepaint 0
+        -outline 1
+        -accopacity 1
+        -brushalignment 1
+        -exportaspectratio 1
+        -stampDepth 0.5
+        -stampSpacing 0.1
+        -screenRadius 1
+        -worldRadius 1.538985
+        -lowerradius 0
+        -opacity 1
+        -reflectionaxis "x" 
+        -exportfiletype "IFF" 
+        -exportfilemode "luminance" 
+        -importfilemode "luminance" 
+        -strokesmooth "spline" 
+        -mappressure "Opacity" 
+        -paintmode "tangent" 
+        -paintoperationtype "Paint" 
+        -dragSlider "none" 
+        -radius 1.538985
+        -stampProfile "solid" 
+        -exportfilesizex 256
+        -exportfilesizey 256
+        -whichTool "general" 
+        -selectedattroper "absolute" 
+        -value 1
+        -minvalue 0
+        -maxvalue 1
+        -clamplower 0
+        -clampupper 1
+        -alphaclamplower 0
+        -alphaclampupper 1
+        -clamp "none" 
+        -alphaclamp "none" 
+        -dataTypeIndex 1
+        -colorfeedback 1
+        -colorfeedbackOverride 0
+        -disablelighting 1
+        -colorrangelower 0
+        -colorrangeupper 1
+        -interactiveUpdate 1
+        -colorAlphaValue 1 
+        -useColorRamp 0
+        -useMaxMinColor 0
+        -rampMinColor 0 0 0 
+        -rampMaxColor 1 1 1 
+        -colorRamp "1,0,0,1,1,1,0.5,0,0.8,1,1,1,0,0.6,1,0,1,0,0.4,1,0,0,1,0,1" 
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "attrPaint.xpm" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    wireContext
+        -image1 "wire.xpm" 
+        -image2 "vacantCell.xpm" 
+        -image3 "vacantCell.xpm" 
+        -holder 0
+        -groupWithBase 0
+        -envelope 1
+        -crossingEffect 0
+        -dropoffDistance 1
+        -localInfluence 0
+        -deformationOrder "Default" 
+        -exclusivePartition "deformPartition" 
+        -exclusive 0
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "wire.xpm" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    setEditCtx
+        -image1 "setEdit.xpm" 
+        -image2 "vacantCell.xpm" 
+        -image3 "vacantCell.xpm" 
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "setEdit.xpm" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    $gBuffStr = `toolButton -style iconOnly -doubleClickCommand "toolPropertyWindow" -cl toolCluster `;
+    $gBuffStr1 = `    artAttrSkinPaintCtx
+        -image1 "paintSkinWeights.xpm" 
+        -image2 "vacantCell.xpm" 
+        -image3 "vacantCell.xpm" 
+        -tangentOutline 1
+        -surfaceConformedBrushVertices 0
+        -record 0
+        -importreassign 0
+        -selectclonesource 0
+        -preserveclonesource 1
+        -dynclonemode 1
+        -pickColor 0
+        -expandfilename 0
+        -usepressure 1
+        -reflectionaboutorigin 0
+        -reflection 0
+        -projective 0
+        -showactive 1
+        -brushfeedback 1
+        -outwhilepaint 1
+        -outline 1
+        -accopacity 0
+        -brushalignment 1
+        -exportaspectratio 1
+        -stampDepth 0.5
+        -stampSpacing 0.1
+        -screenRadius 1
+        -worldRadius 0.706675
+        -lowerradius 0.001
+        -opacity 0.005
+        -reflectionaxis "x" 
+        -exportfiletype "IFF" 
+        -exportfilemode "luminance" 
+        -importfilemode "luminance" 
+        -strokesmooth "spline" 
+        -mappressure "Opacity" 
+        -paintmode "tangent" 
+        -paintoperationtype "Paint" 
+        -dragSlider "none" 
+        -radius 0.706675
+        -stampProfile "gaussian" 
+        -exportfilesizex 256
+        -exportfilesizey 256
+        -whichTool "skinWeights" 
+        -selectedattroper "absolute" 
+        -value 1
+        -minvalue 0
+        -maxvalue 1
+        -clamplower 0
+        -clampupper 1
+        -alphaclamplower 0
+        -alphaclampupper 1
+        -clamp "none" 
+        -alphaclamp "none" 
+        -dataTypeIndex 1
+        -colorfeedback 1
+        -colorfeedbackOverride 0
+        -disablelighting 1
+        -colorrangelower 0
+        -colorrangeupper 1
+        -interactiveUpdate 1
+        -colorAlphaValue 1 
+        -useColorRamp 0
+        -useMaxMinColor 1
+        -rampMinColor 0 0 0 
+        -rampMaxColor 1 1 1 
+        -colorRamp "1,0,0,1,1,1,0.5,0,0.8,1,1,1,0,0.6,1,0,1,0,0.4,1,0,0,1,0,1" 
+        -influence "R_Lower_Arm_Bind_01_Sleeve_Jnt" 
+        -xrayJoints 0
+        -skinPaintMode 1
+        -paintSelectMode 1
+`;
+    toolButton -edit -tool $gBuffStr1 -toolImage1 $gBuffStr1 "paintSkinWeights.xpm" $gBuffStr;
+    toolButton -edit -tool $gBuffStr1 $gBuffStr;
+
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Split Polygon Tool: Select a point on an edge to start cutting the face" 
+        -enableBackground 0
+        -align "center" 
+        -label "Split Polygon Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "polySplitFacet.xpm" 
+        -image1 "polySplitFacet.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "SplitPolygonTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "SplitPolygonToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Sculpt Geometry Tool: Sculpt a geometry object" 
+        -enableBackground 0
+        -align "center" 
+        -label "Sculpt Geometry Tool" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "putty.xpm" 
+        -image1 "putty.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "SculptGeometryTool" 
+        -sourceType "mel" 
+        -doubleClickCommand "SculptGeometryToolOptions" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Lattice" 
+        -enableBackground 0
+        -align "center" 
+        -label "Lattice" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "lattice.xpm" 
+        -image1 "lattice.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "global proc latticeGroup ()\n{\n\tstring $lattice[] = `lattice  -divisions 2 5 2 -objectCentered true  -ldv 2 2 2`;\n\tstring $group = `group $lattice`;\n}\n\nlatticeGroup;\n" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "addGeoDeformerSet" 
+        -enableBackground 0
+        -align "center" 
+        -label "addGeoDeformerSet" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "MEM" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "addGeoDeformerSet;" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "weightWindow" 
+        -enableBackground 0
+        -align "center" 
+        -label "weightWindow" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "WW" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "weightWindow" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "toolBoxWin" 
+        -enableBackground 0
+        -align "center" 
+        -label "toolBoxWin" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "TBW" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "toolBoxWin" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "connectAttr -f ControllerGroupVisibility.LeftArmDeformControls L..." 
+        -enableBackground 0
+        -align "center" 
+        -label "connectAttr -f ControllerGroupVisibility.LeftArmDeformControls L..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "CVGc" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "connectAttr -f ControllerGroupVisibility.LeftArmDeformControls LT_Arm_Wire.envelope;\r\nconnectAttr -f ControllerGroupVisibility.RightArmDeformControls RT_Arm_Wire.envelope;\r\nconnectAttr -f ControllerGroupVisibility.SpineDeformControls Spine_Wire.envelope;\r\nconnectAttr -f ControllerGroupVisibility.HeadDeformControls Head_Wire.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls RT_Leg_Wire.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls LT_Leg_Wire.envelope;\r\nconnectAttr -f ControllerGroupVisibility.HeadDeformControls Head_Deformer_Rot_03_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.HeadDeformControls Head_Deformer_Rot_02_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.HeadDeformControls Head_Deformer_Rot_01_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.SpineDeformControls Spine_Deformer_Rot_01_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.SpineDeformControls Spine_Deformer_Rot_02_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.SpineDeformControls Spine_Deformer_Rot_03_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LeftArmDeformControls LT_Arm_Deformer_Rot_01_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LeftArmDeformControls LT_Arm_Deformer_Rot_02_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LeftArmDeformControls LT_Arm_Deformer_Rot_03_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls LT_Leg_Deformer_Rot_01_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls LT_Leg_Deformer_Rot_02_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls LT_Leg_Deformer_Rot_03_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls RT_Leg_Deformer_01_CL.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls RT_Leg_Deformer_02_CL.envelope;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls RT_Leg_Deformer_03_CL.envelope;\r\nconnectAttr -f ControllerGroupVisibility.RightArmDeformControls RT_Arm_Deformer_Rot_01_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.RightArmDeformControls RT_Arm_Deformer_Rot_02_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.RightArmDeformControls RT_Arm_Deformer_Rot_03_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.StomachDeformControls Stomach_Deformer_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.StomachDeformControls Chest_Deformer_CLCluster.envelope;\r\nconnectAttr -f ControllerGroupVisibility.HeadDeformControls Head_Squash_Deformer_CLCluster.envelope;\r\n\r\nconnectAttr -f ControllerGroupVisibility.HeadDeformControls Head_Deformer_Ctrl_Group.visibility;\r\nconnectAttr -f ControllerGroupVisibility.SpineDeformControls Spine_Deformer_Ctrl_Group.visibility;\r\nconnectAttr -f ControllerGroupVisibility.LeftArmDeformControls LT_Arm_Deformer_Ctrl_Group.visibility;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls LT_Leg_Deformer_Ctrl_Group.visibility;\r\nconnectAttr -f ControllerGroupVisibility.LegDeformControls RT_Leg_Deformer_Ctrl_Group.visibility;\r\nconnectAttr -f ControllerGroupVisibility.RightArmDeformControls RT_Arm_Deformer_Ctrl_Group.visibility;\r\nconnectAttr -f ControllerGroupVisibility.StomachDeformControls |Stomach_Deformer_Ctrl_Group.visibility;\r\nconnectAttr -f ControllerGroupVisibility.HeadDeformControls Head_Squash_Deformer_Ctrl.visibility;" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "global proc setSkinValue ()\r{\r\r\tif (`window -q -exists setSkinVa..." 
+        -enableBackground 0
+        -align "center" 
+        -label "global proc setSkinValue ()\r{\r\r\tif (`window -q -exists setSkinVa..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "SSV" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "setSkinValue" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "newCluster \" -envelope 1\";" 
+        -enableBackground 0
+        -align "center" 
+        -label "newCluster \" -envelope 1\";" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "tinyBoldLabelFont" 
+        -imageOverlayLabel "newCL" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "commandButton.xpm" 
+        -image1 "commandButton.xpm" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "string $sel[] = `ls -fl -sl`;\n\nfor($obj in $sel)\n{\n\tselect -cl;\n\tselect $obj;\n\tnewCluster \" -envelope 1\";\n}" 
+        -sourceType "mel" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import UILib\n\nwin = UILib.ToolBoxWin()\nwin.show()" 
+        -enableBackground 0
+        -align "center" 
+        -label "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "Tool" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import UILib\n\ntry:\n\twin.close()\nexcept:\n\tpass\n\nwin = UILib.ToolBoxWin()\nwin.show()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import MayaScripts\n\nMayaScripts.zeroOut()" 
+        -enableBackground 0
+        -align "center" 
+        -label "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "Zero" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import MayaScripts\n\nMayaScripts.zeroOut()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "joints = cmds.ls(type = 'joint')\ntransforms = cmds.ls(type = 'transform')\nlocators = cmds.ls(type = 'locator')\n\nallTransforms = joints+transforms+locators\nfor transform in allTransforms:\n    cmds.select(transform)\n    if  cmds.toggle( q = True,localAxis = True):\n        cmds.toggle( localAxis = True)\n        \ncmds.select(cl = True)" 
+        -enableBackground 0
+        -align "center" 
+        -label "joints = cmds.ls(type = 'joint')\ntransforms = cmds.ls(type = 'tr..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "joints = cmds.ls(type = 'joint')\ntransforms = cmds.ls(type = 'transform')\nlocators = cmds.ls(type = 'locator')\n\nallTransforms = joints+transforms+locators\nfor transform in allTransforms:\n    cmds.select(transform)\n    if  cmds.toggle( q = True,localAxis = True):\n        cmds.toggle( localAxis = True)\n        \ncmds.select(cl = True)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\njoints = cmds.ls(type = 'joint')\n\nunlockJnts = cmds.ls(sl = True)\n\nfor joint in joints:\n    try:\n        cmds.setAttr('%s.liw'%joint,1)\n        print 'locked %s'%joint\n    except:\n        pass\n        \nfor joint in unlockJnts:\n    try:\n        cmds.setAttr('%s.liw'%joint,0)\n        print 'unlocked %s'%joint\n    except:\n        pass" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\n\njoints = cmds.ls(type = 'joint')\n\nunlo..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "UnLoc" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\njoints = cmds.ls(type = 'joint')\n\nunlockJnts = cmds.ls(sl = True)\n \nfor joint in joints:\n    try:\n        cmds.setAttr('%s.liw'%joint,1)\n        print 'locked %s'%joint\n    except:\n        pass\n       \nfor joint in unlockJnts:\n\t\ttry:\n\t\t\tcmds.setAttr('%s.liw'%joint,0)\n\t\t\tprint 'unlocked %s'%joint\n\t\texcept:\n\t\t\tpass" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import MayaScripts\n\nMayaScripts.switchInfluence()" 
+        -enableBackground 0
+        -align "center" 
+        -label "import sys\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "SwiInf" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.2 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import sys\nimport maya.cmds as cmds\n\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import MayaScripts\nreload(MayaScripts)\n\ncmds.setToolTo('artAttrSkinPaintCtx1')\nMayaScripts.switchInfluence()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.OpenMaya as om\nimport maya.OpenMayaAnim as oma\nimport maya.cmds as cmds\nimport sys\n\nimport sys\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import cvshapeinverter\n\ncvshapeinverter.invert()" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.OpenMaya as om\nimport maya.OpenMayaAnim as oma\nimpor..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.OpenMaya as om\nimport maya.OpenMayaAnim as oma\nimport maya.cmds as cmds\nimport sys\n\nimport sys\nif not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:\n    sys.path.append('C:/Users/Bill/workspace/BelalBallout')\n\nfrom scripts import cvshapeinverter\n\ncvshapeinverter.invert()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -enable 1
+        -width 35
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True, fl = True)\n\nfor vert in sel:\n    pos = cmds.xform(vert,q = True, ws = True, translation = True)\n    cmds.move(0,pos[1],pos[2],vert,ws = True)" 
+        -enableBackground 0
+        -align "center" 
+        -label "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True, fl = True)\n\nf..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.25 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\nsel = cmds.ls(sl = True, fl = True)\n\nfor vert in sel:\n    pos = cmds.xform(vert,q = True, ws = True, translation = True)\n    cmds.move(0,pos[1],pos[2],vert,ws = True)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+
+} 

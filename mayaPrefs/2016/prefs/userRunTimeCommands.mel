@@ -4,17 +4,553 @@
 
 runTimeCommand
 	-annotation "BSB_MM (Press)"
-	-category "Other items.User Marking Menus"
+	-category "User Marking Menus"
 	-hotkeyCtx ""
 	-commandLanguage "mel"
-	-command ("if (`popupMenu -exists tempMM`) { deleteUI tempMM; }\npopupMenu -button 1 -ctl true -alt false -sh false -allowOptionBoxes true -parent `findPanelPopupParent` -mm 1 tempMM; \nsource \"menu_BSB_MM\";\n")
+	-command ("if (`popupMenu -exists tempMM`) { deleteUI tempMM; }\npopupMenu -button 1 -ctl true -alt false -sh false -allowOptionBoxes true -parent viewPanes -mm 1 tempMM; \nsource \"menu_BSB_MM\";\n")
 	BSB_MM_Press;
 
 runTimeCommand
 	-annotation "BSB_MM (Release)"
-	-category "Other items.User Marking Menus"
+	-category "User Marking Menus"
 	-hotkeyCtx ""
 	-commandLanguage "mel"
 	-command ("if (`popupMenu -exists tempMM`) { deleteUI tempMM; }")
 	BSB_MM_Release;
+
+runTimeCommand
+	-annotation ""
+	-category "User"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("OhShiznit;")
+	ohShiznt;
+
+runTimeCommand
+	-annotation "Shave: select a preset and create a new hair node from it"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_createHairFromPresetSelect")
+	shaveSelectPresetAndCreateHair;
+
+runTimeCommand
+	-annotation "Shave: clone node heirarchy with hair"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_multiClone")
+	shaveMultiClone;
+
+runTimeCommand
+	-annotation "Shave: comb hair to match selected curves"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_recomb")
+	shaveCombFromCurves;
+
+runTimeCommand
+	-annotation "Shave: select a preset and apply it to the current hair node"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_copyHairFromPresetSelect")
+	shaveSelectAndApplyPreset;
+
+runTimeCommand
+	-annotation "Shave: set instance object"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_setInstance")
+	shaveSetInstance;
+
+runTimeCommand
+	-annotation "Shave: clear instance object"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_clearInstance")
+	shaveClearInstance;
+
+runTimeCommand
+	-annotation "Shave: change the set of surfaces from which hair grows"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_setHairMesh")
+	shaveUpdateGrowthSurfaces;
+
+runTimeCommand
+	-annotation "Shave: change the set of surfaces with which hair collides"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_setCollisionMesh")
+	shaveUpdateCollisionSurfaces;
+
+runTimeCommand
+	-annotation "Shave: clear the set of surfaces with which hair collides"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_clearCollisionMesh")
+	shaveClearCollisionSurfaces;
+
+runTimeCommand
+	-annotation "Shave: lock the current hair node's guides to a set of selected curves"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_createSplineLocks")
+	shaveCreateSplineLocks;
+
+runTimeCommand
+	-annotation "Shave: if the current hair node is spline locked, unlock it"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_deleteSplineLocks")
+	shaveDeleteSplineLocks;
+
+runTimeCommand
+	-annotation "Shave: create NURBS curves matching the current hair node's guides"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_guidesToCurves")
+	shaveCreateCurvesFromGuides;
+
+runTimeCommand
+	-annotation "Shave: create NURBS curves matching the current hair node's hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_hairsToCurves")
+	shaveCreateCurvesFromHairs;
+
+runTimeCommand
+	-annotation "Shave: create poly meshes matching the current hair node's hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_hairsToPolys")
+	shaveCreatePolysFromHairs;
+
+runTimeCommand
+	-annotation "Shave: create a vertex shader"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_createVertexShader \"\"")
+	shaveCreateVertexShader;
+
+runTimeCommand
+	-annotation "Shave: re-synch a vertex shader to match its corresponding hair node"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_synchShader \"\"")
+	shaveSynchVertexShader;
+
+runTimeCommand
+	-annotation "Shave: edit associations between Shave parameters and surface UV maps"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveLinkingEditor")
+	shaveUVLinkingEditor;
+
+runTimeCommand
+	-annotation "Shave: reset the current hair node's rest pose"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_resetRest")
+	shaveResetRestPose;
+
+runTimeCommand
+	-annotation "Shave: delete the current hair node"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveDeleteCurrent")
+	shaveDelete;
+
+runTimeCommand
+	-annotation "Shave: set scale select for all nodes"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_ScaleSelectAll")
+	shaveScaleSelectAll;
+
+runTimeCommand
+	-annotation "Shave: set scale select for current node"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_ScaleSelectCurrent")
+	shaveScaleSelectCurrent;
+
+runTimeCommand
+	-annotation "Shave: edit global settings"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveGlobalsEditor")
+	shaveEditGlobalSettings;
+
+runTimeCommand
+	-annotation "Shave: select the current hair node's growth surfaces"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_selectMesh growth")
+	shaveSelectGrowthSurfaces;
+
+runTimeCommand
+	-annotation "Shave: select the current hair node's collision surfaces"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_selectMesh collision")
+	shaveSelectCollisionSurfaces;
+
+runTimeCommand
+	-annotation "Shave: synchronize the current hair node with its textures"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveUpdateTextures")
+	shaveSynchToTextures;
+
+runTimeCommand
+	-annotation "Shave: hide and unhide all the hair in the scene"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_toggleHideHair")
+	shaveToggleHideHair;
+
+runTimeCommand
+	-annotation "Shave: create a shelf containing shave styling tools"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveShelf_create")
+	shaveCreateShelf;
+
+runTimeCommand
+	-annotation "Shave: add shadow parameters to selected lights"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_addShadowParamsToLight \"\"")
+	shaveAddShadowParamsToLights;
+
+runTimeCommand
+	-annotation "Shave: remove shadow parameters from selected lights"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_removeShadowParamsFromLight \"\"")
+	shaveRemoveShadowParamsFromLights;
+
+runTimeCommand
+	-annotation "Shave: turn Live Mode (interactive dynamics) on and off"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_toggleLive")
+	shaveToggleLiveMode;
+
+runTimeCommand
+	-annotation "Shave: run and cache dynamics for the current hair node"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveDynamics current")
+	shaveRunDynamicsCurrent;
+
+runTimeCommand
+	-annotation "Shave: run and cache dynamics for all hair nodes"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveDynamics all")
+	shaveRunDynamicsAll;
+
+runTimeCommand
+	-annotation "Shave: clear the dynamics cache for the current hair node"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_clearDynamics \"\"")
+	shaveClearDynamicsCurrent;
+
+runTimeCommand
+	-annotation "Shave: clear the dynamics cache for all hair nodes"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_clearDynamics all")
+	shaveClearDynamicsAll;
+
+runTimeCommand
+	-annotation "Shave: select guides"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrush_setSelectMode guide")
+	shaveSelectGuides;
+
+runTimeCommand
+	-annotation "Shave: select vertices"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrush_setSelectMode vert")
+	shaveSelectVerts;
+
+runTimeCommand
+	-annotation "Shave: select guides by their roots"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrush_setSelectMode root")
+	shaveSelectByRoots;
+
+runTimeCommand
+	-annotation "Shave: select tips"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrush_setSelectMode tip")
+	shaveSelectTips;
+
+runTimeCommand
+	-annotation "Shave: grow selection by adding surrounding hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -growSelection")
+	shaveSelectGrow;
+
+runTimeCommand
+	-annotation "Shave: invert selection"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -invertSelection")
+	shaveSelectInverse;
+
+runTimeCommand
+	-annotation "Shave: move selected verts higher up hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -rotateSelectionUp")
+	shaveSelectRotateUp;
+
+runTimeCommand
+	-annotation "Shave: hide selected hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -hideSelection true")
+	shaveSelectHide;
+
+runTimeCommand
+	-annotation "Shave: unhide selected hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -hideSelection false")
+	shaveSelectUnhide;
+
+runTimeCommand
+	-annotation "Shave: split selected hairs from interpolation groups"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -splitSelection")
+	shaveSplitSelection;
+
+runTimeCommand
+	-annotation "Shave: merge interpolation groups of selected hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -mergeSelection")
+	shaveMergeSelection;
+
+runTimeCommand
+	-annotation "Shave: refresh textures"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveUpdateTextures")
+	shaveUpdateTexturesN;
+
+runTimeCommand
+	-annotation "Shave: Brush Mode: move/translate hair"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrushSetMode 0")
+	shaveBrushTranslateMode;
+
+runTimeCommand
+	-annotation "Shave: Brush Mode: resize/scale hair"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrushSetMode 1")
+	shaveBrushScaleMode;
+
+runTimeCommand
+	-annotation "Shave: Brush Mode: rotate hair about brush"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrushSetMode 2")
+	shaveBrushRotateMode;
+
+runTimeCommand
+	-annotation "Shave: Brush Mode: stand hair straight out from surface"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrushSetMode 3")
+	shaveBrushStandMode;
+
+runTimeCommand
+	-annotation "Shave: Brush Mode: puff hair out from surface"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrushSetMode 4")
+	shaveBrushPuffMode;
+
+runTimeCommand
+	-annotation "Shave: Brush Mode: clump hair together"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveBrushSetMode 5")
+	shaveBrushClumpMode;
+
+runTimeCommand
+	-annotation "Shave: Brush Tool: brush/style hair"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_brushTool false")
+	shaveBrushTool;
+
+runTimeCommand
+	-annotation "Shave: Brush Tool options"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_brushTool true")
+	shaveBrushToolOptions;
+
+runTimeCommand
+	-annotation "Shave: Cut Tool: cut hair"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_cutTool false")
+	shaveCutTool;
+
+runTimeCommand
+	-annotation "Shave: Cut Tool options"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shave_cutTool true")
+	shaveCutToolOptions;
+
+runTimeCommand
+	-annotation "Shave: attenuate hair"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -attenuate")
+	shaveAttenuate;
+
+runTimeCommand
+	-annotation "Shave: pop selected hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -popSelected")
+	shavePopSelected;
+
+runTimeCommand
+	-annotation "Shave: pop zero-sized hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -popZeroSized")
+	shavePopZeroSized;
+
+runTimeCommand
+	-annotation "Shave: recomb hair"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -recomb")
+	shaveRecomb;
+
+runTimeCommand
+	-annotation "Shave: replace rest position on hair"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -replaceRest")
+	shaveReplaceRest;
+
+runTimeCommand
+	-annotation "Shave: toggle collisions"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -tglCollision")
+	shaveTglCollision;
+
+runTimeCommand
+	-annotation "Shave: toggle hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveToggleHideHair")
+	shaveTglHairs;
+
+runTimeCommand
+	-annotation "Shave: lock hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -lock true")
+	shaveLockHair;
+
+runTimeCommand
+	-annotation "Shave: unlock hairs"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -lock false")
+	shaveUnlockHair;
+
+runTimeCommand
+	-annotation "Shave: undo last operation"
+	-category "Shave"
+	-hotkeyCtx ""
+	-commandLanguage "mel"
+	-command ("shaveStyle -undo")
+	shaveUndo;
 
