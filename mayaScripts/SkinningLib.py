@@ -186,6 +186,22 @@ class SkinningTool():
                 
         return outputSelectionList
     
+    def indexForInfluenceObject(self,influence):
+        '''
+        maya's skinclusterFn doesnt work well
+        this one is a replacement
+        input MDagPath (influence)
+        returns python int
+        '''
+        dagPathArray = om.MDagPathArray()
+        self.skinclusterFn.influenceObjects(dagPathArray)
+        dagPathArrayStr = []
+        for i in range(dagPathArray.length()):
+            dagPathArrayStr.append(dagPathArray[i].fullPathName())
+        
+        return dagPathArrayStr.index(influence.fullPathName())
+        
+    
     
     def getWeights(self,verts,influence):
         
@@ -196,7 +212,7 @@ class SkinningTool():
         returns MDoubleArray (weights)
         '''
         
-        index = self.skinclusterFn.indexForInfluenceObject(influence)
+        index = self.indexForInfluenceObject(influence)
         weights = om.MDoubleArray()
         self.skinclusterFn.getWeights(GenAPI.getDagPath(self.shape),verts,index,weights)
         return weights
@@ -211,7 +227,7 @@ class SkinningTool():
         input python float list (weightList)
         '''
         
-        index = self.skinclusterFn.indexForInfluenceObject(influence)
+        index = self.indexForInfluenceObject(influence)
         util = om.MScriptUtil()
         weights = om.MFloatArray()        
         util.createFloatArrayFromList(weightList,weights)
@@ -227,6 +243,26 @@ class SkinningTool():
             self.skinclusterFn.setWeights(self.shapePath,vert,index,weightList[vertIndex],True,oldValues)
             
             meshVertItr.next()
+            
+            
+    def setWeightList(self,influence,weightList):
+        
+        '''
+        set influence value ONLY WORKS FOR POLY MESH
+        input MDagPath (influence)
+        input python float list (weightList)
+        '''
+        
+        index = self.indexForInfluenceObject(influence)
+        mIntArray = om.MIntArray()
+        mIntArray.append(index)
+        util = om.MScriptUtil()
+        weights = om.MFloatArray()        
+        util.createFloatArrayFromList(weightList,weights)
+        oldValues = om.MFloatArray()    
+        verts = GenAPI.getMObjectAllVerts(self.shape)   
+        self.skinclusterFn.setWeights(self.shapePath,verts,mIntArray,weights,True,oldValues)
+
     
     
     def getWeightsFromLattice(self,influence):
@@ -653,9 +689,4 @@ def skinclusterFromMesh(meshFrom,meshTo,joints):
         cmds.delete(floatingJointList[i])
         
     progressWin.end()
-            
-        
-        
-        
-    
     

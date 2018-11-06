@@ -8,16 +8,21 @@ import os,sys
 from collections import OrderedDict
 import simplejson as json
 import maya.cmds as cmds
-from PySide import QtGui,QtCore
-from scripts import SkinningLib,GenAPI
 
-sys.path.append('G:/dwtv/hub/Tools/Rig/scripts/rig')
+try:
+    from PySide2 import QtWidgets,QtCore
+except ImportError:
+    from PySide2 import QtWidgets as QtWidgets
+    from PySide2 import QtCore
+from mayaScripts import SkinningLib,GenAPI
+
+sys.path.append('C:/rig_menu/python/rig')
 from dw_autoRig.AutoRigUI.UIModules import dwUILib
 
-path = __file__.split('saveWeights.py')[0]
-UIPATH = '%ssaveWeights2.ui'%path
+PATH = __file__.split('saveWeights.py')[0]
+UIPATH = '%ssaveWeights2.ui'%PATH
 
-class SaveWeightsUI(QtGui.QMainWindow):
+class SaveWeightsUI(QtWidgets.QMainWindow):
     def __init__(self,parent=dwUILib.getMayaWindow()):
         super(SaveWeightsUI, self).__init__(parent)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)        
@@ -63,12 +68,11 @@ class SaveWeightsFn(QtCore.QObject):
         skincluster = self.checkForSkincluster(mesh)
         skinTool = SkinningLib.SkinningTool(skincluster,mesh)
         influences = skinTool.getInfluencesFromSkincluster()
-        
+        verts = GenAPI.getMObjectAllVerts(mesh)
         for i in range(influences.length()):
-            verts = GenAPI.getMObjectAllVerts(mesh)
             weights = skinTool.getWeights(verts,influences[i])
             weightList = GenAPI.createListFromDoubleArray(weights)
-            skinData[influences[i].fullPathName()] = weightList
+            skinData[influences[i].fullPathName().split('|')[-1]] = weightList
                
         return skinData
     
@@ -134,11 +138,10 @@ class SaveWeightsFn(QtCore.QObject):
     def saveSkinData(self):
         with open(self.filePath,'w') as f:
             json.dump(self.skinDataScene,f, indent=4 * ' ')
+        print 'saved weights'
             
-    def bind(self):
-        data = self.skinDataFile
+    def bind(self,data):
         meshes = data.keys()
-
         for mesh in meshes:
             if mesh in self.selection:
                 if not mesh in self.missingMeshes:
@@ -147,15 +150,19 @@ class SaveWeightsFn(QtCore.QObject):
                     for influence in skinDataList:
                         bindJoints.append(influence) 
                     if not mesh in self.skinnedMeshes:
-                        cmds.skinCluster(mesh,bindJoints)
+                        cmds.skinCluster(mesh,bindJoints,rui=False,omi=False,mi=1)
                     else:
-                        cmds.confirmDialog(message='Adding missing influences for %s'%mesh)
                         skincluster = self.checkForSkincluster(mesh)
+                        skinTool = SkinningLib.SkinningTool(shape=mesh,skincluster=skincluster)
+                        influenceDagArray = skinTool.getInfluencesFromSkincluster()
+                        influenceList = GenAPI.getShortNamesFromDagArray(influenceDagArray)
+                        #cmds.confirmDialog(message='Adding missing influences for %s'%mesh)
                         for influence in bindJoints:
-                            try:
-                                cmds.skinCluster(skincluster, e=True, weight=0, addInfluence=influence)
-                            except RuntimeError:
-                                pass
+                            if not influence in influenceList:
+                                try:
+                                    cmds.skinCluster(skincluster, e=True, weight=0, addInfluence=influence)
+                                except RuntimeError:
+                                    pass
                     
     def loadWeights(self,holdLocked=False):
         data = self.skinDataFile
@@ -167,7 +174,7 @@ class SaveWeightsFn(QtCore.QObject):
                 bindCheck=True
         if bindCheck:
             self.progress.progressC.emit('Binding...')
-            self.bind()
+            self.bind(data)
             
         noMeshData = []
         progressItrA = 100.0/len(self.selection)

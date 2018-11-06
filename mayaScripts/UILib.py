@@ -10,6 +10,7 @@ import maya.cmds as cmds
 
 try:
     from PySide import QtGui,QtCore  # @UnresolvedImport
+    from PySide.QtGui import QColor
     
     try:
         from PySide import shiboken
@@ -17,6 +18,7 @@ try:
         import shiboken
 except ImportError:
     from PySide2 import QtWidgets as QtGui
+    from PySide2.QtGui import QColor
     from PySide2 import QtCore
     import shiboken2 as shiboken
     
@@ -1017,7 +1019,7 @@ class ColorPalette(QtGui.QDialog):
             
             button = QtGui.QPushButton()
             palette = button.palette()
-            color = QtGui.QColor()
+            color = QColor()
             color.setRgbF(self.indexColors[i][0],self.indexColors[i][1],self.indexColors[i][2])
             palette.setColor(button.backgroundRole(),color)
             button.setPalette(palette)

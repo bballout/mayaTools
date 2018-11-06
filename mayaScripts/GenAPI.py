@@ -335,3 +335,14 @@ def createDoubleArrayFromList(pyList):
         doubleArray.append(pyList[i])
         
     return doubleArray
+
+def getShortNamesFromDagArray(dagArray):
+    length = dagArray.length()
+    outList = []
+    for i in range(length):
+        longName = dagArray[i].fullPathName()
+        splitName = longName.split('|')
+        outList.append(splitName[-1])
+        
+    return outList
+        
