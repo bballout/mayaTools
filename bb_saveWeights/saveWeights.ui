@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>503</width>
+    <width>385</width>
     <height>313</height>
    </rect>
   </property>
@@ -62,10 +62,10 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QLineEdit" name="folderLineEdit"/>
+              <widget class="QLineEdit" name="fileLineEdit"/>
              </item>
              <item>
-              <widget class="QPushButton" name="folderPushButton">
+              <widget class="QPushButton" name="findFilePushButton">
                <property name="maximumSize">
                 <size>
                  <width>60</width>
@@ -80,38 +80,7 @@
             </layout>
            </item>
            <item>
-            <widget class="Line" name="line_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QLineEdit" name="fileLineEdit">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="filePathPushButton">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>60</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>File Path</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <layout class="QHBoxLayout" name="horizontalLayout_2"/>
            </item>
           </layout>
          </item>
@@ -194,7 +163,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>503</width>
+     <width>385</width>
      <height>21</height>
     </rect>
    </property>
@@ -206,7 +175,7 @@
   <connection>
    <sender>multiSelectionCheckBox</sender>
    <signal>clicked(bool)</signal>
-   <receiver>folderLineEdit</receiver>
+   <receiver>fileLineEdit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -222,7 +191,7 @@
   <connection>
    <sender>multiSelectionCheckBox</sender>
    <signal>clicked(bool)</signal>
-   <receiver>folderPushButton</receiver>
+   <receiver>findFilePushButton</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -232,38 +201,6 @@
     <hint type="destinationlabel">
      <x>337</x>
      <y>78</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>multiSelectionCheckBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>fileLineEdit</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>56</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>112</x>
-     <y>118</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>multiSelectionCheckBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>filePathPushButton</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>128</x>
-     <y>50</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>350</x>
-     <y>120</y>
     </hint>
    </hints>
   </connection>

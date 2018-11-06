@@ -20,20 +20,54 @@ sys.path.append('C:/rig_menu/python/rig')
 from dw_autoRig.AutoRigUI.UIModules import dwUILib
 
 PATH = __file__.split('saveWeights.py')[0]
-UIPATH = '%ssaveWeights2.ui'%PATH
+UIPATH = '%ssaveWeights.ui'%PATH
+
+print UIPATH
 
 class SaveWeightsUI(QtWidgets.QMainWindow):
     def __init__(self,parent=dwUILib.getMayaWindow()):
         super(SaveWeightsUI, self).__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)        
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)     
         uiFile = QtCore.QFile(UIPATH)
         uiFile.open(QtCore.QFile.ReadOnly)
         dwUILib.loadUI(uiFile,self)
         uiFile.close()
+        self.setGeometry(500,400,400,240)
+        self.setWindowTitle('Save Skin Weights')
+        
+        #adding icon to open folder button
+        #igRoot = os.environ['IG_ROOT']
+        #self.iconPath = igRoot + r"\tech_art\maya\shared\icons"
+        #self.folderIcon = QtWidgets.QIcon(os.path.join(self.iconPath, "folder.bmp"))
+        #self.openFolderPushButton.setIcon(self.folderIcon)
+        #self.openFolderPushButton.setToolTip('Set Directory')
+        self.findFilePushButton.clicked.connect(lambda: self.setNewDir())
+        self.loadWeightsPushButton.clicked.connect(lambda: self.loadWeights())
+        self.saveWeightsPushButton.clicked.connect(lambda: self.saveWeights())
+
+    def setNewDir(self):
+        startingPath = cmds.file(query = True,location = True).replace('/','\\')
+        newPath = cmds.fileDialog2(dialogStyle=0,fm=0,okc='Save',startingDirectory=startingPath)[0]
+        self.fileLineEdit.setText(newPath)
+        
+    def saveWeights(self):
+        filePath = self.fileLineEdit.text()
+        selection = cmds.ls(sl=True)
+        saveFn = SaveWeightsFn(selection=selection,filePath=filePath)
+        saveFn.saveSkinData()        
+        
+    def loadWeights(self):
+        filePath = self.fileLineEdit.text()
+        selection = cmds.ls(sl=True)
+        saveFn = SaveWeightsFn(selection=selection,filePath=filePath)
+        saveFn.loadWeights()
+        #saveFn.progress.progressB.connect(self.currentProgressBar.setValue)
+        self.connect(saveFn.progress,QtCore.SIGNAL('progressA(int)'),self.currentProgressBar,QtCore.SLOT('setValue(int)'),QtCore.Qt.DirectConnection)
+
 
 class Progress(QtCore.QObject):
-    progressA = QtCore.Signal(float)
-    progressB = QtCore.Signal(float)
+    progressA = QtCore.Signal(int)
+    progressB = QtCore.Signal(int)
     progressC = QtCore.Signal(str)
     def __init__(self, parent = None):
             QtCore.QObject.__init__(self, parent)
@@ -197,7 +231,7 @@ class SaveWeightsFn(QtCore.QObject):
                 t = 0
                 for influence in skinDataList:
                     t+=progressItrB
-                    self.progress.progressB.emit(t)
+                    self.progress.progressB.emit(int(t))
                     weightList = data[mesh][influence]
                     if cmds.objExists(influence):
                         skinningTool.setWeightList(GenAPI.getDagPath(influence),weightList)
@@ -209,4 +243,23 @@ class SaveWeightsFn(QtCore.QObject):
             
         if noMeshData:
             cmds.confirmDialog(message='There is no data for:\n %s \n in: \n %s'%(" ; ".join(noMeshData),self.filePath))
+            
+            
+            
+saveWeightWinVar = ''
+def open_win():
+    global saveWeightWinVar
+    try:
+        saveWeightWinVar.close()
+    except:
+        pass
+    
+    try:
+        cmds.deleteUI('saveWeightsWin')
+    except:
+        pass
+            
+    saveWeightWinVar = SaveWeightsUI()
+    saveWeightWinVar.show()
+
             
