@@ -1,39 +1,34 @@
+import maya.OpenMaya as om
+import maya.OpenMayaAnim as oma
 import maya.cmds as cmds
+import sys
 
-cmds.move(-1,0,0,'LF_uparm_bind_5',os = True, r = True)
-cmds.move(1,0,0,'LF_loarm_bind_1',os = True, r = True)
+import sys
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
 
-cmds.move(1,0,0,'RT_uparm_bind_5',os = True, r = True)
-cmds.move(-1,0,0,'RT_loarm_bind_1',os = True, r = True)
+from scripts import MeasuringLib
+reload(MeasuringLib)
+from scripts import RiggingLib
+reload(RiggingLib)
+from scripts import GenAPI
+reload(GenAPI)
+from  scripts import DeformerLib
+reload(DeformerLib)
 
-cmds.move(-1,0,0,'LF_upleg_bind_5',os = True, r = True)
-cmds.move(1,0,0,'LF_loleg_bind_1',os = True, r = True)
+meshes = ['nurbsToPoly1']
+transform = 'cluster3Handle'
+deformer = 'wire3'
 
-cmds.move(1,0,0,'RT_upleg_bind_5',os = True, r = True)
-cmds.move(-1,0,0,'RT_loleg_bind_1',os = True, r = True)
+DeformerLib.extrapWeightsToExistingDeformer(transform,meshes,deformer)
 
-cmds.move(1,0,0,'LF_wrist',os = True, r = True)
-cmds.move(-1,0,0,'RT_wrist',os = True, r = True)
+cmds.xform(q = True,ws = True,translation = True)
 
-cmds.move(1,0,0,'LF_uparm_bind_1',os = True, r = True)
-cmds.move(-1,0,0,'RT_uparm_bind_1',os = True, r = True)
+###
+DeformerLib.mirrorDeformer('Shirt_Geo','wire1')
 
-cmds.move(-1,0,0,'LF_upleg',os = True, r = True)
-cmds.move(1,0,0,'RT_upleg',os = True, r = True)
-##########################################################
-import maya.cmds as cmds
+DeformerLib.transferReverseWeightList('Shirt_Geo','wire6','wire7')
 
-cmds.move(1,0,0,'LF_uparm_bind_5',os = True, r = True)
-cmds.move(-1,0,0,'LF_loarm_bind_1',os = True, r = True)
+DeformerLib.transferWeightList('Skirt_Geo','wire3','wire5')
 
-cmds.move(-1,0,0,'RT_uparm_bind_5',os = True, r = True)
-cmds.move(1,0,0,'RT_loarm_bind_1',os = True, r = True)
-
-cmds.move(1,0,0,'LF_upleg_bind_5',os = True, r = True)
-cmds.move(-1,0,0,'LF_loleg_bind_1',os = True, r = True)
-
-cmds.move(-1,0,0,'RT_upleg_bind_5',os = True, r = True)
-cmds.move(1,0,0,'RT_loleg_bind_1',os = True, r = True)
-
-cmds.move(-1,0,0,'LF_wrist',os = True, r = True)
-cmds.move(1,0,0,'RT_wrist',os = True, r = True)
+DeformerLib.mirrorDeformerMultiMesh('LT_Shirt_Buttons_Geo','RT_Shirt_Buttons_Geo','wire1',axis = 'x',table = [-1,1,1])

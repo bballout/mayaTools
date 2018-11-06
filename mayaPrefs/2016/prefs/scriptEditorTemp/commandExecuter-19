@@ -1,39 +1,31 @@
-def createFollicle():
+import maya.OpenMaya as om
+import maya.cmds as cmds
 
-    sel = cmds.ls(sl = True,fl = True)
-    joints = []
-    follicles = []
-    for i in range(len(sel)):
-    
-        surfaceTransform = sel[i].split('.')[0]
-        #surfaceShape = cmds.listRelatives(surfaceTransform,type = 'shape')[0]
-        surfaceShape = surfaceTransform
-        uvPoint = sel[i]
-        
-        uvValues = cmds.polyEditUV(uvPoint,query = True)
-        uValue = uvValues[0]
-        vValue = uvValues[1]
-        
-          
-        follicle = cmds.createNode('follicle')
-        follicles.append(follicle)
-        follicleTransform = cmds.listRelatives(follicle,parent = True)[0]
-        cmds.connectAttr('%s.outTranslate'%follicle,'%s.translate'%follicleTransform)
-        cmds.connectAttr('%s.outRotate'%follicle,'%s.rotate'%follicleTransform)
-        
-        cmds.setAttr('%s.parameterU'%follicle,uValue)
-        cmds.setAttr('%s.parameterV'%follicle,vValue)
-        
-        cmds.connectAttr('%s.outMesh'%surfaceShape, '%s.inputMesh'%follicle,f = True)
-        cmds.connectAttr('%s.worldMatrix[0]'%surfaceShape, '%s.inputWorldMatrix'%follicle)
-        
-        cmds.select(cl = True)
-        rivetJoint = cmds.joint()
-        cmds.parentConstraint(follicleTransform,rivetJoint)
-        
-        joints.append(rivetJoint)
-        print uvValues
+objA = 'locator1'
+objB = 'locator2'
 
-    cmds.group(joints)
-    cmds.group(follicles)
-createFollicle()
+posObjA = cmds.xform(objA, q = True, ws = True, translation = True)
+posObjB = cmds.xform(objB, q = True, ws = True, translation = True)
+
+vectorA = om.MVector(posObjA[0],posObjA[1],posObjA[2])
+vectorB = om.MVector(posObjB[0],posObjB[1],posObjB[2])
+vectorC = vectorB - vectorA
+
+
+transformation = om.MTransformationMatrix()
+transformation.setTranslation(vectorA,om.MSpace.kWorld)
+transformation.addTranslation(vectorC,om.MSpace.kObject)
+
+worldTranslationVector = transformation.getTranslation(om.MSpace.kWorld)
+localTrnaslationVector = vectorC
+
+#cmds.move(worldTranslationVector.x, worldTranslationVector.y, worldTranslationVector.z )
+cmds.move(localTrnaslationVector.x, localTrnaslationVector.y, localTrnaslationVector.z ,r = True)
+
+#cmds.move(translateVector[0],translateVector[1],translateVector[2],r = True,os = True)
+#cmds.move(-0.107107, 0.640946, 1.343299 )
+
+'''
+0.107107 0.640946 1.343299 
+'''
+

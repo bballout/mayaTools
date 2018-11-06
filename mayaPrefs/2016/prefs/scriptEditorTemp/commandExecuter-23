@@ -1,17 +1,13 @@
-driver = 'turbulance_driver'
+import maya.cmds as cmds
 
-        
-        
-attrs = cmds.listAttr(driver,ud = True)
+selectTo = 'L_Elbow_Def_IB050_Geo'
 
-for attr in attrs:
-    if not attr == 'drive' and not attr == 'activate':
-        print attr
-        connection = cmds.connectionInfo('%s.%s'%(driver,attr),sfd = True)
-        mdNode = cmds.createNode('multiplyDivide')
-        cmds.connectAttr(connection,'%s.input1X'%mdNode)
-        cmds.connectAttr('root_CTRL.turbulance','%s.input2X'%mdNode)
-        cmds.connectAttr('%s.outputX'%mdNode,'%s.%s'%(driver,attr),f = True)
-        print connection
-        
-cmds.select(driver)
+sel = cmds.ls(sl = True, fl = True)
+
+cmds.select(cl = True)
+
+for obj in sel:
+    
+    component = obj.split('.')[1]
+    cmds.select('%s.%s'%(selectTo,component),add = True)
+    

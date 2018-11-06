@@ -1,25 +1,19 @@
-def createParamTracker(name = ''):
+import maya.OpenMaya as om
+import maya.OpenMayaAnim as oma
+import maya.cmds as cmds
+import sys
+
+import sys
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
     
-    sphere = cmds.sphere(n = '%s_Target_Surface'%name)[0]
-    sphereShape = cmds.listRelatives(sphere,type = 'shape')[0]
-    loc = cmds.spaceLocator(name = '%s_Target_Loc'%name)[0]
-    cmds.move(1,0,0,loc)
-    cpsNode = cmds.createNode('closestPointOnSurface',n = '%s_Target_CPS'%name)
-    cmds.connectAttr('%s.worldSpace[0]'%sphereShape,'%s.inputSurface'%cpsNode)
-    dmNode = cmds.createNode('decomposeMatrix',name = '%s_Target_DM'%name)
-    cmds.connectAttr('%s.worldMatrix[0]'%loc,'%s.inputMatrix'%dmNode)
-    cmds.connectAttr('%s.outputTranslate'%dmNode,'%s.inPosition'%cpsNode)
-    
-    cmds.addAttr(loc,ln = 'paramU',at = 'double')
-    cmds.setAttr('%s.paramU'%loc,e = True, keyable = True)
-    cmds.connectAttr('%s.result.parameterU'%cpsNode,'%s.paramU'%loc)
-    
-    cmds.addAttr(loc,ln = 'paramV',at = 'double')
-    cmds.setAttr('%s.paramV'%loc,e = True, keyable = True)
-    cmds.connectAttr('%s.result.parameterV'%cpsNode,'%s.paramV'%loc)
-    
-    grp = cmds.group(name = '%s_Target_Grp'%name,empty = True)
-    cmds.parent(sphere,grp)
-    cmds.parent(loc,grp)
-    
-createParamTracker(name = 'RT_Knee')
+from scripts import MayaScripts
+reload(MayaScripts)
+
+MayaScripts.makeRivets(iterations = 5,surfaceName = 'nurbsPlaneShape1',nodeNames = 'test')
+
+    iterations = (kwargs.get('iterations')-1.0)
+    surfaceName = kwargs.get('surfaceName')
+    nodeNames = kwargs.get('nodeNames')
+
+MayaScripts.createDistanceNode(start = 'pSphere1',end = 'pSphere2',name = 'distance')

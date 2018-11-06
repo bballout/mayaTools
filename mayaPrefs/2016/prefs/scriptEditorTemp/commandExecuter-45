@@ -1,3 +1,18 @@
 import maya.cmds as cmds
 
-cmds.setAttr('pSphereShape1.uuid','30B3F75E-4E98-C7D5-D4E8-C5920EEC7410')
+distance = 'L_Arm_01_Lower_DistanceShape'
+deformer = 'L_Arm_Def'
+
+length = cmds.getAttr('%s.distance'%distance)
+
+mdNode = cmds.createNode('multiplyDivide')
+cdNode = cmds.createNode('condition')
+cmds.connectAttr('%s.distance'%distance,'%s.input2X'%mdNode)
+cmds.setAttr('%s.input1X'%mdNode,length)
+cmds.setAttr('%s.operation'%mdNode,2)
+cmds.connectAttr('%s.outputX'%mdNode,'%s.firstTerm'%cdNode)
+cmds.connectAttr('%s.outputX'%mdNode,'%s.colorIfTrueR'%cdNode)
+cmds.setAttr ('%s.secondTerm'%cdNode, 1)
+cmds.setAttr ('%s.operation'%cdNode, 4)
+cmds.connectAttr('%s.outColorR'%cdNode,'%s.sy'%deformer)
+cmds.connectAttr('%s.outColorR'%cdNode,'%s.sz'%deformer)

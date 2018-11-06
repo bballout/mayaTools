@@ -1,17 +1,18 @@
-#havok prim flags
+import sys
+import maya.cmds as cmds
 
-sel = cmds.ls(sl = True)
-hp = []
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
 
-for obj in sel:
-    primShape = '%s_hkShape'%obj
-    hp.append(primShape)
+from scripts import MayaScripts
+reload(MayaScripts)
 
-for obj in hp:
-    cmds.setAttr('%s.kTargeting'%obj,1)
-    cmds.setAttr('%s.kHeroMove'%obj,1)
-    cmds.setAttr('%s.kMove'%obj,1)
-    cmds.setAttr('%s.kHeroAltMove'%obj,1)
-    cmds.setAttr('%s.kCamera'%obj,1)
-    cmds.setAttr('%s.kProjectile'%obj,1)
-    cmds.setAttr('%s.kGround'%obj,1)
+iterations = kwargs.get('iterations')
+surfaceName = kwargs.get('surfaceName')
+nodeNames = kwargs.get('nodeNames')
+closedSurface = kwargs.get('closedSurface',False)
+normalVector = kwargs.get('normalVector',(0,1,0))
+tangentVector = kwargs.get('tangentVector',(-1,0,0))
+
+MayaScripts
+

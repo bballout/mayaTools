@@ -1,10 +1,40 @@
-driver = 'wrinkle_driver'
-noise = 'noise'
-attrs = cmds.listAttr(driver, ud = True)
+import maya.cmds as cmds
+import maya.OpenMaya as om
+import GenAPI
 
-for attr in attrs:
-    connection = cmds.connectionInfo('%s.%s'%(driver,attr),sfd = True)
-    pma = cmds.createNode('plusMinusAverage')    
-    cmds.connectAttr('%s.output'%noise,'%s.input1D[0]'%pma)
-    cmds.connectAttr(connection,'%s.input1D[1]'%pma)
-    cmds.connectAttr('%s.output1D'%pma,'%s.%s'%(driver,attr),f = True)
+scaleVector = [-1,1,1]
+
+LObj = 'L_Ctrl'
+RObj = 'L_Ctrl'
+
+LObjPath = GenAPI.getDagPath(LObj)
+RObjPath = GenAPI.getDagPath(RObj)
+
+scaleDoubleArray = om.MScriptUtil()
+scaleDoubleArray.createFromList( scaleVector, 3 )
+scaleDoubleArrayPtr = scaleDoubleArray.asDoublePtr()
+
+LTransformFn = om.MFnTransform(LObjPath)
+LMatix = transformFn.transformationMatrix()
+LTransformationMatrix = om.MTransformationMatrix(matix)
+
+RTransformFn = om.MFnTransform(RObjPath)
+RMatix = transformFn.transformationMatrix()
+RTransformationMatrix = om.MTransformationMatrix(matix)
+RParentMatrix = 
+
+LEuelerRotation = LTransformationMatrix.eulerRotation()
+
+
+reflectionMatrix = om.MTransformationMatrix()
+reflectionMatrix.setScale(scaleDoubleArrayPtr,om.MSpace.kWorld)
+
+finalMatrix = transformationMatrix.asMatrix() * reflectionMatrix.asMatrix()
+finalTransformation = om.MTransformationMatrix(finalMatrix)
+
+translationVector = finalTransformation.getTranslation(om.MSpace.kWorld)
+
+
+
+cmds.move(translationVector.x,translationVector.y,translationVector.z,RObj,ws = True)
+cmds.rotate(euelerRotation.x,euelerRotation.y,euelerRotation.z,RObj,ws = True)

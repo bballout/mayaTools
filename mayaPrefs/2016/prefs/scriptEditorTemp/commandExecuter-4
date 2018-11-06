@@ -1,84 +1,26 @@
-import maya.cmds as cmds
-neckTwistJoints = ['neck1_twist','neck2_twist','neck3_twist','neck4_twist']
+ string $jnts = "Hip";
 
-ctrls = []
-#create controls
-for joint in neckTwistJoints:
-    nullCtrl = cmds.group(empty=True,name='%s_CTRL'%joint)
-    cmds.select(cl=True)
-    jointGrp = cmds.joint(name='%s_grp'%joint)
-    cmds.parent(nullCtrl,jointGrp)
-    tempCon = cmds.parentConstraint(joint,jointGrp)
-    cmds.delete(tempCon)
-    cmds.parent(jointGrp,'neck')
-    ctrls.append(nullCtrl)
+int $lockCheck = `getAttr ($jnts +".liw")`;
+
+listAttr -ud
+
+channelBox -q -sma "mainChannelBox"
 
 
-#creating ctrl constraint grps
-constraintGrps = []
-i = 1
-for ctrl in ctrls:
-    grp = cmds.group(empty = True, name = 'neck%i_twist_control_spaceConGrp'%i)
-    constraint = cmds.parentConstraint(ctrl, grp)
-    cmds.delete(constraint)
-    cmds.parent(grp,'neck%i_twist_grp'%i)
-    cmds.parent(ctrl, grp)
-    constraintGrps.append(grp)
-    i+=1
+joint;
+select -cl;
+joint;
+select -cl;
+joint;
+kSpaceSwitchConstraintCmd -n "FFfffuuu" "joint1" "joint2" "joint3" 
 
-neckOris = []    
-#create neck space transforms
-i = 1
-for ctrl in ctrls:
-    oriGrp = cmds.group(empty = True, name = 'neck%i_twist_control_ori_neck'%i)
-    parGrp = cmds.group(empty = True, name = 'neck%i_twist_control_oriPar_neck'%i)
-    cmds.parent(oriGrp,parGrp)
-    constraint = cmds.parentConstraint(ctrl, parGrp)
-    cmds.delete(constraint)
-    cmds.parent(parGrp, 'neck')
-    neckOris.append(oriGrp)
-    i+=1
 
-chestOris = []   
-#create neck space transforms
-i = 1
-for ctrl in ctrls:
-    oriGrp = cmds.group(empty = True, name = 'neck%i_twist_control_ori_chest'%i)
-    parGrp = cmds.group(empty = True, name = 'neck%i_twist_control_oriPar_chest'%i)
-    cmds.parent(oriGrp,parGrp)
-    constraint = cmds.parentConstraint(ctrl, parGrp)
-    cmds.delete(constraint)
-    cmds.parent(parGrp, 'chest')
-    chestOris.append(oriGrp)
-    i+=1
-    
-#create consraints
-i = 0
-oriConstraints = []
-for grp in constraintGrps:
-    oriConstraint = cmds.orientConstraint(chestOris[i],neckOris[i],constraintGrps[i],mo = True, skip = ['x','z'])
-    oriConstraints.append(oriConstraint[0])
-    i+=1
-    
-#add twist amount attrs
-for ctrl in ctrls:
-    cmds.addAttr(ctrl,ln='twistAmount',at='double',min=0,max=1,dv=0,keyable=True)
-       
-#connect twist attrs
-i = 0
-for ctrl in ctrls:
-    wal = cmds.orientConstraint(oriConstraints[i],q = True, wal = True)
-    cmds.connectAttr('%s.twistAmount'%ctrl,'%s.%s'%(oriConstraints[i],wal[1]))
-    rev = cmds.createNode('reverse',name = 'neck%i_twist_reverse'%(i+1))
-    cmds.connectAttr('%s.twistAmount'%ctrl,'%s.inputX'%rev)
-    cmds.connectAttr('%s.outputX'%rev,'%s.%s'%(oriConstraints[i],wal[0]))
-    i+=1
-    
-#constrain bind joint
-i=0
-for joint in neckTwistJoints:
-    cmds.parentConstraint(ctrls[i],joint)
-    i+=1
-    
-2.93688
-    
+sphere -r 2;
+move 3 5 6;
+sphere -r 1;
+move 8 7 1;
+sphere -r 0.5;
+move 1 0 1;
+kParentConstraintCmd  -n "FFfffuuu" -mo true "nurbsSphere1" "nurbsSphere2" "nurbsSphere3"  
+
+parentConstraint "la" "joint2" "joint3" "joint4"

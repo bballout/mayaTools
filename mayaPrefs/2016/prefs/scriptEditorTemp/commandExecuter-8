@@ -1,45 +1,40 @@
-#create joints
 import maya.cmds as cmds
+import maya.OpenMaya as om
 
-sel = cmds.ls(sl = True)
-cmds.select(cl = True)
-joints = []
-for obj in sel:
-    cmds.select(cl = True)
-    name = obj.split('_CTRL_Null')[0]
-    jnt = cmds.joint(name = name)
-    constraint = cmds.parentConstraint(obj,jnt)
-    cmds.delete(constraint)
-    joints.append(jnt)
-#parent joints
-for joint in joints:
-    cmds.parent(joint,'head')
+import sys
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
     
-cmds.parent('CTR_lolip','jaw')
+from scripts import GenAPI
 
-#select joints
-cmds.select(joints)
-    
-#add constraint
-cmds.setAttr("RT_corner_grp.tx",e = True,l = False)
-cmds.setAttr("RT_corner_grp.ty",e = True,l = False)
-cmds.setAttr("RT_corner_grp.tz",e = True,l = False)
-cmds.setAttr("LF_corner_grp.tx",e = True,l = False)
-cmds.setAttr("LF_corner_grp.ty",e = True,l = False)
-cmds.setAttr("LF_corner_grp.tz",e = True,l = False)
+transform = cmds.ls(sl = True)[0]
 
-lcon = cmds.parentConstraint('jaw_CTRL','head_CTRL','LF_corner_grp',mo = True,skipRotate = ['x','y','z'])
-rcon = cmds.parentConstraint('jaw_CTRL','head_CTRL','RT_corner_grp',mo = True,skipRotate = ['x','y','z'])
+curve = 'L_Eye_Lid_Ctrl_Crv'
+curveShapeDagPath = GenAPI.getDagPath(curve)
+transformPath = GenAPI.getDagPath(transform)
 
-cmds.setAttr("LF_corner_grp_parentConstraint1.head_CTRLW1", 0.5) 
-cmds.setAttr("RT_corner_grp_parentConstraint1.head_CTRLW1", 0.5) 
+transformFn = om.MFnTransform(transformPath)
+tranlateVector = transformFn.getTranslation(om.MSpace.kWorld)
+translatePoint = om.MPoint(tranlateVector.x,tranlateVector.y,tranlateVector.z)
 
-#add sdk eye lids
-cmds.addAttr('head_CTRL',ln = 'leftBlink', at = 'double',min = 0, max = 1,k = True)
-cmds.addAttr('head_CTRL',ln = 'rightBlink', at = 'double',min = 0, max = 1,k = True)
+util = om.MScriptUtil()
+util.createFromInt(0)
+paramPtr = util.asDoublePtr()
 
+closestPoint = curveFn.closestPoint(translatePoint,paramPtr,0.0001,om.MSpace.kWorld)
 
+curveFn = om.MFnNurbsCurve(curveShapeDagPath)
+curveFn.getParamAtPoint(closestPoint,paramPtr,0.001,om.MSpace.kWorld)
 
+param = util.getDouble(paramPtr)
 
+pocNode = cmds.createNode('pointOnCurveInfo')
+cmds.connectAttr('%s.worldSpace[0]'%curve,'%s.inputCurve'%pocNode)
+cmds.setAttr('%s.parameter'%pocNode,param)
 
+locator = cmds.spaceLocator()[0]
+grp = cmds.group(empty = True)
+cmds.parent(locator,grp)
+
+cmds.connectAttr('%s.position'%pocNode,'%s.translate'%grp)
 

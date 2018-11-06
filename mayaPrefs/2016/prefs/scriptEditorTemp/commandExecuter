@@ -1,24 +1,210 @@
-sel = cmds.ls(sl = True)
-clusterHandles = []
-for obj in sel:
-    clusterHandle = cmds.cluster(obj)[1]
-    pivotPos = cmds.xform(obj, q = True,ws = True,rp = True)
-    cmds.setAttr('%s.rotatePivotX'%clusterHandle,pivotPos[0])
-    cmds.setAttr('%s.rotatePivotY'%clusterHandle,pivotPos[1])
-    cmds.setAttr('%s.rotatePivotZ'%clusterHandle,pivotPos[2])
-    
-    cmds.setAttr('%s.scalePivotX'%clusterHandle,pivotPos[0])
-    cmds.setAttr('%s.scalePivotY'%clusterHandle,pivotPos[1])
-    cmds.setAttr('%s.scalePivotZ'%clusterHandle,pivotPos[2])
-    
-    clusterHandles.append(clusterHandle)
-    
-handles = cmds.ls(sl = True)
-for handle in handles:
-    cmds.select(cl = True)
-    joint = cmds.joint()
-    constraint = cmds.parentConstraint(handle,joint)
-    cmds.delete(constraint)
-    cmds.select(cl = True)
-    
-cmds.delete(handles)
+////////////////////////////////////////////////////////////////////
+///////////////////Facial Ctrl Toggle//////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+string $facialCtrlVis = `getAttr "ControllerGroupVisibility.FaceControls"`;
+
+if($facialCtrlVis == 0) 
+	setAttr "ControllerGroupVisibility.FaceControls" 1;
+
+if($facialCtrlVis == 1) 
+	setAttr "ControllerGroupVisibility.FaceControls" 0;
+
+
+
+string $facialCtrlVis = `getAttr "ControllerGroupVisibility.FaceControls"`;if($facialCtrlVis == 0) setAttr "ControllerGroupVisibility.FaceControls" 1;if($facialCtrlVis == 1) setAttr "ControllerGroupVisibility.FaceControls" 0;
+
+/////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////
+///////////////////Teeth Ctrl Toggle//////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+string $teethCtrlVis = `getAttr "ControllerGroupVisibility.TeethControls"`;
+
+if($teethCtrlVis == 0) 
+	setAttr "ControllerGroupVisibility.TeethControls" 1;
+
+if($teethCtrlVis == 1) 
+	setAttr "ControllerGroupVisibility.TeethControls" 0;
+
+
+string $teethCtrlVis = `getAttr "ControllerGroupVisibility.TeethControls"`;if($teethCtrlVis == 0) setAttr "ControllerGroupVisibility.TeethControls" 1; if($teethCtrlVis == 1) setAttr "ControllerGroupVisibility.TeethControls" 0;
+
+
+/////////////////////////////////////////////////////////////////////////////
+///////////////LT Arm Def Ctrl Vis//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+string $LTArmCtrlVis = `getAttr "ControllerGroupVisibility.LeftArmDeformControls"`;
+
+if ($LTArmCtrlVis == 0)
+{
+	setAttr "ControllerGroupVisibility.LeftArmDeformControls" 1;
+}
+
+if ($LTArmCtrlVis == 1)
+{
+	setAttr "ControllerGroupVisibility.LeftArmDeformControls" 0;
+}
+
+string $LTArmCtrlVis = `getAttr "ControllerGroupVisibility.LeftArmDeformControls"`;if ($LTArmCtrlVis == 0){setAttr "ControllerGroupVisibility.LeftArmDeformControls" 1;}if ($LTArmCtrlVis == 1){setAttr "ControllerGroupVisibility.LeftArmDeformControls" 0;}
+
+
+/////////////////////////////////////////////////////////////////////////////
+///////////////RT Arm Def Ctrl Vis//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+string $RTArmCtrlVis = `getAttr "ControllerGroupVisibility.RightArmDeformControls"`;
+
+if ($RTArmCtrlVis == 0)
+{
+	setAttr "ControllerGroupVisibility.RightArmDeformControls" 1;
+}
+
+if ($RTArmCtrlVis == 1)
+{
+	setAttr "ControllerGroupVisibility.RightArmDeformControls" 0;
+}
+
+string $RTArmCtrlVis = `getAttr "ControllerGroupVisibility.RightArmDeformControls"`;if ($RTArmCtrlVis == 0){setAttr "ControllerGroupVisibility.RightArmDeformControls" 1;}if ($RTArmCtrlVis == 1){setAttr "ControllerGroupVisibility.RightArmDeformControls" 0;}
+
+/////////////////////////////////////////////////////////////////////////////
+///////////////Leg Def Ctrl Vis//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+string $LegCtrlVis = `getAttr "ControllerGroupVisibility.LegDeformControls"`;
+
+if ($LegCtrlVis == 0)
+{
+	setAttr "ControllerGroupVisibility.LegDeformControls" 1;
+}
+
+if ($LegCtrlVis == 1)
+{
+	setAttr "ControllerGroupVisibility.LegDeformControls" 0;
+}
+
+string $LegCtrlVis = `getAttr "ControllerGroupVisibility.LegDeformControls"`;if ($LegCtrlVis == 0){setAttr "ControllerGroupVisibility.LegDeformControls" 1;}if ($LegCtrlVis == 1){setAttr "ControllerGroupVisibility.LegDeformControls" 0;}
+
+
+////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////
+///////////////////Head Ctrl Toggle//////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+string $headCtrlVis = `getAttr "ControllerGroupVisibility.HeadDeformControls"`;
+
+if($headCtrlVis == 0)
+	setAttr "ControllerGroupVisibility.HeadDeformControls" 1;
+
+if($headCtrlVis == 1)
+	setAttr "ControllerGroupVisibility.HeadDeformControls" 0;
+
+string $headCtrlVis = `getAttr "ControllerGroupVisibility.HeadDeformControls"`;if($headCtrlVis == 0)setAttr "ControllerGroupVisibility.HeadDeformControls" 1;if($headCtrlVis == 1)setAttr "ControllerGroupVisibility.HeadDeformControls" 0;
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////Spine  Ctrl Toggle//////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+string $spineCtrlVis = `getAttr "ControllerGroupVisibility.SpineDeformControls"`;
+
+if($spineCtrlVis == 0)
+	setAttr "ControllerGroupVisibility.SpineDeformControls" 1;
+
+if($spineCtrlVis == 1)
+	setAttr "ControllerGroupVisibility.SpineDeformControls" 0;
+
+
+string $spineCtrlVis = `getAttr "ControllerGroupVisibility.SpineDeformControls"`;if($spineCtrlVis == 0)setAttr "ControllerGroupVisibility.SpineDeformControls" 1;if($spineCtrlVis == 1)setAttr "ControllerGroupVisibility.SpineDeformControls" 0;
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////Clothing Ctrl Toggle//////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+string $clothingCtrlVis = `getAttr "ControllerGroupVisibility.ClothingControls"`;if($clothingCtrlVis == 0) setAttr "ControllerGroupVisibility.ClothingControls" 1;if($clothingCtrlVis == 1) setAttr "ControllerGroupVisibility.ClothingControls" 0;
+
+//////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////Stomach Ctrl Toggle//////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+string $stomachVisValue = `getAttr "ControllerGroupVisibility.StomachDeformControls"`;
+
+if($stomachVisValue == 0)
+	setAttr "ControllerGroupVisibility.StomachDeformControls" 1;	
+
+if($stomachVisValue == 1)
+	setAttr "ControllerGroupVisibility.StomachDeformControls" 0;	
+
+string $stomachVisValue = `getAttr "ControllerGroupVisibility.StomachDeformControls"`;if($stomachVisValue == 0)setAttr "ControllerGroupVisibility.StomachDeformControls" 1;	if($stomachVisValue == 1)setAttr "ControllerGroupVisibility.StomachDeformControls" 0;
+
+////////////////////////////////////////////////////////////////////////
+///////////////////Ska-Doosh////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+string $skadoosh = `getAttr "ControllerGroupVisibility.SkaDooshDeformControls"`;
+
+if($skadoosh == 0)
+	setAttr "ControllerGroupVisibility.SkaDooshDeformControls" 1;
+
+if($skadoosh == 1)
+	setAttr "ControllerGroupVisibility.SkaDooshDeformControls" 0;
+
+
+string $skadoosh = `getAttr "ControllerGroupVisibility.SkaDooshDeformControls"`;if($skadoosh == 0)setAttr "ControllerGroupVisibility.SkaDooshDeformControls" 1;if($skadoosh == 1)setAttr "ControllerGroupVisibility.SkaDooshDeformControls" 0;
+
+
+
+setAttr "Transform.LT_Arm_IKFK" 10;
+setAttr "Transform.RT_Arm_IKFK" 10;
+setAttr "Transform.LT_Leg_IKFK" 10;
+setAttr "Transform.RT_Leg_IKFK" 10;
+
+setAttr "Transform.LT_Arm_IKFK" 0;
+setAttr "Transform.RT_Arm_IKFK" 0;
+setAttr "Transform.LT_Leg_IKFK" 0;
+setAttr "Transform.RT_Leg_IKFK" 0;
+
+/////////////////////////////////////////////////////////////////////////////////////////
+string $hatControls = `getAttr "Hat_Ctrl.CtrlVis"`;
+
+if ($hatControls == 1)
+{
+	setAttr "Hat_Ctrl.CtrlVis" 0;
+}
+
+if ($hatControls == 0)
+{
+	setAttr "Hat_Ctrl.CtrlVis" 1;
+}
+
+string $hatControls = `getAttr "Hat_Ctrl.CtrlVis"`;if ($hatControls == 1);if ($hatControls == 1){setAttr "Hat_Ctrl.CtrlVis" 0;}if ($hatControls == 0){setAttr "Hat_Ctrl.CtrlVis" 1;}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+string $beardControls = `getAttr "ControllerGroupVisibility.BeardControls"`;
+
+if ($beardControls == 1)
+{
+	setAttr "ControllerGroupVisibility.BeardControls" 0;
+}
+
+if ($beardControls == 0)
+{
+	setAttr "ControllerGroupVisibility.BeardControls" 1;
+}
+
+string $beardControls = `getAttr "ControllerGroupVisibility.BeardControls"`;if ($beardControls == 1){setAttr "ControllerGroupVisibility.BeardControls" 0;}if ($beardControls == 0){setAttr "ControllerGroupVisibility.BeardControls" 1;}
+
+/////////////////////////////////////////////////////////////////////////////////////	
+
+string $beardControls = `getAttr "ControllerGroupVisibility.TailDeformControls"`;if ($beardControls == 1){setAttr "ControllerGroupVisibility.TailDeformControls" 0;}if ($beardControls == 0){setAttr "ControllerGroupVisibility.TailDeformControls" 1;}
+
+
+move -rpr -0.107107 0.640946 1.343299

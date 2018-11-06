@@ -1,18 +1,17 @@
-#create override switch for corrective blends
-
+import maya.OpenMaya as om
 import maya.cmds as cmds
 
-driver = 'corrective_driver'
-switch = 'root_CTRL.correctiveBlends'
-attrs = cmds.listAttr(driver,ud = True)
+vectorA = cmds.getAttr('vectorProduct1.input1')[0]
+vectorB = cmds.getAttr('vectorProduct1.input2')[0]
 
-for attr in attrs:
+mVectorA = om.MVector(vectorA[0],vectorA[1],vectorA[2])
+mVectorB = om.MVector(vectorB[0],vectorB[1],vectorB[2])
 
-    mdNode = cmds.createNode('multiplyDivide')
-    cmds.connectAttr(switch,'%s.input1X'%mdNode)
-    connection = cmds.connectionInfo('%s.%s'%(driver,attr),sfd = True)
-    cmds.connectAttr(connection,'%s.input2X'%mdNode)
-    cmds.connectAttr('%s.outputX'%mdNode,'%s.%s'%(driver,attr),f = True)
-    print connection
-    
-###############
+mVectorA.normalize()
+mVectorB.normalize()
+
+mVectorPlane = om.MVector(0,-1,0)
+cross = mVectorA ^ mVectorPlane
+
+dot = mVectorB * cross
+print dot

@@ -1,6 +1,26 @@
-import igCinematicManager2
-reload(igCinematicManager2)
+import MayaScripts
+reload(MayaScripts)
 
-manager = igCinematicManager2.igCinematicManagerMainClass()
-shotlist = manager.exportShotList2()
-shotlist['Shots']
+import maya.cmds as cmds
+
+MayaScripts.createMoPathLoc('R_Clav_01_Crv')
+
+locators = cmds.ls(sl = True)
+MayaScripts.makeFloatingJoints(locators = locators, name = 'R_Clav_01')
+
+paramNodes = cmds.ls(sl = True)
+transforms = cmds.ls(sl = True)
+
+paramNodes.sort()
+transforms.sort()
+
+curve = 'L_Clav_01_Crv'
+MayaScripts.twistInterp(obj = curve,transforms = transforms,paramNodes = paramNodes)
+
+cmds.listRelatives('L_Clav_01_Floating_01_Jnt', parent = True)
+
+MayaScripts.antiTwistInterp(name = 'R_Clav',transforms = transforms,paramNodes = paramNodes,axis = 'rotateX')
+
+sel = cmds.ls(sl = True)
+for obj in sel:cmds.setAttr('%s.rotateOrder'%obj,4)
+

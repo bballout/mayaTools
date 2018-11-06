@@ -1,20 +1,24 @@
-assetPath = 'X:/i20/devel/assets...'
+import maya.OpenMaya as om
+import maya.OpenMayaAnim as oma
+import maya.cmds as cmds
+import sys
 
-import igPerforceTools
+import sys
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
 
-p4 = igPerforceTools.igP4()
-p4.connect()
-p4.sync(assetPath)
-p4.disconnect()
+from scripts import BlendShapeLib
+reload(BlendShapeLib)
+from scripts import MeasuringLib
+reload(MeasuringLib)
 
+deformTransform = 'DeformerTransform'
+poseMesh = 'PoseMesh'
+sculptedShape = 'SculptMesh'
+origShape = 'OrigMesh'
+outShape = 'OutMesh'
 
-import sys 
-import os
-import maya.mel as mel
+weightList = MeasuringLib.MeasuringTool.createWeigthListFromInfluence2(poseMesh,deformTransform)
 
-if not 'C:/Users/bballout/git/mayaTools' in sys.path:
-	sys.path.append('C:/Users/bballout/git/mayaTools')
-
-from mayaScripts import cvshapeinverter
-
-cvshapeinverter.invert()
+shapeTool = BlendShapeLib.ShapeTool('PoseMesh') 
+shapeTool.createInvertedShape(sculptedShape,origShape,outShape,deformTransform,weightList) 

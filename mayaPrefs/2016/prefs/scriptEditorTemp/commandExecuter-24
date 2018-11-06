@@ -1,22 +1,12 @@
+import maya.OpenMaya as om
+import maya.OpenMayaAnim as oma
 import maya.cmds as cmds
+import sys
 
-blendShapeNodes = ['jacketBlends','pantsBlends']
+import sys
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
 
+from scripts import cvshapeinverter
 
-for blendShapeNode in blendShapeNodes:
-    
-    blendAttrs = cmds.aliasAttr(blendShapeNode, q = True)
-    attrs = []
-    
-    for attr in blendAttrs:
-        if not 'weight'in attr:
-            attrs.append(attr)
-    i = 0   
-    for attr in attrs:
-            connection = cmds.connectionInfo('%s.%s'%(blendShapeNode,attr),sfd = True)
-            attrName = 'igMorph_%s_target%i'%(blendShapeNode,i)
-            
-            cmds.addAttr('root', longName = attrName, attributeType = 'double',keyable = True )
-            cmds.connectAttr(connection,'root.%s'%attrName)
-            
-            i += 1
+cvshapeinverter.invert()

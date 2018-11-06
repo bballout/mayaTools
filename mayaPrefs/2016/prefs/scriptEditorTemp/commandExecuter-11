@@ -1,28 +1,12 @@
-#################################################
+import sys
 
-blendname = 'blendShape20'
-geoName = 'geo_jacketOpenButtons_suit'
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
 
+from scripts import BlendShapeLib
+reload(BlendShapeLib)
 
-blendAttrs = cmds.aliasAttr(blendname, q = True)
-attrs = []
-
-for attr in blendAttrs:
-    if not 'weight'in attr:
-        attrs.append(attr)
-        
-i = 0
-for attr in attrs:
-    cmds.setAttr('%s.%s'%(blendname,attr),0)
-    
-grp = cmds.group(empty = True)
-
-for attr in attrs:
-    print attr
-    for zAttr in attrs:
-        cmds.setAttr('%s.%s'%(blendname,zAttr),0)
-        
-    cmds.setAttr('%s.%s'%(blendname,attr),1)
-    dup = cmds.duplicate(geoName)
-    cmds.parent(dup,grp)
-    cmds.rename(dup,attr)
+selection = ['joint1','joint2']
+name = 'test'
+startVector = [0,-1,0]
+BlendShapeLib.createParamTracker(selection = selection,name = name,startVector = startVector)

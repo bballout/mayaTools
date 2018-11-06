@@ -1,8 +1,22 @@
 import maya.cmds as cmds
 
 sel = cmds.ls(sl = True)
+rivetSurface = 'R_Eye_LookAt_Rivet_SurfaceShape'
+upLoc = 'R_Eye_Lid_CPS_Up_Loc'
 
 for obj in sel:
-    collGrp = cmds.group(empty = True, name = 'coll_%s'%obj)
-    pc = cmds.parentConstraint(obj, collGrp, mo = False)
-    cmds.delete(pc)
+    name = obj.split('_Loc')[0]
+    follicleTransform = '%s_Follicle'%name
+    follicle = '%s_FollicleShape'%name
+    trackingLoc = cmds.spaceLocator(name = '%s_Aim_Loc'%name)[0]
+    cpsNode = cmds.createNode('closestPointOnSurface',name = '%s_CPS'%name)
+    dmNode = cmds.createNode('decomposeMatrix',name = '%s_DM'%name)
+    cmds.connectAttr('%s.worldMatrix[0]'%obj,'%s.inputMatrix'%dmNode)
+    cmds.connectAttr('%s.outputTranslate'%dmNode,'%s.inPosition'%cpsNode)
+    cmds.connectAttr('%s.worldSpace[0]'%rivetSurface,'%s.inputSurface'%cpsNode)
+    cmds.connectAttr('%s.result.parameterU'%cpsNode,'%s.parameterU'%follicle)
+    cmds.connectAttr('%s.result.parameterV'%cpsNode,'%s.parameterV'%follicle)
+    cmds.pointConstraint(follicleTransform,trackingLoc)
+    aimConstraint = cmds.aimConstraint(obj,trackingLoc)[0]
+    cmds.setAttr('%s.worldUpType'%aimConstraint,1)
+    cmds.connectAttr('%s.worldMatrix[0]'%upLoc,'%s.worldUpMatrix'%aimConstraint)

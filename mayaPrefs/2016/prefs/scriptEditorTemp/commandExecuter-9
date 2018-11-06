@@ -1,30 +1,23 @@
-#blend shape stuff
-
-#transfer normals
+import maya.OpenMaya as om
+import maya.OpenMayaAnim as oma
 import maya.cmds as cmds
-basemesh = 'Buttoned_dress_jacket'
-cbs = 'LF_jacket_armOut_cbs'
+import sys
 
-cmds.transferAttributes(basemesh, cbs, transferPositions=0, transferNormals=1, transferUVs=0, transferColors=0, 
-    sampleSpace=4, sourceUvSpace="map1", targetUvSpace="map1", searchMethod=3, flipUVs=0, colorBorders=1)
-    
-#select target's component
-sel = cmds.ls(sl = True,fl = True)
-corrective = 'jacketCorrectives|RT_armDownBack_cbs'
-selList = []
-for obj in sel:
-    component = obj.split('.')[1]
-    newComp = '%s.%s'%(corrective,component)
-    selList.append(newComp)
-    
-cmds.select(selList)
+import sys
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
 
-#subtract shape
-fromShape = 'LF_jacket_armOut_cbs_inverted1'
-toShape = 'LF_jacket_clavUp_cbs_inverted'
-newMesh = 'jacket_closed1'
-
-from mayaScripts import BlendShapeLib
-blendshapeTool = BlendShapeLib.ShapeTool(fromShape)
-translateVectors = blendshapeTool.getTranslationVectors(toShape)
-blendshapeTool.setTranslation(newMesh,translateVectors)
+from scripts import MeasuringLib
+reload(MeasuringLib)
+from scripts import RiggingLib
+reload(RiggingLib)
+from scripts import GenAPI
+reload(GenAPI)
+from  scripts import DeformerLib
+reload(DeformerLib)
+from scripts import ToolBoxFn
+reload(ToolBoxFn)
+from scripts import UILib
+reload(UILib)
+from scripts import MayaScripts
+reload(MayaScripts)

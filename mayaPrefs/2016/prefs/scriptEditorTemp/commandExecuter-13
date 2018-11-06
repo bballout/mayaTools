@@ -1,34 +1,67 @@
+'''
+Created on Oct 24, 2013
+
+@author: Bill
+'''
+import sys
 import maya.cmds as cmds
 
-#parent proxies to joints
-sel = cmds.ls(sl = True)
-for obj in sel:
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
 
-    split1 = obj.split('geo_proxy_')[1]
-    jointName = split1.split('_meshVis')[0]
-    cmds.parent(obj,jointName)
+from scripts import MayaScripts
+reload(MayaScripts)
 
-#connect proxy vis      
-sel = cmds.ls(sl = True)
-for obj in sel:
-    try:
-        cmds.connectAttr('root_CTRL.displayMode','%s.visibility'%obj,f = True)
-    except:
-        pass
+MayaScripts.createMoPathLoc('Spine_01_Up_Crv')
 
-#connect skinned geo vis    
-sel = cmds.ls(sl = True)
-reverse = cmds.createNode('reverse')
-cmds.connectAttr('root_CTRL.displayMode','%s.inputX'%reverse)
+#args for ribbon creation
+locators = cmds.ls(sl = True)
+numLocators = len(locators)
+name = 'Spine_01'
+close = False
+vector = [1,0,0]
+width = 1.5
+
+#create ribbon
+ribbon = MayaScripts.buildRibbonSurface(locators = locators,name = name,close = close,vector = vector,width = width)
 
 
-for obj in sel:
-    cmds.connectAttr('%s.outputX'%(reverse),'%s.visibility'%obj,f =True)
+#args for rivets
+iterations = numLocators
+normalVector = (0,1,0)
+tangentVector = (1,0,0)
+name = 'Spine_01'
+
+rivets = MayaScripts.makeRivets(iterations = iterations,surfaceName = ribbon[1],nodeNames = name,
+            closedSurface = False,normalVector = (0,1,0),tangentVector = (1,0,0))
+
+                  
+MayaScripts.deleteRivets()      
+#tread anim attr
+cmds.addAttr(ribbon[0],ln = 'tread',at = 'double')
+cmds.setAttr('%s.tread'%ribbon[0],e = True,keyable = True)
+
+for rivet in rivets:
+    vValue = cmds.getAttr('%s.vValue'%rivet)
+    mdNode = cmds.createNode('multiplyDivide',n = '%s_MD'%rivet)
+    cmds.setAttr('%s.input1X'%mdNode,0.005)
+    pmaNode = cmds.createNode('plusMinusAverage',n = '%s_PMA'%rivet)
+    cmds.connectAttr('%s.tread'%ribbon[0],'%s.input2X'%mdNode)
+    cmds.connectAttr('%s.outputX'%mdNode,'%s.input1D[0]'%pmaNode)
+    cmds.setAttr('%s.input1D[1]'%pmaNode,vValue)
+    cmds.connectAttr('%s.output1D'%pmaNode,'%s.vValue'%rivet)
     
     
-refPaths = cmds.file(q = True, r = True)
+#cancle rotateX
 
+jointGrps = cmds.ls(sl = True)
 
+for jointGrp in jointGrps:
+    name = jointGrp.split('_Jnt_Grp')[0]
+    child = cmds.listRelatives(jointGrp,children = True)[0]
+    mdNode = cmds.createNode('multiplyDivide',name = '%s_Reverse_MD'%name )
+    cmds.connectAttr('%s.rotateX'%jointGrp,'%s.input1X'%mdNode)
+    cmds.setAttr('%s.input2X'%mdNode,-1)
+    cmds.connectAttr('%s.outputX'%mdNode,'%s.rotateX'%child)
+    
 
-reload(igGeoCache)
-igGeoCache.getFileRefs()

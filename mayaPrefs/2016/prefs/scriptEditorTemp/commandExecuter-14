@@ -1,29 +1,29 @@
-#extract blends
-
+import sys
 import maya.cmds as cmds
 
-blendname = 'blendShape14'
-geoName = 'geo_jacketOpen_suit'
-
-blendAttrs = cmds.aliasAttr(blendname, q = True)
-attrs = []
-
-for attr in blendAttrs:
-    if not 'weight'in attr:
-        attrs.append(attr)
-        
-i = 0
-for attr in attrs:
-    cmds.setAttr('%s.%s'%(blendname,attr),0)
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
     
-grp = cmds.group(empty = True)
+from scripts import GenAPI 
+from autoRig import Component
+from autoRig.Component import dwBaseRig
+from autoRig.Component import dwFKRig
+from autoRig.Component import dwControls
+reload(dwBaseRig)
+reload(dwFKRig)
+reload(dwControls)
 
-for attr in attrs:
-    print attr
-    for zAttr in attrs:
-        cmds.setAttr('%s.%s'%(blendname,zAttr),0)
-        
-    cmds.setAttr('%s.%s'%(blendname,attr),1.0)
-    dup = cmds.duplicate(geoName)
-    cmds.parent(dup,grp)
-    cmds.rename(dup,attr)
+fkRig = dwFKRig.FKRig(name = 'L_Arm')
+
+fkRig.layoutData['count'] = 5
+fkRig.layoutData['positions'] = [[0,1,0],[0,2,0],[0,3,0],[0,4,0],[0,5,0]]
+fkRig.layoutData['auto'] = False
+fkRig.layoutData['autoCount'] = 0
+fkRig.layoutData['reorient'] = True
+fkRig.layoutData['aimAxis'] = [1,0,0]
+fkRig.layoutData['upAxis'] = [0,1,0]
+
+fkRig.buildLayout()
+fkRig.buildRig()
+fkRig.clearSetup()
+

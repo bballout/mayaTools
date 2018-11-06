@@ -1,31 +1,37 @@
-def createFollicle():
+import maya.cmds as cmds
 
-    sel = cmds.ls(sl = True,fl = True)
-    
-    for i in range(len(sel)):
-    
-        surfaceTransform = sel[i].split('.')[0]
-        '''
-        surfaceShape = cmds.listRelatives(surfaceTransform,type = 'shape')[0]
-        uvPoint = sel[i]
-        '''
-        surfaceShape = surfaceTransform
-        uvPoint = sel[i]
-        
-        uvValues = cmds.polyEditUV(uvPoint,query = True)
-        uValue = uvValues[0]
-        vValue = uvValues[1]
-        
-            
-        follicle = cmds.createNode('follicle')
-        follicleTransform = cmds.listRelatives(follicle,parent = True)[0]        
-        cmds.connectAttr('%s.outTranslate'%follicle,'%s.translate'%follicleTransform)
-        cmds.connectAttr('%s.outRotate'%follicle,'%s.rotate'%follicleTransform)
-        
-        cmds.setAttr('%s.parameterU'%follicle,uValue)
-        cmds.setAttr('%s.parameterV'%follicle,vValue)
-        
-        cmds.connectAttr('%s.outMesh'%surfaceShape, '%s.inputMesh'%follicle,f = True)
-        cmds.connectAttr('%s.worldMatrix[0]'%surfaceShape, '%s.inputWorldMatrix'%follicle)
-        
-createFollicle()
+cmds.loadPlugin('multiplyMatrixNode.py',qt= True)
+
+reflection = [-1,1,1]
+
+LCtrl = 'L_Ctrl'
+RCtrl = 'R_Ctrl'
+
+null = cmds.group(empty = True)
+constraint = cmds.parentConstraint(LCtrl,null,mo = False)
+cmds.delete(constraint)
+
+nullGrp = cmds.group(empty = True)
+cmds.parent(null,nullGrp)
+cmds.scale(reflection[0],reflection[1],reflection[2],nullGrp)
+cmds.parent(null,w = True)
+cmds.delete(nullGrp)
+
+translation = cmds.xform(null,q = True,ws = True,translation = True)
+
+cmds.move(0,0,0,null,ws = True)
+
+multiplyMatrixNode = cmds.createNode('kMultiplyMatrixNode')
+decomposeMatrixNode = cmds.createNode('decomposeMatrix')
+cmds.connectAttr('%s.parentMatrix'%(RCtrl),'%s.matrixA'%multiplyMatrixNode)
+cmds.connectAttr('%s.matrix'%(null),'%s.matrixB'%multiplyMatrixNode)
+cmds.connectAttr('%s.outMatrix'%multiplyMatrixNode,'%s.inputMatrix'%decomposeMatrixNode)
+
+rotateX = cmds.getAttr('%s.outputRotate.outputRotateX'%decomposeMatrixNode)
+rotateY = cmds.getAttr('%s.outputRotate.outputRotateY'%decomposeMatrixNode)
+rotateZ = cmds.getAttr('%s.outputRotate.outputRotateZ'%decomposeMatrixNode)
+
+cmds.delete(null,multiplyMatrixNode,decomposeMatrixNode)
+
+cmds.move(translation[0],translation[1],translation[2],RCtrl,ws =True)
+cmds.rotate(rotateX,rotateY,rotateZ,RCtrl,ws = True)

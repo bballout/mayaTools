@@ -1,28 +1,31 @@
-import maya.cmds as cmds
+def addInbetweenShape():
+    import pymel.core as pm
 
-animCameraShape = '?NS?igCam_Animation'
-cmds.lookThru(animCameraShape)
-
+    #Adds InBetweens for properly named and connected shapes
+    objects = pm.ls(sl = 1)
+    base = str(objects.pop(-1))
     
-def getShotFromCamera(camera):
+    baseInputs = pm.listHistory(base)
     
-    def getShotInfo(shotNode):
-        startFrame = cmds.shot(shotNode,q = True,startTime = True)
-        endFrame = cmds.shot(shotNode,q = True,endTime = True)
-        camera = cmds.shot(shotNode,q = True,currentCamera = True)
-        return startFrame,endFrame,camera
+    for b in baseInputs:
+        if b.nodeType() == 'blendShape':
+            blShape = b
     
-    shots = cmds.ls(type = 'shot')
-    for shot in shots:
-        info = getShotInfo(shot)
-        camNS = camera.split(':')[0]
-        shotCamNS = info[2].split(':')[0]
-        if camNS == shotCamNS:
-            return shot,info[0],info[1]
+    targets = blShape.getTarget()
     
-shotInfo = getShotFromCamera(animCameraShape)
-cmds.playbackOptions(e = 1, ast = shotInfo[1])
-cmds.playbackOptions(e = 1, aet = shotInfo[2])
-cmds.playbackOptions(e = 1, min = shotInfo[1])
-cmds.playbackOptions(e = 1, max = shotInfo[2])
-cmds.currentTime(shotInfo[1])   
+    for o in objects:
+        nameList = o.split('_')
+        ibSuffix = nameList.pop()
+        ibTarget = '_'.join(nameList)
+        ibName = str(o)
+        ibWeight = int(ibSuffix.strip('IB')) * .01
+        
+        print ibWeight
+        print ibTarget
+        ibIndex = targets.index(ibTarget)
+        
+        print ibIndex
+    pm.blendShape(str(blShape), e = 1, ib = 1,tc = False, t = (base, ibIndex, ibName, ibWeight))
+    
+    
+addInbetweenShape()

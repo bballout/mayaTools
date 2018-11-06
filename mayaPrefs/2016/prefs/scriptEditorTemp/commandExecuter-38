@@ -1,24 +1,71 @@
+import maya.cmds as cmds
+searchFor = 'L_'
+replaceWith = 'R_'
 
-table 	= QtGui.QTableWidget()
-tableItem 	= QtGui.QTableWidgetItem()
+sel = cmds.ls(sl = True)
+connections = cmds.listConnections(skipConversionNodes = True)
+sdks = []
+blendWeights = []
 
-# initiate table
-table.setWindowTitle("QTableWidget Example @pythonspot.com")
-table.resize(400, 250)
-table.setRowCount(4)
-table.setColumnCount(2)
+for connection in connections:
+    if cmds.nodeType(connection) == 'animCurveUA':
+        sdks.append(connection)
 
-# set data
-table.setItem(0,0, QTableWidgetItem("Item (1,1)"))
-table.setItem(0,1, QTableWidgetItem("Item (1,2)"))
-table.setItem(1,0, QTableWidgetItem("Item (2,1)"))
-table.setItem(1,1, QTableWidgetItem("Item (2,2)"))
-table.setItem(2,0, QTableWidgetItem("Item (3,1)"))
-table.setItem(2,1, QTableWidgetItem("Item (3,2)"))
-table.setItem(3,0, QTableWidgetItem("Item (4,1)"))
-table.setItem(3,1, QTableWidgetItem("Item (4,2)"))
-table.setItem(10,1, QTableWidgetItem("Item (5,2)"))
-
-# show table
-table.show()
+    if cmds.nodeType(connection) == 'blendWeighted':
+        blendWeights.append(connection)
+        
+for sdk in sdks:
+    name = '%s%s'%(replaceWith,sdk.split(searchFor)[1])
+    dupsdk = cmds.duplicate(sdk,name = name)[0]
+    inputConnection = cmds.connectionInfo('%s.input'%sdk,sfd = True)
+    oppInput = '%s%s'%(replaceWith,inputConnection.split(searchFor)[1])
+    cmds.connectAttr(oppInput,'%s.input'%dupsdk)
+    outConnection = cmds.connectionInfo('%s.output'%sdk,dfs = True)[0]
+    oppOutput = '%s%s'%(replaceWith,outConnection.split(searchFor)[1])
+    cmds.connectAttr('%s.output'%dupsdk,oppOutput)
+    cmds.select(dupsdk)
  
+for blendWeight in blendWeights:
+    i = 0
+    connections = cmds.listConnections(blendWeight,skipConversionNodes = True,d = False)
+    dupBlend = cmds.duplicate(blendWeight)[0]
+    print dupBlend
+    
+    for sdk in connections:
+        try:
+            name = '%s%s'%(replaceWith,sdk.split(searchFor)[1])
+            dupsdk = cmds.duplicate(sdk,name = name)[0]
+            inputConnection = cmds.connectionInfo('%s.input'%sdk,sfd = True)
+            oppInput = '%s%s'%(replaceWith,inputConnection.split(searchFor)[1])
+            cmds.connectAttr(oppInput,'%s.input'%dupsdk)
+            outConnection = cmds.connectionInfo('%s.output'%sdk,dfs = True)[0]
+            oppOutput = '%s%s'%(replaceWith,outConnection.split(searchFor)[1])
+            cmds.connectAttr('%s.output'%dupsdk,oppOutput)
+            cmds.select(dupsdk)
+            i+=1
+        except:
+            #name = '%s%s'%(replaceWith,sdk.split(searchFor)[1])
+            dupsdk = cmds.duplicate(sdk)[0]
+            inputConnection = cmds.connectionInfo('%s.input'%sdk,sfd = True)
+            oppInput = '%s%s'%(replaceWith,inputConnection.split(searchFor)[1])
+            cmds.connectAttr(oppInput,'%s.input'%dupsdk)
+            outConnection = cmds.connectionInfo('%s.output'%sdk,dfs = True)[0]
+            print dupBlend
+            cmds.connectAttr('%s.output'%dupsdk,'%s.input[%i]'%(dupBlend,i))
+            cmds.select(dupsdk)
+            i+=1
+    
+           
+    outConnections = cmds.connectionInfo('%s.output'%blendWeight,dfs = True)[0]
+    print outConnections
+    if cmds.nodeType(outConnections.split('.')[0]) == 'unitConversion':
+        input = cmds.connectionInfo('%s.output'%outConnections.split('.')[0],dfs = True)[0]
+    else:    
+        input = '%s%s'%(replaceWith,outConnections.split(searchFor)[1])
+        
+    oppInput = '%s%s'%(replaceWith,input.split(searchFor)[1])
+    #print oppInput
+    cmds.connectAttr('%s.output'%dupBlend,oppInput)
+    
+cmds.artAttrSkinPaintCtx('artAttrSkinPaintCtx1')
+

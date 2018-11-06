@@ -1,16 +1,16 @@
-import sys 
-import os
-import maya.mel as mel
-import maya.OpenMaya as om
+import sys
+import maya.cmds as cmds
 
-if not 'C:/Users/bballout/git/mayaTools' in sys.path:
-	sys.path.append('C:/Users/bballout/git/mayaTools')
-	
-from mayaScripts import GenAPI
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
+    
+from autoRig import Component
+from autoRig.Component import TreadScript
+reload(TreadScript)
 
+selection =  cmds.ls(sl = True)
+selection.sort()
 
-inMesh = GenAPI.getMObject('pPlaneShape1')
-meshFn = om.MFnMesh(inMesh)
-colors = om.MColorArray()
-colorSet = 'polyColorPerVertex1'
-meshFn.getColors(colors)
+TreadScript.build(name = 'L_Mid_Track',selection = selection,width = 50)
+
+cmds.skinCluster('TempName_Floating_36_Jnt','TempName_Floating_01_Jnt','TempName_36_Lattice',mi = 1)

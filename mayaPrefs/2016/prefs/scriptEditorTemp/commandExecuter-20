@@ -1,7 +1,25 @@
-reload(igCinematicManager)
-igCinematicManager.exportAll()
+global proc AEkRBFNodeTemplate( string $nodeName ) { 
+    editorTemplate -beginScrollLayout;
 
-cmds.about(version = True)
+    //Add the stringAttr control
+    editorTemplate -addControl "stringAttr";
 
+    //Add the enumAttr control
+    editorTemplate -addControl "enumAttr";
 
-import igMayaFileOpenCallback
+    //Add the numAttr control
+    editorTemplate -addControl "numAttr";
+
+    //Since this is derived from a transform node, we should add the template 
+    //from a transform node AEtransformMain $nodeName; 
+    AEtransformNoScroll $nodeName; 
+    editorTemplate -addExtraControls; 
+    editorTemplate -endScrollLayout; 
+}
+AEkRBFNodeTemplate "kRBFNode1"
+
+connectAttr -f Spine_01_01_FollicleShape.parameterU kCurveInterpolateNode1.value[0];
+connectAttr -f Spine_01_02_FollicleShape.parameterU kCurveInterpolateNode1.value[1];
+connectAttr -f Spine_01_03_FollicleShape.parameterU kCurveInterpolateNode1.value[2];
+connectAttr -f Spine_01_04_FollicleShape.parameterU kCurveInterpolateNode1.value[3];
+connectAttr -f Spine_01_05_FollicleShape.parameterU kCurveInterpolateNode1.value[4];

@@ -1,15 +1,23 @@
-# Import the module
-import subprocess
+import maya.cmds as cmds
 
-process = subprocess.Popen([r'C:\Users\bballout\Desktop\test.bat'],shell = True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr = subprocess.STDOUT)
-grep_stdout = process.communicate(input='echo c')[0]
-print(grep_stdout.decode())
+def moveShape(ctrlFrom,ctrlTo):
 
+    
+    grp = cmds.group(empty = True)
+    cmds.parentConstraint(ctrlTo,grp)
+    cmds.parent(ctrlFrom,grp)
+    cmds.makeIdentity(ctrlFrom,t = True,r = True,s = True,apply = True)
+    
+    ctrlFromShapes = cmds.listRelatives(ctrlFrom,type = "shape",fullPath = True)
+    i = 1
+    for shape in ctrlFromShapes:
+        print shape
+        cmds.parent(shape, ctrlTo, r = True, s = True)
+        #cmds.rename(shape,'%sShape%i'%(ctrlTo,i))
+        i+=1
+        
+    cmds.delete(grp)
 
-('\r\nC:\\Program Files\\Autodesk\\Maya2016>echo a; \r\na;\r\n\r\nC:\\Program Files\\Autodesk\\Maya2016>echo b; \r\nb;\r\n', None)
-('\r\nC:\\Program Files\\Autodesk\\Maya2016>echo a; \r\na;\r\n\r\nC:\\Program Files\\Autodesk\\Maya2016>echo b; \r\nb;\r\n', None)
+sel = cmds.ls(sl = True)
+moveShape(sel[0],sel[1])
 
-
-process = subprocess.Popen('echo a;',shell = True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr = subprocess.STDOUT)
-grep_stdout = process.communicate(input='echo c;')[0]
-print(grep_stdout.decode())

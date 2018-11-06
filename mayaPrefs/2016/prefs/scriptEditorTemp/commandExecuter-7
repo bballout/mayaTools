@@ -1,24 +1,6 @@
-import maya.cmds as cmds
+sphere;
+kSurfaceRivetCmd -s nurbsPlaneShape1 -u 2 -v 2.3 -nv 1 0 0 -tv 0 1 0;
 
-#parent proxies to joints
-sel = cmds.ls(sl = True)
-for obj in sel:
-    
-    try:
-        split1 = obj.split('geo_proxy_')[1]
-        jointName = split1.split('_meshVis')[0]
-        cmds.parent(obj,jointName)
-    except:
-        pass
-#connect proxy vis      
-sel = cmds.ls(sl = True)
-for obj in sel:
-    cmds.connectAttr('root_CTRL.displayMode','%s.visibility'%obj)
+setAttr pTorus1.overrideColor 31
 
-#connect skinned geo vis    
-sel = cmds.ls(sl = True)
-reverse = cmds.createNode('reverse')
-cmds.connectAttr('root_CTRL.displayMode','%s.inputX'%reverse)
-
-for obj in sel:
-    cmds.connectAttr('%s.outputX'%reverse,'%s.visibility'%obj)
+delete art

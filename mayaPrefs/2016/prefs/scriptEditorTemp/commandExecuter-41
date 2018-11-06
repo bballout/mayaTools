@@ -1,1 +1,14 @@
-ns = cmds.referenceQuery('hero:Skeleton', ns=1).strip(":")
+import maya.cmds as cmds
+
+sel = cmds.ls(sl = True)
+
+joints = []
+
+for obj in sel:
+    if cmds.nodeType(obj) == 'joint':
+        joints.append(obj)
+        
+cmds.select(joints)
+
+for joint in joints:
+    cmds.setAttr('%s.segmentScaleCompensate'%joint,0)

@@ -1,16 +1,27 @@
-import igKeyPusher
-reload(igKeyPusher)
+import maya.cmds as cmds
 
-pusher = igKeyPusher.KeyPusher()
-pusher.allAnimation = True
+blendname = 'blendShape12'
+geoName = 'UpperBody_Geo1'
 
-keys = pusher.gatherKeys()
+blendAttrs = cmds.aliasAttr(blendname, q = True)
+attrs = []
 
-if 'head_CTRL_rotate_doc_head_repo_inputBZ' in keys:
-    print 'found it'
+for attr in blendAttrs:
+    if not 'weight'in attr:
+        attrs.append(attr)
+        
+i = 0
+for attr in attrs:
+    cmds.setAttr('%s.%s'%(blendname,attr),0)
     
-cmds.currentTime(q=True)
+grp = cmds.group(empty = True)
 
-
-reload(igGeoCache)
-win = igGeoCache.CacheWin()
+for attr in attrs:
+    print attr
+    for zAttr in attrs:
+        cmds.setAttr('%s.%s'%(blendname,zAttr),0)
+        
+    cmds.setAttr('%s.%s'%(blendname,attr),1)
+    dup = cmds.duplicate(geoName)
+    cmds.parent(dup,grp)
+    cmds.rename(dup,attr)

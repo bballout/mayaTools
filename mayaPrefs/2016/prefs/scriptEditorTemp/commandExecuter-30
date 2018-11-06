@@ -1,10 +1,17 @@
-wrinkleAttrs = cmds.listAttr('wrinkle_driver', ud = True)
-correctiveAttrs = cmds.listAttr('corrective_driver', ud = True)
+import GenAPI
+import maya.OpenMaya as om
 
-for attr in wrinkleAttrs:
-    cmds.addAttr('root',ln = 'igAnim_%s'%attr, at = 'double',keyable = True)
-    cmds.connectAttr('wrinkle_driver.%s'%attr,'root.igAnim_%s'%attr)
+joint = 'L_Hip_01_Bind_01_Jnt'
+
+jointObject = GenAPI.getMObject(joint)
+nodeFn = om.MFnDagNode(jointObject)
+
+while not nodeFn.parent(0).apiType() == om.MFn.kWorld:
+    if nodeFn.parent(0).apiType() == om.MFn.kJoint:
+        nodeFn.setObject(nodeFn.parent(0))
+    else:
+        break
     
-for attr in correctiveAttrs:
-    cmds.addAttr('root',ln = 'igMorph_%s'%attr, at = 'double',keyable = True)
-    cmds.connectAttr('corrective_driver.%s'%attr,'root.igMorph_%s'%attr)
+dagPath = om.MDagPath()
+nodeFn.getPath(dagPath)
+print dagPath.partialPathName()

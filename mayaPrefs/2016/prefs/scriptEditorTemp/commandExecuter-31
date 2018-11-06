@@ -1,6 +1,19 @@
-from mayaScripts import BlendShapeLib
+import maya.cmds as cmds
 
-shapeTool = BlendShapeLib.ShapeTool('RT_Elbow_50_cbs1')
-translateVectors = shapeTool.getTranslationVectors('RT_Elbow_100_cbs1')
+joints = cmds.ls(type = 'joint')
 
-BlendShapeLib.ShapeTool.setTranslation('rt_shape',translateVectors) 
+unlockJnts = cmds.ls(sl = True)
+
+for joint in joints:
+    try:
+        cmds.setAttr('%s.liw'%joint,1)
+        print 'locked %s'%joint
+    except:
+        pass
+        
+for joint in unlockJnts:
+    try:
+        cmds.setAttr('%s.liw'%joint,0)
+        print 'unlocked %s'%joint
+    except:
+        pass

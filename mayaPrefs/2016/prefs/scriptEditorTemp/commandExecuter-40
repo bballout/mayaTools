@@ -1,10 +1,36 @@
-import igKeyPusher
-reload(igKeyPusher)
+setAttr "L_Upper_Arm_Bind_05_Jnt.translateX" -1;
+setAttr "L_Lower_Arm_Bind_01_Jnt.translateX" 1;
+setAttr "R_Upper_Arm_Bind_05_Jnt.translateX" -1;
+setAttr "R_Lower_Arm_Bind_01_Jnt.translateX" 1;
 
-keypusher = igKeyPusher.KeyPusher()
-keypusher.allAnimation = True
-keypusher.skipUnloadedRefs = True
-keys = keypusher.gatherKeys()
 
-if 'mask_CTRL_scaleY3' in keys:
-    'shit!'
+setAttr "R_Lower_Leg_Bind_01_Jnt.translateX" 1;
+setAttr "R_Upper_Leg_Bind_05_Jnt.translateX" -1;
+setAttr "L_Lower_Leg_Bind_01_Jnt.translateX" 1;
+setAttr "L_Upper_Leg_Bind_05_Jnt.translateX" -1;
+
+setAttr "L_Clav_01_Bind_05_Jnt.translateX" -1;
+setAttr "R_Clav_01_Bind_05_Jnt.translateX" -1;
+
+setAttr "L_Lower_Arm_Bind_05_Jnt.translateX" -1;
+setAttr "R_Lower_Arm_Bind_05_Jnt.translateX" -1;
+
+
+///////////////////////////////////////
+setAttr "L_Upper_Arm_Bind_05_Jnt.translateX" 0;
+setAttr "L_Lower_Arm_Bind_01_Jnt.translateX" 0;
+setAttr "R_Upper_Arm_Bind_05_Jnt.translateX" 0;
+setAttr "R_Lower_Arm_Bind_01_Jnt.translateX" 0;
+
+setAttr "R_Lower_Leg_Bind_01_Jnt.translateX" 0;
+setAttr "R_Upper_Leg_Bind_05_Jnt.translateX" 0;
+setAttr "L_Lower_Leg_Bind_01_Jnt.translateX" 0;
+setAttr "L_Upper_Leg_Bind_05_Jnt.translateX" 0;
+
+
+setAttr "L_Clav_01_Bind_05_Jnt.translateX" 0;
+setAttr "R_Clav_01_Bind_05_Jnt.translateX" 0;
+
+setAttr "L_Lower_Arm_Bind_05_Jnt.translateX" 0;
+setAttr "R_Lower_Arm_Bind_05_Jnt.translateX" 0;
+

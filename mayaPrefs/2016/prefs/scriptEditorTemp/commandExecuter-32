@@ -1,11 +1,26 @@
-x = [1, 2, 3]
-y = [4, 5, 6]
-zipped = zip(x, y)
-zipped
+import sys
+import maya.cmds as cmds
 
-x2, y2 = zip(*zipped)
-x == list(x2) and y == list(y2)
-True
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
+    
+from InsomniacTest import bbHandRig
+reload(bbHandRig)
+
+builderCtrl = 'Right_wrist_CTRL'
+builder = bbHandRig.HandRig(builderCtrl = builderCtrl)
+builder.buildRig()
 
 
+print builder.thumbJnt
+print builder.fingerJnts
 
+cmds.makeIdentity('joint80', apply = True, r = True)
+
+
+reload(bbHandRig)
+builder = bbHandRig.HandRig(builderCtrl = 'Right_wrist_CTRL')
+builder.wristJnt
+
+builder.builderCtrl
+builder.buildRig()

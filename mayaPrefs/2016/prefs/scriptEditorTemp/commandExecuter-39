@@ -1,21 +1,21 @@
-def checkThis():
-    connection = cmds.connectionInfo('%s.output'%sel,dfs=True)[0].split('.')[0]
-    unloadedKey = False
+import maya.cmds as cmds
 
-    if cmds.nodeType(connection) == 'animBlendNodeAdditiveDL':
-        out = cmds.connectionInfo('%s.output'%connection,dfs=True)[0].split('.')[0]
-        print out
-        if cmds.nodeType(out) == 'reference':
-            print 'made it here'
-            unloadedKey = True
-    elif cmds.nodeType(connection) == 'reference':
-        
-        unloadedKey = True
-                    
-    if unloadedKey:
-        print 'skipping this key'
-sel = cmds.ls(sl=True)[0]        
-checkThis()
+joints = cmds.ls(type = 'joint')
+unlockJnts = cmds.ls(sl = True)
+unlockIt = False
 
-if cmds.nodeType('innerdemon_03:LF_uparm_FK_CTRL') == 'reference':
-    print 'is ref'
+for joint in joints:
+    try:
+        cmds.setAttr('%s.liw'%joint,1)
+        print 'locked %s'%joint
+
+    except:
+        pass
+       
+for joint in unlockJnts:
+	if unlockIt:
+		try:
+			cmds.setAttr('%s.liw'%joint,0)
+			print 'unlocked %s'%joint
+		except:
+			pass

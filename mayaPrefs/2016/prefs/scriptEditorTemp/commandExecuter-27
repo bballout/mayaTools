@@ -1,13 +1,20 @@
-startTime = 3
-endTime = 33
-duration = endTime - startTime
+import maya.OpenMaya as om
+import maya.OpenMayaAnim as oma
+import sys
 
-duplicateThese = ['jacketOpen','pants','jacketOpen_Pocket','jacketOpen_Buttons']
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
+    
+from dw_autoRig.AutoRigUI.UIModules import dwAutoRigUI
+reload(dwAutoRigUI)
 
-for mesh in duplicateThese:
-    grp = cmds.group(empty = True)
-    for i in range(duration+1):
-        cmds.currentTime(i+startTime)
-        dup = cmds.duplicate(mesh, name = '%s_frame%i'%(mesh,i))
-        cmds.parent(dup,grp)
-        
+dwAutoRigUI.open_win()
+
+
+from scripts import GenAPI
+
+shapePath =  GenAPI.getDagPath('nurbsCircle1')
+curveFn = om.MFnNurbsCurve(shapePath)
+curveItr = om.MItCurveCV(shapePath)
+cvs = curveItr.length()
+

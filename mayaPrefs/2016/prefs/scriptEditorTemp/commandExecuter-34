@@ -1,37 +1,63 @@
-import testExport
-reload(testExport)
+import maya.cmds as cmds
+import maya.OpenMaya as om
+from scripts import GenAPI
 
-shot1 = testExport.Shot('shot1')
-shot2 = testExport.Shot('shot2')
+curve = 'L_Clav_01_Crv'
+upObject = 'L_Arm_01_Clav_01_Jnt'
+name = 'L_Clav_01'
 
-shots = [shot1,shot2]
+curvePath = GenAPI.getDagPath(curve)
+curveItr = om.MItCurveCV(curvePath)
+curveFn = om.MFnNurbsCurve()
 
-for shot in shots:
-    testExport.exportShot(shot)
 
-testExport.exportShotList(shots)
+shape = cmds.listRelatives(curve,type = 'shape')[0]
+curvePath = GenAPI.getDagPath(curve)
+curveItr = om.MItCurveCV(curvePath)
+curveFn = om.MFnNurbsCurve(curvePath)
+util = om.MScriptUtil()
 
-#######################################
-import testExport
-reload(testExport)
+cmds.addAttr(curve,ln = 'upperTwist',at = 'double',keyable = True)
+cmds.addAttr(curve,ln = 'lowerTwist',at = 'double',keyable = True)
 
-testExport.fastExport()
-#####################################
-import testExport
-reload(testExport)
+while not curveItr.isDone():
+    #getting param value
+    pos = curveItr.position()
+    ptr = util.asDoublePtr()
+    curveFn.getParamAtPoint(pos,ptr,om.MSpace.kWorld)
+    uValue = util.getDouble(ptr)
+    print uValue
+    
+    #motion path node setup
+    loc = cmds.spaceLocator(name = '%s_Twist_%s_Loc'%(name,str(curveItr.index()+1).zfill(2)))
+    offset = cmds.group(name = '%s_Twist_%s_Offset_Loc'%(name,str(curveItr.index()+1).zfill(2)))
+    group = cmds.group(name = '%s_Twist_%s_Grp_Loc'%(name,str(curveItr.index()+1).zfill(2)))
+    moPathNode = cmds.createNode('motionPath',name = '%s_Twist_%s_MoPath'%(name,str(curveItr.index()+1).zfill(2)))
+    cmds.connectAttr('%s.worldSpace[0]'%shape,'%s.geometryPath'%moPathNode)
+    cmds.setAttr('%s.uValue'%moPathNode,uValue)
+    cmds.setAttr('%s.follow'%moPathNode,True)
+    cmds.setAttr('%s.worldUpType'%moPathNode,2)
+    cmds.setAttr('%s.frontAxis'%moPathNode,0)
+    cmds.connectAttr('%s.worldMatrix[0]'%upObject,'%s.worldUpMatrix'%moPathNode)
+    cmds.connectAttr('%s.allCoordinates'%moPathNode,'%s.translate'%group)
+    cmds.connectAttr('%s.rotate'%moPathNode,'%s.rotate'%group)
+    
+    #setting up twist
+    mdNode = cmds.createNode('multiplyDivide',name = '%s_UpperTwist_%s_MD'%(name,str(curveItr.index()+1).zfill(2)))
+    mdNode2 = cmds.createNode('multiplyDivide',name = '%s_LowerTwist_%s_MD'%(name,str(curveItr.index()+1).zfill(2)))
+    reverse = cmds.createNode('reverse',name = '%s_Twist_%s_Reverse'%(name,str(curveItr.index()+1).zfill(2)))
+    pmaNode = cmds.createNode('plusMinusAverage',name = '%s_Twist_%s_PMA'%(name,str(curveItr.index()+1).zfill(2)))
+    cmds.connectAttr('%s.outputX'%reverse,'%s.input1X'%mdNode2)
+    
+    cmds.connectAttr('%s.input1X'%mdNode,'%s.inputX'%reverse)
+    cmds.setAttr('%s.input1X'%mdNode,uValue)
+    cmds.connectAttr('%s.upperTwist'%curve,'%s.input2X'%mdNode)
+    cmds.connectAttr('%s.lowerTwist'%curve,'%s.input2X'%mdNode2)
+    cmds.connectAttr('%s.outputX'%mdNode,'%s.input1D[0]'%pmaNode)
+    cmds.connectAttr('%s.outputX'%mdNode2,'%s.input1D[1]'%pmaNode)
+    cmds.connectAttr('%s.output1D'%pmaNode,'%s.rotateX'%offset)
+    
+    curveItr.next()
 
-shot1 = testExport.Shot('shot1')
-testExport.exportShot(shot1)
 
-animClip = r'X:\i20\devel\assets\source\test\bballout\testCinematics\kingpin\kingpin_idle\kingpin_idle_shot1_Camera_igCam_Export.animClip'
-testExport.checkOutFile(animClip)
-
-os.path.isfile(animClip)
-
-p4 = igPerforceTools.igP4()
-p4.checkOutFile(animClip)
-p4.disconnect()
-
-cmds.playbackOptions(min = 1)
-cmds.playbackOptions(max = 14)
 

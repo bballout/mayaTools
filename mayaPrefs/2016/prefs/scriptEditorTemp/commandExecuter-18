@@ -1,13 +1,24 @@
+import maya.cmds as cmds
 
-meshes = cmds.ls(type = 'mesh')
-skinnedMeshes = []
+sel = cmds.ls(sl = True)
+jointCon = 'R_Eye_Lid_Jnt_Grp'
 
-for mesh in meshes:
+for obj in sel:
+    name = obj.split('_Jnt')[0]
+    translateConnection = cmds.connectionInfo('%s.translateX'%obj,sfd = True)
+    connection = translateConnection.split('.')[0]
+    cmds.setAttr('%s.rotateOrder'%connection, 1)
+    translateMDNode = cmds.createNode('multiplyDivide',name = '%s_Translate_MD'%name)
     
-    history  = cmds.listHistory(mesh,pdo = 1 ,il = 2)
-    if history:                      
-        for node in history:
-            if cmds.nodeType(node) == 'skinCluster':
-                skinnedMeshes.append(mesh)
-                
-cmds.select(skinnedMeshes)
+    cmds.connectAttr('%s.translateX'%connection,'%s.input1X'%translateMDNode)
+    cmds.connectAttr('%s.translateY'%connection,'%s.input1Y'%translateMDNode)
+    cmds.connectAttr('%s.translateZ'%connection,'%s.input1Z'%translateMDNode)
+    
+    cmds.connectAttr('%s.scaleX'%jointCon,'%s.input2X'%translateMDNode)
+    cmds.connectAttr('%s.scaleY'%jointCon,'%s.input2Y'%translateMDNode)
+    cmds.connectAttr('%s.scaleZ'%jointCon,'%s.input2Z'%translateMDNode)
+    
+    cmds.connectAttr('%s.outputX'%translateMDNode,'%s.translateX'%obj,f = True)
+    cmds.connectAttr('%s.outputY'%translateMDNode,'%s.translateY'%obj,f = True)
+    cmds.connectAttr('%s.outputZ'%translateMDNode,'%s.translateZ'%obj,f = True) 
+    

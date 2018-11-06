@@ -1,11 +1,22 @@
-driver = 'corrective_driver'
-tweaker = 'corrective_tweaker'
-driverAttrs = cmds.listAttr(driver,ud=True)
+import sys
+import maya.cmds as cmds
 
-for attr in driverAttrs:
-    connection = cmds.connectionInfo('%s.%s'%(driver,attr),sfd=True)
-    pma = cmds.createNode('plusMinusAverage')
-    cmds.connectAttr(connection,'%s.input1D[0]'%pma)
-    cmds.addAttr(tweaker,ln=attr,keyable=True)
-    cmds.connectAttr('%s.%s'%(tweaker,attr),'%s.input1D[1]'%pma)
-    cmds.connectAttr('%s.output1D'%pma,'%s.%s'%(driver,attr),f=True)
+if not 'C:/Users/Bill/workspace/BelalBallout' in sys.path:
+    sys.path.append('C:/Users/Bill/workspace/BelalBallout')
+    
+from scripts import DeformerLib
+
+sel = cmds.ls(sl = True)
+for obj in sel:
+    transform = obj
+    shape = cmds.listRelatives(transform,type = 'shape')[0]
+    nodeType = cmds.nodeType(shape)
+    deformerName = ''
+    if nodeType == 'clusterHandle':
+        connection = cmds.connectionInfo('%s.worldMatrix[0]'%transform, dfs = True)[0]
+        deformerName = connection.split('.')[0]
+    elif nodeType == 'nurbsCurve':
+        connection = cmds.connectionInfo('%s.worldSpace[0]'%shape, dfs = True)[0]
+        deformerName = connection.split('.')[0]   
+    if not deformerName == '':
+        DeformerLib.mirrorCluster(transform,deformerName,prefix = 'L_',oppPrefix = 'R_', axis = 'x',direction = '<', table = [-1,1,1])
