@@ -5,8 +5,8 @@ Created on Aug 18, 2018
 '''
 #include
 import os,sys
-from collections import OrderedDict
 import simplejson as json
+import maya.OpenMaya as om
 import maya.cmds as cmds
 
 try:
@@ -14,15 +14,13 @@ try:
 except ImportError:
     from PySide2 import QtWidgets as QtWidgets
     from PySide2 import QtCore
-from mayaScripts import SkinningLib,GenAPI
+from mayaTools.mayaScripts import SkinningLib,GenAPI
 
 sys.path.append('C:/rig_menu/python/rig')
 from dw_autoRig.AutoRigUI.UIModules import dwUILib
 
 PATH = __file__.split('saveWeights.py')[0]
 UIPATH = '%ssaveWeights.ui'%PATH
-
-print UIPATH
 
 class SaveWeightsUI(QtWidgets.QMainWindow):
     def __init__(self,parent=dwUILib.getMayaWindow()):
@@ -36,14 +34,15 @@ class SaveWeightsUI(QtWidgets.QMainWindow):
         self.setWindowTitle('Save Skin Weights')
         
         #adding icon to open folder button
-        #igRoot = os.environ['IG_ROOT']
         #self.iconPath = igRoot + r"\tech_art\maya\shared\icons"
         #self.folderIcon = QtWidgets.QIcon(os.path.join(self.iconPath, "folder.bmp"))
         #self.openFolderPushButton.setIcon(self.folderIcon)
         #self.openFolderPushButton.setToolTip('Set Directory')
-        self.findFilePushButton.clicked.connect(lambda: self.setNewDir())
-        self.loadWeightsPushButton.clicked.connect(lambda: self.loadWeights())
-        self.saveWeightsPushButton.clicked.connect(lambda: self.saveWeights())
+        self.findFilePushButton.clicked.connect(self.setNewDir)
+        self.loadWeightsPushButton.clicked.connect(self.loadWeights)
+        self.saveWeightsPushButton.clicked.connect(self.saveWeights)
+        self.selectSkinnedGeoPushButton.clicked.connect(self.selectSkinnedMeshes)
+        self.selectFileSkinnedGeoPushButton.clicked.connect(self.selectFileSkinnedMeshes)   
 
     def setNewDir(self):
         startingPath = cmds.file(query = True,location = True).replace('/','\\')
@@ -54,32 +53,60 @@ class SaveWeightsUI(QtWidgets.QMainWindow):
         filePath = self.fileLineEdit.text()
         selection = cmds.ls(sl=True)
         saveFn = SaveWeightsFn(selection=selection,filePath=filePath)
+        saveFn.progressA.connect(self.currentProgressBar.setValue)
+        saveFn.progressB.connect(self.totalProgressBar.setValue)
+        saveFn.progressC.connect(self.statusText.setText)
         saveFn.saveSkinData()        
         
     def loadWeights(self):
         filePath = self.fileLineEdit.text()
         selection = cmds.ls(sl=True)
         saveFn = SaveWeightsFn(selection=selection,filePath=filePath)
+        saveFn.progressA.connect(self.currentProgressBar.setValue)
+        saveFn.progressB.connect(self.totalProgressBar.setValue)
+        saveFn.progressC.connect(self.statusText.setText)
         saveFn.loadWeights()
-        #saveFn.progress.progressB.connect(self.currentProgressBar.setValue)
-        self.connect(saveFn.progress,QtCore.SIGNAL('progressA(int)'),self.currentProgressBar,QtCore.SLOT('setValue(int)'),QtCore.Qt.DirectConnection)
+        
 
-
-class Progress(QtCore.QObject):
+        #self.connect(saveFn.progress,QtCore.SIGNAL('progressA(int)'),self.statusText,QtCore.SLOT('setValue(int)'),QtCore.Qt.DirectConnection)
+        #self.connect(saveFn.progress,QtCore.SIGNAL('progressC(str)'),self.statusText,QtCore.SLOT('setText(str)'),QtCore.Qt.DirectConnection)
+        
+    def selectSkinnedMeshes(self):
+        skinnedGeo = SaveWeightsFn.findSkinnedGeo()
+        cmds.select(skinnedGeo)
+    
+    def selectFileSkinnedMeshes(self):
+        filePath = self.fileLineEdit.text()
+        existingGeo = []
+        nonexistingGeo = []
+        if filePath:
+            selection = cmds.ls(sl=True)
+            saveFn = SaveWeightsFn(selection=selection,filePath=filePath)
+            data = saveFn.skinDataFile
+            meshes = data.keys()
+            for mesh in meshes:
+                if cmds.objExists(mesh):
+                    existingGeo.append(mesh)
+                else:
+                    nonexistingGeo.append(mesh)
+        
+        if nonexistingGeo:
+            cmds.confirmDialog(message='This geo does not exist:\n %s \n'%(" ; ".join(nonexistingGeo)))
+        if existingGeo:     
+            cmds.select(existingGeo)
+          
+class SaveWeightsFn(QtCore.QObject):
     progressA = QtCore.Signal(int)
     progressB = QtCore.Signal(int)
     progressC = QtCore.Signal(str)
-    def __init__(self, parent = None):
-            QtCore.QObject.__init__(self, parent)
-
-class SaveWeightsFn(QtCore.QObject):
-    def __init__(self,*args, **kwargs):
-        self.progress = Progress()
-        self._skinDataScene = OrderedDict()
-        self._skinDataFile = OrderedDict()
+    
+    def __init__(self,*args, **kwargs):                                                
+        super(SaveWeightsFn, self).__init__()
+        self._skinDataScene = dict()
+        self._skinDataFile = dict()
         self._skinnedMeshes = []
         self._missingMeshes = []
-        
+            
         self.filePath = kwargs.get('filePath',None)
         self.selection = kwargs.get('selection',None)
         self.mode = kwargs.get('mode','multi')
@@ -97,30 +124,56 @@ class SaveWeightsFn(QtCore.QObject):
         else:
             return False
         
+    @staticmethod       
+    def findSkinnedGeo():
+        meshes = cmds.ls(type='mesh')
+        skinnedMeshes = []
+        for mesh in meshes:
+            history = cmds.listHistory(mesh,il=2,pdo=1)
+            if history:
+                for node in history:
+                    if cmds.nodeType(node) == 'skinCluster':
+                        transform = cmds.listRelatives(mesh,parent=True)[0]
+                        skinnedMeshes.append(transform)
+        return skinnedMeshes
+        
     def getWeights(self,mesh):
-        skinData = OrderedDict()
+        skinData = dict()
         skincluster = self.checkForSkincluster(mesh)
         skinTool = SkinningLib.SkinningTool(skincluster,mesh)
         influences = skinTool.getInfluencesFromSkincluster()
         verts = GenAPI.getMObjectAllVerts(mesh)
+        self.progressC.emit(mesh)
+        
+        progressBItr = 100.0/influences.length()
+        influenceCounter = 0
         for i in range(influences.length()):
+            influenceCounter+=progressBItr
+            self.progressB.emit(influenceCounter)
             weights = skinTool.getWeights(verts,influences[i])
             weightList = GenAPI.createListFromDoubleArray(weights)
             skinData[influences[i].fullPathName().split('|')[-1]] = weightList
-               
+           
+        self.progressB.emit(0)
+        self.progressC.emit('Status')   
         return skinData
     
     @property
     def skinDataScene(self):
-        data = OrderedDict()
+        data = dict()
+        progressItrA = 100.0/len(self.selection)
+        meshCounter = 0
         meshes = []
         for item in self.selection:
             if self.checkForSkincluster(item):
                 meshes.append(item)              
         for mesh in meshes:
+            meshCounter+=progressItrA
+            self.progressA.emit(meshCounter)
             skinData = self.getWeights(mesh)
             data[mesh] = skinData
-                
+        
+        self.progressA.emit(0)       
         self._skinDataScene = data
         return self._skinDataScene
     
@@ -172,7 +225,7 @@ class SaveWeightsFn(QtCore.QObject):
     def saveSkinData(self):
         with open(self.filePath,'w') as f:
             json.dump(self.skinDataScene,f, indent=4 * ' ')
-        print 'saved weights'
+        om.MGlobal.displayInfo('saved weights')
             
     def bind(self,data):
         meshes = data.keys()
@@ -199,26 +252,28 @@ class SaveWeightsFn(QtCore.QObject):
                                     pass
                     
     def loadWeights(self,holdLocked=False):
+        self.progressC.emit('Reading File...')
         data = self.skinDataFile
         meshes = data.keys()            
         
         bindCheck = False
+        self.progressC.emit('Checking for skinclusters...')
         for mesh in self.selection:
             if mesh in meshes:
                 bindCheck=True
         if bindCheck:
-            self.progress.progressC.emit('Binding...')
+            self.progressC.emit('Binding...')
             self.bind(data)
             
         noMeshData = []
         progressItrA = 100.0/len(self.selection)
-        i = 0
+        numMeshes = 0
         for mesh in self.selection:
-            i+=progressItrA
-            self.progress.progressA.emit(i)
             if mesh in meshes:
+                numMeshes+=progressItrA
+                self.progressA.emit(numMeshes)
                 skinDataList = data[mesh]
-                self.progress.progressC.emit('Checking for skincluster...')
+                self.progressC.emit(mesh)
                 skincluster = self.checkForSkincluster(mesh)
                 skinningTool = SkinningLib.SkinningTool(skincluster,mesh)
                 influences = skinningTool.getInfluencesFromSkincluster()   
@@ -226,26 +281,31 @@ class SaveWeightsFn(QtCore.QObject):
                 for i in range(influences.length()):
                     cmds.setAttr('%s.liw'%influences[i].fullPathName(), 0)
                 
-                self.progress.progressC.emit('Setting weights...')
+
                 progressItrB = 100.0/len(skinDataList)
                 t = 0
                 for influence in skinDataList:
                     t+=progressItrB
-                    self.progress.progressB.emit(int(t))
                     weightList = data[mesh][influence]
                     if cmds.objExists(influence):
                         skinningTool.setWeightList(GenAPI.getDagPath(influence),weightList)
                         cmds.setAttr('%s.liw'%influence, 1)
                     else:
-                        cmds.confirmDialog(message='Cannot find %s in %s'%(influence,self.filePath))                        
+                        cmds.confirmDialog(message='Cannot find %s in %s'%(influence,self.filePath)) 
+                        
+                    self.progressB.emit(t)                       
             else:
                 noMeshData.append(mesh)
+                
+        self.progressA.emit(0)
+        self.progressB.emit(0)
+        self.progressC.emit('Status')
             
         if noMeshData:
             cmds.confirmDialog(message='There is no data for:\n %s \n in: \n %s'%(" ; ".join(noMeshData),self.filePath))
-            
-            
-            
+    
+
+                         
 saveWeightWinVar = ''
 def open_win():
     global saveWeightWinVar

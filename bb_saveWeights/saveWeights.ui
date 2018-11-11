@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
+    <width>433</width>
     <height>313</height>
    </rect>
   </property>
@@ -51,7 +51,14 @@
            <item>
             <widget class="QPushButton" name="selectSkinnedGeoPushButton">
              <property name="text">
-              <string>Select Skinned Geo</string>
+              <string>Scene Skins</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="selectFileSkinnedGeoPushButton">
+             <property name="text">
+              <string>Saved Skins</string>
              </property>
             </widget>
            </item>
@@ -163,7 +170,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>385</width>
+     <width>433</width>
      <height>21</height>
     </rect>
    </property>
